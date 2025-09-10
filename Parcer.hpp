@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <exception>
 
+
+
 typedef enum PrefixType{
 	PREF_USER,
 	PREF_SERVER
