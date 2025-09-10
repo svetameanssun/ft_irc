@@ -1,14 +1,5 @@
 #include "Parcer.hpp"
 
-/*template <typename T>
-return_type fucntion_name(T parameter){
-}*/
-template <typename T>
-int checkSenderCommand(
-
-void Parcer::checkUserCommand(void){
-
-}
 /**
 * @brief Sets the prefix type for the message sender type (SERV or USER)
 *
@@ -49,6 +40,7 @@ void Parcer::checkCommand(std::string &message){
 		// of the server.
 	}
 }
+
 
 
 
