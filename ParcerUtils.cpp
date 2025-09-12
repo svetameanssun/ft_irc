@@ -1,22 +1,26 @@
+
 #include "Parcer.hpp"
 
 /**
-* @brief Sets the prefix type for the message sender type (SERV or USER)
+* @brief  Method sets the flag to know who is sending the message(Operator or Client)
 *
-* NOW this function assigns the default prefix type to the given reference.
+* NOW this function assigns the default Operator type.
 * LATER this funtion will allow distinguishing whether the sender
-* is a server or a user, through accesing the Server/Client class.
+* is an operator or a simple client, through accesing the client class.
 *
-* @param prefixType Reference to a prefix type variable that will be set.
-*	By default, it will be set to PREF_USER.
+* @param prefixType No idea what parameters will be needed to know who the sender is.
 */
-void Parcer::setPrefixType(pT &prefixType){
-	/*code to develop...*/
-	prefixType = PREF_USER;
+/*void Parcer::setClientType(void){
+	/*code to develop...
+	this->isOperator = 1; //default setting
 }
 
+bool Parcer::getClientType() const{
+	return (this->isOperator);
+}*/
 
 
+//  INVITE sveta 42
 
 /**
 * @brief Checks if the command is valid.
@@ -31,23 +35,20 @@ void Parcer::setPrefixType(pT &prefixType){
 * @param message Reference to a string message that is beeing sent
 *			
 */
-void Parcer::checkCommand(std::string &message){
-	if (_prefixType == PREF_USER)
+/*void Parcer::checkCommand(std::string &message){
+	if (this->isOperator)
 	{
-		//check if the command corresponds to the list of the commands
-		// of the client.
+
 	}
-	else if (_prefixType == PREF_SERVER)
-	{
-		// check if the command corresponds to the list of the commands
-		// of the server.
+	else{
+
 	}
-}
+}*/
 
 
 
 
-std::vector <std::string> Parcer::customSplit(){
+std::vector <std::string> Parcer::customSplit(void){
 	try{
 	if (_message.length() > 512){
 		throw std::runtime_error("_message is too long\n");
@@ -62,12 +63,37 @@ std::vector <std::string> Parcer::customSplit(){
 	catch (const std::exception & e){
 		std::cerr << "input error: " << e.what();
 	}
-	setPrefixType(_prefixType);// I set the value to default user type;
-	try{
-		checkCommand(_message);
+
+	std::vector<std::string> messageVec;
+	std::istringstream iss(_message);
+	std::string temp;
+	
+	while(iss.good()){
+
+		iss >> temp;
+		std::cout << temp;
+		messageVec.push_back(temp);
+	}
+	
+	std::vector<std::string>::iterator ite = messageVec.end();
+	/*for (std::vector<std::string>::iterator it = messageVec.begin(); it != ite; ++it)
+	{
+		std::cout << *it << "\n";
+	}*/
+	/*try{
+
+		//checkCommand(_message);
 	} catch (const std::exception &e){
 		std::cerr << "input error: " << e.what();
-	}
-		
+	}*/
+	
+	return (messageVec);
+
+}
+
+
+int main(){
+	Parcer parcer("Invite sveta 42");
+	parcer.customSplit();
 
 }

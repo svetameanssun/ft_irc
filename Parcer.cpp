@@ -1,7 +1,7 @@
 #include "Parcer.hpp"
 
 
-Parcer::Parcer(const Parcer& other){
+/*Parcer::Parcer(const Parcer& other){
 	this->_message = other._message;
 }
 
@@ -11,7 +11,7 @@ Parcer& Parcer::operator=(const Parcer& other){
 		this->_message = other._message;
 	}
 	return (*this);
-}
+}*/
 
 Parcer::~Parcer(){
 
