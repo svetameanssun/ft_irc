@@ -15,6 +15,9 @@ void Parcer::setPrefixType(pT &prefixType){
 	prefixType = PREF_USER;
 }
 
+
+
+
 /**
 * @brief Checks if the command is valid.
 *
@@ -61,8 +64,8 @@ std::vector <std::string> Parcer::customSplit(){
 	}
 	setPrefixType(_prefixType);// I set the value to default user type;
 	try{
-		checkCommand();
-	} catch (const std::exception &e{
+		checkCommand(_message);
+	} catch (const std::exception &e){
 		std::cerr << "input error: " << e.what();
 	}
 		

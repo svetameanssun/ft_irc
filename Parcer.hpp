@@ -6,13 +6,23 @@
 #include <vector>
 #include <stdexcept>
 #include <exception>
+#include <map>
+
+typedef enum CommandList{
+	PASS,
+	NICK,
+	JOIN,
+	PRIVMSG,
+	INVITE,
+	KICK,
+} CmdLst;
 
 
 
 typedef enum PrefixType{
 	PREF_USER,
 	PREF_SERVER
-} pT;
+} PrefT;
 
 
 
@@ -24,6 +34,7 @@ class Parcer{
 		~Parcer();
 		std::string getMessage(std::string message)const;
 		std::vector<std::string> customSplit();
+		void checkCommand(std::string &message);
 		void setPrefixType(pT &prefixType);
 	private:
 		std::string _message;
