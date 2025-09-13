@@ -11,7 +11,8 @@ INC_FILES =		Server.hpp \
 INCLUDE  = $(addprefix $(INC_DIR), $(INC_FILES))
 
 FILES    = 	main.cpp \
-			Server.cpp
+			Server.cpp \
+			utils.cpp
 
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))
 OBJS     = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
@@ -47,6 +48,6 @@ fclean: clean
 re: fclean all
 
 run: 
-	@./$(NAME) 9000
+	@./$(NAME) 9000 9@atoi2025
 
 .PHONY: all clean fclean re run

@@ -18,8 +18,8 @@ private:
     int                         _listenFd;      // listening socket
     int                         _port;          // port number
     std::string                 _password;      // optional server password
-    std::map<int, Client*>      _clients;       // fd -> Client*
-    std::map<std::string, Channel*> _channels;  // name -> Channel*
+    std::map<int, Client *>      _clients;       // fd -> Client*
+    std::map<std::string, Channel *> _channels;  // name -> Channel*
     std::vector<struct pollfd>  _pollFds;       // list of poll fds
     bool                        _running;       // server loop flag
 
@@ -32,8 +32,8 @@ public:
     ~Server();                                     
 
     // core methods
+    void    init(char *argv[]);
     void    initSocket();
-    void    run();
     void    stop();
 
     // getters
@@ -42,8 +42,8 @@ public:
 
     // setters
     void    setPort(int port);
-    void    setPassword(std::string password);
-    
+    void    setPassword(const std::string password);
+
     // client/channel management
     void    addClient(int fd);
     void    removeClient(int fd);

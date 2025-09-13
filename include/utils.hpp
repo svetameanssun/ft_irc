@@ -8,12 +8,6 @@
 #define TRUE 1
 #define FALSE 0
 
-void log_err(const std::string &message)
-{
-    std::cerr << message << std::endl;
-}
+void log_msg(const char* format, ...);
 
-void log_msg(const std::string &message)
-{
-    std::cout << message << std::endl;
-}
+void log_err(const char* format, ...);

@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "utils.hpp"
 
 // Default constructor
 Server::Server()
@@ -15,8 +16,21 @@ Server::~Server() {
     // más adelante: liberar Clients y Channels
 }
 
+void Server::init(char *argv[])
+{
+    //Check for input - password and port number
+    //And remove the password
+    setPassword(argv[2]);
+    log_msg("Password: %s", getPassword().c_str());
+
+    setPort(atoi(argv[1]));
+    log_msg("Server listening in port number: %d", getPort());
+}
+
+
+void Server::setPort(int port) { _port = port; }
+void Server::setPassword(const std::string password) { _password = password; }
+
+
 int Server::getPort() const { return _port; }
-
-void Server::setPort(int port) { this->_port = port; }
-
-void Server::setPassword(std::string password) { this->_password = password; }
+const std::string &Server::getPassword() const { return _password; }
