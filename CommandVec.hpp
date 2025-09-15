@@ -6,12 +6,15 @@
 #include <vector>
 
 typedef enum CommandEnum{
+	// Connection Registration
 	PASS, 
-	NICK, 
+	NICK,
+	USER,
+	QUIT,
+
+	//Channel Operations
 	JOIN, 
 	PRIVMSG, 
-	QUIT, 
-	PING, 
 
 	KICK,
 	INVITE, 
@@ -22,7 +25,7 @@ typedef enum CommandEnum{
 class CommandVec{
 	public:
 		CommandVec() : commandVec({"PASS", "NICK", "JOIN", "PRIVMSG", "QUIT",
-			"PING", "KICK","INVITE", "TOPIC", "MODE" }){
+			"PING", "QUIT", "KICK","INVITE", "TOPIC", "MODE" }){
 		};
 		
 		const std::vector <std::string> &getCommandVec(void) const;
