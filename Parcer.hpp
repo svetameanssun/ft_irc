@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <exception>
 #include <map>
-#include "CommandVec.hpp"
+#include "CommandHandler.hpp"
 
 
 class Parcer{
@@ -18,22 +18,35 @@ class Parcer{
 		Parcer&operator=(const Parcer&other);
 		~Parcer();
 
-		std::string getMessage(void)const;
-		std::vector<std::string> splitMessage(std::vector<std::string> &messageVec);
-		bool isValidCommand(std::string &message);
-		bool isValidParam(std::vector<std::string> &messageVec);
+		void splitMessage(void);
 		
-		bool getClientType(void) const;
+		int checkParams(void);
+		int commandReply(std::string command);
+		
 		void setClientType(void); // TO DO
-		bool isCommonCommand(std::string command);
-		bool isOperatorComamnd(std::string command);
-	private:
-		std::string _message;
-		bool isOperator; // later this "flag" we can introduce
-						// in different ways: through parameters, class client
-						// as parameter, etc.
-		CommandVec commands;
+		bool getClientType(void) const;
+		std::string getMessage(void)const;
+		std::vector<std::string> getMessageVec(void) const;
+		private:
+		const std::string _message;
+		std::vector<std::string> _messageVec;
+		bool _isOperator; // later this "flag" we can introduce
+		// in different ways: through parameters, class client
+		// as parameter, etc.
+		CommandHandler _commandList;
 	
 };
+/**
+ * @brief parces and analizes the command and its params.
+ * 
+ * This function initiates parcing, analizes the command and parameter
+ * structure, and passes the data to the server.
+ * 
+ * @param NOW void
+ *		LATER Parcer &parcer, to init Parcer class outside 
+ * @returns RPL/0 on  success or l ERR (from Replies.hpp)
+ */
+
+int launchParcing(void);
 
 #endif
