@@ -28,28 +28,28 @@ std::vector<std::string>::const_iterator CommandHandler::end() const{
 	return (this->validCommands.end());
 }
 
-void CommandHandler::handle(std::string command){
+int CommandHandler::handle(std::string command){
 		// DO IT LIKE ONE OF THER EXCERSICES IN CPP module01 ex05 !!!
 	if (this->_messageVec.at(0) == "PASS")
-		handlePass(_messageVec);
+		return (handlePass(_messageVec));
 	else if (this->_messageVec.at(0) == "NICK")
-		handleNick(_messageVec);
+		return (handleNick(_messageVec));
 	else if (this->_messageVec.at(0) == "USER")
-		handleUser(_messageVec);
+		return (handleUser(_messageVec));
 	else if (this->_messageVec.at(0) == "QUIT")
-		handleQuit(_messageVec);
+		return (handleQuit(_messageVec));
 	else if (this->_messageVec.at(0) == "JOIN")
-		handleJoin(_messageVec);
+		return (handleJoin(_messageVec));
 	else if (this->_messageVec.at(0) == "MODE")
-		handleMode(_messageVec);
+		return (handleMode(_messageVec));
 	else if (this->_messageVec.at(0) == "TOPIC")
-		handleTopic(_messageVec);
+		return (handleTopic(_messageVec));
 	else if (this->_messageVec.at(0) == "INVITE")
-		handleInvite(_messageVec);
+		return (handleInvite(_messageVec));
 	else if (this->_messageVec.at(0) == "KICK")
-		handleKick(_messageVec);
+		return (handleKick(_messageVec));
 	else if (this->_messageVec.at(0) == "PRIVMSG")
-		handPrivmsg(_messageVec);
+		return (handPrivmsg(_messageVec));
 	else if (this->_messageVec.at(0) == "INFO")
-		handleInfo(_messageVec);
+		return (handleInfo(_messageVec));
 }
