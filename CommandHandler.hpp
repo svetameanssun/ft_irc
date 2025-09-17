@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 
+#include "Replies.hpp"
+
 /*typedef enum CommandEnum{
 	// Connection Registration
 	PASS, 
@@ -26,31 +28,12 @@
 
 class CommandHandler{
 	public:
-		CommandHandler()
-		: validCommands({"PASS",
-			"NICK",
-			"USER",
-			"QUIT",
-
-			"JOIN",
-			"PRIVMSG",
-			"KICK",
-			"INVITE",
-			"TOPIC",
-			"MODE" }){
-		};
-		
-		const std::vector <std::string> &getValidCommands(void) const;
-		std::vector<std::string>::const_iterator begin() const;
-		std::vector<std::string>::const_iterator end() const;
+		CommandHandler();
 		int handle(std::vector <std::string> messageVec);
-		const std::map<std::string, int (CommandHandler::*)(std::vector<std::string>)>& getHandlerMap() const {
-    		return handlerMap;
-		}
+		const std::map<std::string, int (CommandHandler::*)(std::vector<std::string>)>& getHandlerMap() const;
+		
 
-	
 	private:
-		const std::vector <std::string> validCommands;
 		std::map<std::string, int (CommandHandler::*)(std::vector <std::string> messageVec)> handlerMap;
 		int handlePass(std::vector <std::string> messageVec);
 		int handleNick(std::vector <std::string> messageVec);
