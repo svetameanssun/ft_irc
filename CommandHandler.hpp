@@ -43,22 +43,22 @@ class CommandHandler{
 		const std::vector <std::string> &getValidCommands(void) const;
 		std::vector<std::string>::const_iterator begin() const;
 		std::vector<std::string>::const_iterator end() const;
-		void handle(std::string command);
+		int handle(std::string command);
 	
 	private:
 		const std::vector <std::string> validCommands;
 		std::map<std::string, void (CommandHandler::*)(void)> handlerMap;
-		void handlePass();
-		void handleNick();
-		void handleUser();
-		void handleQuit();
-		void handleJoin();
-		void handleMode();
-		void handleTopic();
-		void handleInvite();
-		void handleKick();
-		void handlePrivmsg();
-		void handleInfo();
+		int handlePass();
+		int handleNick();
+		int handleUser();
+		int handleQuit();
+		int handleJoin();
+		int handleMode();
+		int handleTopic();
+		int handleInvite();
+		int handleKick();
+		int handlePrivmsg();
+		int handleInfo();
 		
 };
 
