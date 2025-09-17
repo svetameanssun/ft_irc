@@ -30,8 +30,7 @@ void Parcer::splitMessage(void){
 //
 int Parcer::checkParams()
 {
-
-	
+  if (_commandList.handle(_messageVec.at(0));
 }
 
 int Parcer::commandReply(std::string message){
