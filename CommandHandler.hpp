@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 
-typedef enum CommandEnum{
+/*typedef enum CommandEnum{
 	// Connection Registration
 	PASS, 
 	NICK,
@@ -20,7 +20,7 @@ typedef enum CommandEnum{
 	INVITE, 
 	TOPIC, 
 	MODE 
-} CmdLst;
+} CmdLst;*/
 
 
 
@@ -43,22 +43,26 @@ class CommandHandler{
 		const std::vector <std::string> &getValidCommands(void) const;
 		std::vector<std::string>::const_iterator begin() const;
 		std::vector<std::string>::const_iterator end() const;
-		int handle(std::string command);
+		int handle(std::vector <std::string> messageVec);
+		const std::map<std::string, int (CommandHandler::*)(std::vector<std::string>)>& getHandlerMap() const {
+    		return handlerMap;
+		}
+
 	
 	private:
 		const std::vector <std::string> validCommands;
-		std::map<std::string, void (CommandHandler::*)(void)> handlerMap;
-		int handlePass();
-		int handleNick();
-		int handleUser();
-		int handleQuit();
-		int handleJoin();
-		int handleMode();
-		int handleTopic();
-		int handleInvite();
-		int handleKick();
-		int handlePrivmsg();
-		int handleInfo();
+		std::map<std::string, int (CommandHandler::*)(std::vector <std::string> messageVec)> handlerMap;
+		int handlePass(std::vector <std::string> messageVec);
+		int handleNick(std::vector <std::string> messageVec);
+		int handleUser(std::vector <std::string> messageVec);
+		int handleQuit(std::vector <std::string> messageVec);
+		int handleJoin(std::vector <std::string> messageVec);
+		int handleMode(std::vector <std::string> messageVec);
+		int handleTopic(std::vector <std::string> messageVec);
+		int handleInvite(std::vector <std::string> messageVec);
+		int handleKick(std::vector <std::string> messageVec);
+		int handlePrivmsg(std::vector <std::string> messageVec);
+		int handleInfo(std::vector <std::string> messageVec);
 		
 };
 

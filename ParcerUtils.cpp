@@ -28,21 +28,17 @@ void Parcer::splitMessage(void){
 
 // works with _commandList and _messageVec and ParcerFlags
 //
-int Parcer::checkParams()
-{
-  if (_commandList.handle(_messageVec.at(0));
-}
 
-int Parcer::commandReply(std::string message){
+int Parcer::commandReply(){
 
-	std::vector <std::string>:: const_iterator iterBegin = _commandList.begin();
+	/*std::vector <std::string>:: const_iterator iterBegin = _commandList.begin();
 	std::vector <std::string>:: const_iterator iterEnd = _commandList.end(); 
 	for (; iterBegin != iterEnd; iterBegin++){
 		if (*iterBegin == message){
 			return (checkParams());
 		}
-	}
-	return (ERR_UNKNOWNCOMMAND);
+	}*/
+	_commandList.handle(_messageVec);
 }
 
 int launchParcing(void){
@@ -55,5 +51,5 @@ int launchParcing(void){
 		std::cerr << "input error: " << e.what();
 		return (666);// CHECK what ERR_VARIANT I can apply here! 
 	}
-	return(parcer.commandReply(parcer.getMessage()));
+	return(parcer.commandReply());
 }

@@ -19,9 +19,7 @@ class Parcer{
 		~Parcer();
 
 		void splitMessage(void);
-		
-		int checkParams(void);
-		int commandReply(std::string command);
+		int commandReply();
 		
 		void setClientType(void); // TO DO
 		bool getClientType(void) const;

@@ -1,4 +1,5 @@
 #include "CommandHandler.hpp"
+#include "Replies.hpp"
 
 CommandHandler::CommandHandler() {
 
@@ -28,28 +29,15 @@ std::vector<std::string>::const_iterator CommandHandler::end() const{
 	return (this->validCommands.end());
 }
 
-int CommandHandler::handle(std::string command){
+int CommandHandler::handle(std::vector <std::string> messageVec){
 		// DO IT LIKE ONE OF THER EXCERSICES IN CPP module01 ex05 !!!
-	if (this->_messageVec.at(0) == "PASS")
-		return (handlePass(_messageVec));
-	else if (this->_messageVec.at(0) == "NICK")
-		return (handleNick(_messageVec));
-	else if (this->_messageVec.at(0) == "USER")
-		return (handleUser(_messageVec));
-	else if (this->_messageVec.at(0) == "QUIT")
-		return (handleQuit(_messageVec));
-	else if (this->_messageVec.at(0) == "JOIN")
-		return (handleJoin(_messageVec));
-	else if (this->_messageVec.at(0) == "MODE")
-		return (handleMode(_messageVec));
-	else if (this->_messageVec.at(0) == "TOPIC")
-		return (handleTopic(_messageVec));
-	else if (this->_messageVec.at(0) == "INVITE")
-		return (handleInvite(_messageVec));
-	else if (this->_messageVec.at(0) == "KICK")
-		return (handleKick(_messageVec));
-	else if (this->_messageVec.at(0) == "PRIVMSG")
-		return (handPrivmsg(_messageVec));
-	else if (this->_messageVec.at(0) == "INFO")
-		return (handleInfo(_messageVec));
+
+	std::string cmd = messageVec.at(0);
+	if (handlerMap.find(cmd) != handlerMap.end()) {
+    	return (this->*handlerMap[cmd])(messageVec);
+	}
+	else {
+    	std::cerr << "Unknown command: " << cmd << std::endl;
+    return (ERR_UNKNOWNCOMMAND);
+}
 }
