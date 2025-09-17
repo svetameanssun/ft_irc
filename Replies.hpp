@@ -56,7 +56,6 @@
 // ---- JOIN Command Errors ---------------------------------------
 #define ERR_NOSUCHCHANNEL      403 // No such channel exists
 #define ERR_TOOMANYCHANNELS    405 // Client has joined too many channels
-#define ERR_TOOMANYTARGETS     407 // Too many recipients/targets (applies to some cmds, incl. JOIN)
 #define ERR_CHANNELISFULL      471 // Cannot join channel (channel is full)
 #define ERR_INVITEONLYCHAN     473 // Cannot join channel (invite-only)
 #define ERR_BANNEDFROMCHAN     474 // You are banned from the channel
@@ -163,7 +162,6 @@
 
 #define ERR_NOTOPLEVEL         413 // Cannot send to a non-valid top-level target
 #define ERR_WILDTOPLEVEL       414 // Cannot send to wildcard target
-#define ERR_TOOMANYTARGETS     416 // Too many recipients specified
 
 // ---- PRIVMSG Command Replies ----
 // RPL_AWAY  (301) // Target user is marked as away (optional reply)
@@ -199,6 +197,7 @@
 #define ERR_CHANOPRIVSNEEDED   482 // Inviter lacks privileges to do that (INVITE, TOPIC, MODE, KICK )
 #define ERR_NOCHANMODES        477 // Channel does not support channel modes (MODE, TOPIC)
 #define ERR_USERNOTINCHANNEL  441 // User is not on the specified channel (KICK, MODE)
+#define ERR_TOOMANYTARGETS     407 // Too many recipients/targets (applies to some cmds, incl. JOIN, PRIVMSG)
 
 
 #endif
