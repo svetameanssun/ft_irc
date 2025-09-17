@@ -1,0 +1,7 @@
+SERVER:
+
+    - Check if we can refine the log messages
+    - Implement checking for password and port, and decide where
+    - (At the end) Implement signals 
+
+    - Next: start looking at how to handle connections
