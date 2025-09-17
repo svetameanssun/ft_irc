@@ -1,6 +1,4 @@
 #include "Parcer.hpp"
-#include "Replies.hpp"
-#include "CommandHandler.hpp"
 
 
 void Parcer::splitMessage(void){
@@ -18,38 +16,28 @@ void Parcer::splitMessage(void){
 	// stpliting string into vector;
 	std::istringstream iss(_message);
 	std::string temp;
-	while(iss.good()){
-
-		iss >> temp;
-		std::cout << temp;
+	while(iss >> temp){
+		std::cout << temp << "\n";
 		this->_messageVec.push_back(temp);
 	}
 }
 
-// works with _commandList and _messageVec and ParcerFlags
-//
-
-int Parcer::commandReply(){
-
-	/*std::vector <std::string>:: const_iterator iterBegin = _commandList.begin();
-	std::vector <std::string>:: const_iterator iterEnd = _commandList.end(); 
-	for (; iterBegin != iterEnd; iterBegin++){
-		if (*iterBegin == message){
-			return (checkParams());
-		}
-	}*/
-	_commandList.handle(_messageVec);
+int Parcer::commandProccess(void){
+	std::string cmd = getMessageVec().at(0);
+	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
+	this->_messageVec.at(0) = cmd;
+	return (_cmdHandler.handle(_messageVec));
 }
 
 int launchParcing(void){
 	std::vector<std::string> messageVec;
-	Parcer parcer("Invite        sveta       :42  gggg  fff 			");
-	
+	Parcer parcer("Invite        sveta       :42  gggg  fff 			\r\n");
+
 	try{ 
 		parcer.splitMessage();
 	} catch (const std::exception & e){
 		std::cerr << "input error: " << e.what();
 		return (666);// CHECK what ERR_VARIANT I can apply here! 
 	}
-	return(parcer.commandReply());
+	return(parcer.commandProccess());
 }
