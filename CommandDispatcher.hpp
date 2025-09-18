@@ -1,6 +1,6 @@
-
-#ifndef COMMANDHANDLER_HPP
-#define COMMANDHANDLER_HPP
+ 
+#ifndef COMMANDDISPATCHER_HPP
+#define COMMANDDISPATCHER_HPP
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,45 +8,25 @@
 
 #include "Replies.hpp"
 
-/*typedef enum CommandEnum{
-	// Connection Registration
-	PASS, 
-	NICK,
-	USER,
-	QUIT,
-
-	//Channel Operations
-	JOIN, 
-	PRIVMSG,
-	KICK,
-	INVITE, 
-	TOPIC, 
-	MODE 
-} CmdLst;*/
-
-
-
-class CommandHandler{
+class CommandDispatcher{
 	public:
-		CommandHandler();
-		int handle(std::vector <std::string> messageVec);
-		const std::map<std::string, int (CommandHandler::*)(std::vector<std::string>)>& getHandlerMap() const;
+		CommandDispatcher();
+		int dispatch(std::vector <std::string> messageVec);
+		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)>& getDispatcherMap() const;
 		
-
 	private:
-		std::map<std::string, int (CommandHandler::*)(std::vector <std::string> messageVec)> handlerMap;
-		int handlePass(std::vector <std::string> messageVec);
-		int handleNick(std::vector <std::string> messageVec);
-		int handleUser(std::vector <std::string> messageVec);
-		int handleQuit(std::vector <std::string> messageVec);
-		int handleJoin(std::vector <std::string> messageVec);
-		int handleMode(std::vector <std::string> messageVec);
-		int handleTopic(std::vector <std::string> messageVec);
-		int handleInvite(std::vector <std::string> messageVec);
-		int handleKick(std::vector <std::string> messageVec);
-		int handlePrivmsg(std::vector <std::string> messageVec);
-		int handleInfo(std::vector <std::string> messageVec);
-		
+		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> messageVec)> dispatcherMap;
+		int dispatchPass(std::vector <std::string> messageVec);
+		int dispatchNick(std::vector <std::string> messageVec);
+		int dispatchUser(std::vector <std::string> messageVec);
+		int dispatchQuit(std::vector <std::string> messageVec);
+		int dispatchJoin(std::vector <std::string> messageVec);
+		int dispatchMode(std::vector <std::string> messageVec);
+		int dispatchTopic(std::vector <std::string> messageVec);
+		int dispatchInvite(std::vector <std::string> messageVec);
+		int dispatchKick(std::vector <std::string> messageVec);
+		int dispatchPrivmsg(std::vector <std::string> messageVec);
+		int dispatchInfo(std::vector <std::string> messageVec);
 };
 
 #endif
