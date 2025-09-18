@@ -1,7 +1,7 @@
-#include "Parcer.hpp"
+#include "CommandParcer.hpp"
 
 
-void Parcer::splitMessage(void){
+void CommandParcer::splitMessage(void){
 	// common message characteristics check
 	if (_message.length() > 512){
 		throw std::runtime_error("_message is too long\n");
@@ -22,16 +22,16 @@ void Parcer::splitMessage(void){
 	}
 }
 
-int Parcer::commandProccess(void){
+int CommandParcer::commandProccess(void){
 	std::string cmd = getMessageVec().at(0);
 	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
 	this->_messageVec.at(0) = cmd;
-	return (_cmdHandler.handle(_messageVec));
+	return (_cmdDispatcher.dispatch(_messageVec));
 }
 
 int launchParcing(void){
 	std::vector<std::string> messageVec;
-	Parcer parcer("Invite        sveta       :42  gggg  fff 			\r\n");
+	CommandParcer parcer("Invite        sveta       :42  gggg  fff 			\r\n");
 
 	try{ 
 		parcer.splitMessage();
