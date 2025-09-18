@@ -1,5 +1,5 @@
-#ifndef PARCER_HPP
-#define PARCER_HPP
+#ifndef COMMANDPARCER_HPP
+#define COMMANDPARCER_HPP
 
 #include <iostream>
 #include <sstream>
@@ -11,15 +11,15 @@
 #include <algorithm>
 #include <cctype>
 
-#include "CommandHandler.hpp"
+#include "CommandDispatcher.hpp"
 
 
-class Parcer {
+class CommandParcer {
   public:
-    Parcer(std::string message): _message(message) {};
-    Parcer(const Parcer&other);
-    Parcer&operator=(const Parcer&other);
-    ~Parcer();
+    CommandParcer(std::string message): _message(message) {};
+    CommandParcer(const CommandParcer&other);
+    CommandParcer&operator=(const CommandParcer&other);
+    ~CommandParcer();
 
     void splitMessage(void);
     int commandProccess(void);
@@ -34,8 +34,7 @@ class Parcer {
     bool _isOperator; // later this "flag" we can introduce
                         // in different ways: through parameters, class client
                         // as parameter, etc.
-    CommandHandler _cmdHandler;
-
+    CommandDispatcher _cmdDisp;
 };
 /**
  * @brief parces and analizes the command and its params.
@@ -48,6 +47,7 @@ class Parcer {
  * @returns RPL/0 on  success or l ERR (from Replies.hpp)
  */
 
+//TEMPORAL, later this function (or its content) will fit into some part of the server's code
 int launchParcing(void);
 
 #endif
