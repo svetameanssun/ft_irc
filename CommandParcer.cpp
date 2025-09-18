@@ -1,10 +1,10 @@
-#include "Parcer.hpp"
+#include "CommandParcer.hpp"
 
 // MORE IDIOMATIC WAY:
-Parcer::Parcer(const Parcer& other) : _message(other._message), _isOperator(other._isOperator) {}
+CommandParcer::CommandParcer(const CommandParcer& other) : _message(other._message), _isOperator(other._isOperator) {}
 
 
-Parcer& Parcer::operator=(const Parcer& other){
+CommandParcer& CommandParcer::operator=(const CommandParcer& other){
 	if(this != &other)
 	{
 		//this->_message(other._message); cannot do it, message is CONST
@@ -23,22 +23,22 @@ Parcer& Parcer::operator=(const Parcer& other){
 *
 * @param void idea what parameters will be needed to know who the sender is.
 */
-void Parcer::setClientType(void){
+void CommandParcer::setClientType(void){
 	//code to develop...
 	this->_isOperator = 1; //default setting
 }
 
 
-bool Parcer::getClientType(void) const{
+bool CommandParcer::getClientType(void) const{
 	return (this->_isOperator);
 }
 
-std::vector<std::string> Parcer::getMessageVec(void) const{
+std::vector<std::string> CommandParcer::getMessageVec(void) const{
 	return (this->_messageVec);
 }
 
-std::string Parcer::getMessage(void) const{
+std::string CommandParcer::getMessage(void) const{
 	return (this->_message);
 }
 
-Parcer::~Parcer(){}
+CommandParcer::~CommandParcer(){}
