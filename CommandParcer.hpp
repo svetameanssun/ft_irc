@@ -13,7 +13,6 @@
 
 #include "CommandDispatcher.hpp"
 
-
 class CommandParcer {
   public:
     CommandParcer(std::string message): _message(message) {};
@@ -23,17 +22,12 @@ class CommandParcer {
 
     void splitMessage(void);
     int commandProccess(void);
-
-    void setClientType(void); // TO DO
-    bool getClientType(void) const;
     std::string getMessage(void) const;
     std::vector<std::string> getMessageVec(void) const;
   private:
     const std::string _message;
     std::vector<std::string> _messageVec;
-    bool _isOperator; // later this "flag" we can introduce
-                        // in different ways: through parameters, class client
-                        // as parameter, etc.
+
     CommandDispatcher _cmdDisp;
 };
 /**

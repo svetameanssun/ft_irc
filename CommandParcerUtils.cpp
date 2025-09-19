@@ -26,7 +26,7 @@ int CommandParcer::commandProccess(void){
 	std::string cmd = getMessageVec().at(0);
 	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
 	this->_messageVec.at(0) = cmd;
-	return (_cmdDispatcher.dispatch(_messageVec));
+	return (_cmdDisp.dispatch(_messageVec));
 }
 
 int launchParcing(void){

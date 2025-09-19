@@ -11,7 +11,7 @@
 // Notes: Must be sent before NICK/USER during registration.
 // On success: no direct numeric reply (server waits for USER+NICK).
 #define ERR_PASSWDMISMATCH     464 // Incorrect password supplied
-
+#define ERR_NEEDLESSPARAMS     250  // if there are more then 2 params.
 // ------------------------------------------------------
 // NICK Command
 // ------------------------------------------------------
