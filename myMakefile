@@ -2,10 +2,10 @@ NAME  = ircparcer
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = CommandHandler.cpp \
-	Parcer.cpp \
-	ParcerUtils.cpp \
-	CommandHandlerUtils.cpp \
+SRC = CommandDispatcher.cpp \
+	CommandDispatcherUtils.cpp \
+	CommandParcer.cpp \
+	CommandParcerUtils.cpp \
 	main.cpp
 
 OBJS = $(SRC:.cpp=.o)
