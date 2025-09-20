@@ -8,6 +8,7 @@
 
 #include "Replies.hpp"
 #include "ParcerFlags.hpp"
+#include "ParcerResult.hpp"
 
 class CommandDispatcher{
 	public:
@@ -18,6 +19,7 @@ class CommandDispatcher{
 		bool isValidJoin(std::vector <std::string> messageVector);
 	private:
 		ParcerFlags flags;
+		ParcerResult parcRes;
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> messageVec)> dispatcherMap;
 		int dispatchPass(std::vector <std::string> messageVec);
 		int dispatchNick(std::vector <std::string> messageVec);
