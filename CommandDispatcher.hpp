@@ -2,9 +2,11 @@
 #ifndef COMMANDDISPATCHER_HPP
 #define COMMANDDISPATCHER_HPP
 #include <iostream>
+ #include <sstream>
 #include <string>
 #include <vector>
 #include <map>
+
 
 #include "Replies.hpp"
 #include "ParcerFlags.hpp"
