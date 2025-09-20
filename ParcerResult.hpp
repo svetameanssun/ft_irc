@@ -15,8 +15,8 @@ class ParcerResult{
     cosnt std::map<std::string, std::string> getChannelNamePassMap(void) const;
     const std::vector <std::string> getChannelNameVec(void) const;
   private:
-    std::map<std::string, std::string> channelNamePassMap;
-    std::vector <std::string> channelNameVec;
+    std::map<std::string, std::string> _channelNamePassMap;
+    std::vector <std::string> _channelNameVec;
 };
 
 
