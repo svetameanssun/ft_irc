@@ -1,7 +1,7 @@
 #ifndef PARCERRESULT_HPP
 #define PARCERRESULT_HPP
 
-#icnlude <map>
+#include <map>
 #include <vector>
 #include <string>
 
@@ -10,6 +10,8 @@ class ParcerResult{
   public:
     ParcerResult();
     ~ParcerResult();
+     cosnt std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
+    cosnt std::vector<std::string> stringToVec(std::string string,char devisor);
     void setChannelNamePassMap(std::map<std::string, std::string> joinResMap);
     void setChannelnameVec(std::vector <std::string> joinResVec);
     cosnt std::map<std::string, std::string> getChannelNamePassMap(void) const;
