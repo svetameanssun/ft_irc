@@ -30,7 +30,7 @@ bool CommandDispatcher::isValidJoin(std::vector <std::string> messageVector){
    
     // 
     if (messageVector.size() == 2){
-        parcRes.set
+        parcer.setChannelnameVec(parcRes.stringToVec(messageVector[1]));
         //check, how many channels i want to join
         //  make a vector out of channels
         // and then handle("JOIN", channelVec)
@@ -39,6 +39,7 @@ bool CommandDispatcher::isValidJoin(std::vector <std::string> messageVector){
     }
 
     if (messageVector.size() == 3){
+        parcRes.setChannelNamePassMap(parcRes.stringsToMap(messageVector[1], messageVector[2]));
         //check how many channels I want to join//
         // make a map [key] - channels name/
         //            value - password.
