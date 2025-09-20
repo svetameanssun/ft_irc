@@ -30,7 +30,7 @@ bool CommandDispatcher::isValidJoin(std::vector <std::string> messageVector){
    
     // 
     if (messageVector.size() == 2){
-        
+        parcRes.set
         //check, how many channels i want to join
         //  make a vector out of channels
         // and then handle("JOIN", channelVec)
