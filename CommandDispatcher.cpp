@@ -21,6 +21,8 @@ const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)
 
 int CommandDispatcher::dispatch(std::vector <std::string> messageVec){
 	std::string cmd = messageVec.at(0);
+	//if(messageVec.size() > 15)
+		//return (ERR_NEEDLESSPARAMS);//rfc2812.pdf ,pg5, but what about triling params??
 	if (dispatcherMap.find(cmd) != dispatcherMap.end()) {
     	return (this->*dispatcherMap[cmd])(messageVec);
 	}

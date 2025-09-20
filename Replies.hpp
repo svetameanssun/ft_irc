@@ -190,7 +190,6 @@
 #define ERR_NOSUCHCHANNEL      403 // Target channel does not exist (KICK, JOIN, MODE)
 #define ERR_CANNOTSENDTOCHAN   404 // Cannot send message to channel (no access,e.g., +n, +m, banned) (PRIVMSG)
 #define ERR_UNKNOWNCOMMAND     421 // Command not recognized by the server (sent after any command the server doesn’t know)
-#define ERR_ERRONEUSCOMMAND    422 // Command parameters invalid or malformed (can be sent after any command that exists but is syntactically wrong)
 #define ERR_UNAVAILRESOURCE    437 // Target nickname temporarily unavailable (JOIN, NICK)
 #define ERR_NEEDMOREPARAMS     461 // Not enough parameters supplied to the command
 #define ERR_ALREADYREGISTRED   462 // USER command sent after client has already registered (PASS, USER, NICK)
