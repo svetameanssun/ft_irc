@@ -9,7 +9,6 @@
 
 
 #include "Replies.hpp"
-
 #include "ParcerResultNick.hpp"
 #include "ParcerResultJoin.hpp"
 #include "ParcerResultPass.hpp"
@@ -17,12 +16,15 @@
 class CommandDispatcher{
 	public:
 		CommandDispatcher();
+		CommandDispatcher(const CommandDispatcher &other);
+		CommandDispatcher&operator=(const CommandDispatcher &other);
+		~CommandDispatcher();
 		int dispatch(std::vector <std::string> messageVec);
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)>& getDispatcherMap() const;
-		bool isValidNick(std::string nick);
-		bool isValidJoin(std::vector <std::string> messageVector);
+		//bool isValidNick(std::string nick);
+		//bool isValidJoin(std::vector <std::string> messageVector);
 	private:
-		ParcerResult *parcRes;
+		AParcerResult *_parcerResult;
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> messageVec)> dispatcherMap;
 		int dispatchPass(std::vector <std::string> messageVec);
 		int dispatchNick(std::vector <std::string> messageVec);

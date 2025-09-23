@@ -15,6 +15,24 @@ CommandDispatcher::CommandDispatcher() {
 	dispatcherMap["INFO"] = &CommandDispatcher::dispatchInfo;
 }
 
+
+CommandDispatcher::CommandDispatcher(const CommandDispatcher &other){
+	this->dispatcherMap = other.dispatcherMap;
+	this->_parcerResult = other._parcerResult;
+}
+
+CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
+	if (this != &other){
+		this->dispatcherMap = other.dispatcherMap;
+		this->_parcerResult = other._parcerResult;
+	}
+	return (*this);
+}
+
+CommandDispatcher::~CommandDispatcher(){
+
+}
+
 const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)>& CommandDispatcher::getDispatcherMap() const {
     return dispatcherMap;
 }
