@@ -12,16 +12,21 @@
 class ParcerResultJoin : public AParcerResult {
   public:
     ParcerResultJoin();
+    ParcerResultJoin(const ParcerResultJoin &other);
+    ParcerResultJoin& operator=(const ParcerResultJoin& other);
     ~ParcerResultJoin();
-    cosnt std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
-    cosnt std::vector<std::string> stringToVec(std::string string, char devisor);
+    const std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
+  
+    const std::vector<std::string> stringToVec(std::string string, char devisor);
+    bool isValidJoin(std::vector <std::string> messageVector);
     void setChannelNamePassMap(std::map<std::string, std::string> joinResMap);
-    void setChannelnameVec(std::vector <std::string> joinResVec);
-    cosnt std::map<std::string, std::string> getChannelNamePassMap(void) const;
+    void setChannelNameVec(std::vector <std::string> joinResVec);
+  
+    const std::map<std::string, std::string> getChannelNamePassMap(void) const;
     const std::vector <std::string> getChannelNameVec(void) const;
   private:
-    std::map<std::string, std::string> _channelNamePassMap;
-    std::vector <std::string> _channelNameVec;
+    std::map<std::string, std::string> _joinResMap;
+    std::vector <std::string> _joinResVec;
 };
 
 #endif

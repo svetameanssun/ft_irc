@@ -12,10 +12,14 @@
 class ParcerResultNick : public AParcerResult {
   public:
     ParcerResultNick();
+    ParcerResultNick(const ParcerResultNick &other);
+    ParcerResultNick& operator=(const ParcerResultNick& other);
     ~ParcerResultNick();
+    void setNickParams(std::vector<std::string> nickCommand);
+    const std::vector<std::string> getNickParams(void) const;
 
     bool isSpecialChar(int c);
-    bool isValidNick(std::string nick)
+    bool isValidNick(std::vector<std::string> nickCommand);
     
   private:
     std::vector <std::string> _nickParams;
