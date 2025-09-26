@@ -17,8 +17,3 @@ AParcerResult& AParcerResult::operator=(const AParcerResult& other){
     }
     return (*this);
 }
-
-AParcerResult::~AParcerResult(){
-
-}
-

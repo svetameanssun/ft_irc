@@ -5,7 +5,8 @@ ParcerResultPass::~ParcerResultPass() {
 	
 };
 
-ParcerResultPass::ParcerResultPass(const ParcerResultPass& other) {
+ParcerResultPass::ParcerResultPass(const ParcerResultPass& other)
+  : AParcerResult("PASS") {
   this->_passParams = other._passParams;
   this->_command = "PASS";
 };

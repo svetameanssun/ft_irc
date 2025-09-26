@@ -1,8 +1,10 @@
 #include "ParcerResultNick.hpp"
 
-ParcerResultNick::ParcerResultNick() {}
+ParcerResultNick::ParcerResultNick()
+  : AParcerResult("NICK") {}
 ParcerResultNick::~ParcerResultNick() {}
-ParcerResultNick::ParcerResultNick(const ParcerResultNick& other) {
+ParcerResultNick::ParcerResultNick(const ParcerResultNick& other)
+  : AParcerResult("NICK") {
   this->_nickParams = other._nickParams;
   this->_command = "NICK";
 };
@@ -39,9 +41,7 @@ bool ParcerResultNick::isValidNick(std::vector<std::string> nickCommand) {
   if (nickname.at(0) == '-' || isdigit(nickname.at(0))) return (0);
   if (!isalpha(nickname.at(0)) && !isSpecialChar(nickname.at(0))) return (0);
   if (nickname.length() > 9) return (0);
-  for (int i = 1; i < nickname.length(); ++i) {
-    if (nickname.at(i) > 127)  // non-ASCII
-      return 0;
+  for (long unsigned int i = 1; i < nickname.length(); ++i) {
     if (!isdigit(nickname.at(i)) && !isalpha(nickname.at(i)) &&
         !isSpecialChar(nickname.at(i)) && nickname.at(i) != '-')
       return (0);

@@ -1,10 +1,13 @@
 #include "CommandParcer.hpp"
 
 // MORE IDIOMATIC WAY:
-CommandParcer::CommandParcer(const CommandParcer& other) : _message(other._message) {}
+CommandParcer::CommandParcer(const CommandParcer& other) : _message(other._message) {
+	(void)other;
+}
 
 
 CommandParcer& CommandParcer::operator=(const CommandParcer& other){
+	(void)other;
 	return (*this);
 }
 

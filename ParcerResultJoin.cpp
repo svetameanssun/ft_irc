@@ -1,9 +1,11 @@
 #include "ParcerResultJoin.hpp"
 
-ParcerResultJoin::ParcerResultJoin() {
+ParcerResultJoin::ParcerResultJoin()
+    : AParcerResult("JOIN") {
 }
 
-ParcerResultJoin::ParcerResultJoin(const ParcerResultJoin &other){
+ParcerResultJoin::ParcerResultJoin(const ParcerResultJoin &other)
+    : AParcerResult("JOIN"){
     this->_joinResVec = other._joinResVec;
     this->_joinResMap = other._joinResMap;
 }
@@ -15,12 +17,27 @@ ParcerResultJoin& ParcerResultJoin::operator=(const ParcerResultJoin& other){
         this->_joinResMap = other._joinResMap;
     }
     return (*this);
-
 }
 
-ParcerResultJoin::~ParcerResultJoin() {
+bool ParcerResultJoin::isValidChannelNameChar(int c){
+    if (c == '\0')
+        return (false);
+    else if (c == '\a')
+        return (false);
+    else if (c == '\r')
+        return (false);
+    else if (c == '\n')
+        return (false);
+    else if (c == ' ')
+        return (false);
+    else if (c == ',')
+        return (false);
+    else if (c == ':')
+        return (false);
+    else{
+        return (true);
+    }
 }
-
 
 const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
@@ -52,12 +69,26 @@ const std::map<std::string, std::string> ParcerResultJoin::stringsToMap(std::str
     return(resMap);
 }
 
-
-bool isValidChannelName(std::string channelName){
-    //check the channel name requirements
-    // and check whether this excact channelName complies with these requirements
-    // return false if the name is not valid.
-
+ //checks the channel name requirements
+// and checks whether this excact channelName complies with these requirements
+// returns false if the name is not valid.
+bool ParcerResultJoin::isValidChannelName(std::string channelName){
+    size_t i = 0;
+    if (channelName.empty()) // NOT FORGET EVERYWHERE!
+        return false;
+    if (channelName.at(0) != "#" && channelName.at(0) != "&"){
+        return (false);
+    }
+    if (channelName.length() > 200 || channelName.length() == 1){
+        return (false);
+    }
+    i++;
+    for (; i < channelName.length(); i++){
+        if (!isValidChannelNameChar(channelName.at(i))){
+            return (false);
+        }
+    }
+    return (true);
 }
 
 bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector){
@@ -66,7 +97,7 @@ bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector){
         _joinResVec = stringToVec(messageVector[1], ',');
         for(int i = 0; this->_joinResVec.size(); i++){
             if (!isValidChannelName(_joinResVec.at(i)))
-                return (ERR_UNKNOWNCOMMAND);
+                return (0);
         }
         //check, how many channels i want to join
         //  make a vector out of channels
@@ -78,7 +109,7 @@ bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector){
         _joinResMap = stringsToMap(messageVector[1], messageVector[2]);
         for (std::map<std::string, std::string>::iterator it = _joinResMap.begin(); it != _joinResMap.end(); ++it){
             if (!isValidChannelName(it->first) || !isValidChannelName(it->second))
-                return (ERR_UNKNOWNCOMMAND);
+                return (0);
         }
         //check how many channels I want to join//
         // make a map [key] - channels name/
@@ -86,7 +117,7 @@ bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector){
         //&foo,+bar,#foof
         //fubar,foobar
     }
-    
+    return (true);
 }
 
 
@@ -106,5 +137,8 @@ const std::map<std::string, std::string> ParcerResultJoin::getChannelNamePassMap
 
 const std::vector <std::string> ParcerResultJoin::getChannelNameVec(void) const {
     return (_joinResVec);
+}
+
+ParcerResultJoin::~ParcerResultJoin() {
 }
 
