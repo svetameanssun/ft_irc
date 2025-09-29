@@ -17,3 +17,7 @@ AParcerResult& AParcerResult::operator=(const AParcerResult& other){
     }
     return (*this);
 }
+
+std::string AParcerResult::getCommand()const{
+    return (_command);
+}

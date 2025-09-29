@@ -16,10 +16,11 @@ class ParcerResultPass : public AParcerResult {
     ParcerResultPass& operator=(const ParcerResultPass& other);
     ~ParcerResultPass();
     
-    void setPassParams(std::vector<std::string> nickCommand);
+    void setPassParams(std::vector<std::string> passCommand);//
     const std::vector<std::string> getPassParams(void) const;
   private:
-    std::vector <std::string> _passParams;
+    std::vector <std::string> _passParams; // to make it unified,
+                                          // I pass the password as a vec, but it is actually a string
 };
 
 #endif

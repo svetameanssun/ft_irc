@@ -21,8 +21,6 @@ class CommandDispatcher{
 		~CommandDispatcher();
 		int dispatch(std::vector <std::string> messageVec);
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)>& getDispatcherMap() const;
-		//bool isValidNick(std::string nick);
-		//bool isValidJoin(std::vector <std::string> messageVector);
 	private:
 		AParcerResult *_parcerResult;
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> messageVec)> dispatcherMap;
@@ -38,5 +36,8 @@ class CommandDispatcher{
 		int dispatchPrivmsg(std::vector <std::string> messageVec);
 		int dispatchInfo(std::vector <std::string> messageVec);
 };
+
+void printMap(const std::map<std::string, std::string> &myMap);
+void printVec(const std::vector<std::string> &myVec);
 
 #endif

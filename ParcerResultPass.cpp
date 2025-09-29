@@ -21,9 +21,10 @@ ParcerResultPass& ParcerResultPass::operator=(const ParcerResultPass& other) {
 
 void ParcerResultPass::setPassParams(std::vector<std::string> passCommand) {
   if (!passCommand.empty()) {
-    passCommand.erase(passCommand.begin());  // drop the first element
+    passCommand.erase(passCommand.begin());  // drop the first element, which is the command
   }
   this->_passParams = passCommand;
+
 }
 
 const std::vector<std::string> ParcerResultPass::getPassParams(void) const {

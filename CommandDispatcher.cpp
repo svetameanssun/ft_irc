@@ -39,8 +39,6 @@ const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)
 
 int CommandDispatcher::dispatch(std::vector <std::string> messageVec){
 	std::string cmd = messageVec.at(0);
-	//if(messageVec.size() > 15)
-		//return (ERR_NEEDLESSPARAMS);//rfc2812.pdf ,pg5, but what about triling params??
 	if (dispatcherMap.find(cmd) != dispatcherMap.end()) {
     	return (this->*dispatcherMap[cmd])(messageVec);
 	}
@@ -48,4 +46,26 @@ int CommandDispatcher::dispatch(std::vector <std::string> messageVec){
     	std::cerr << "Unknown command: " << cmd << std::endl;
     return (ERR_UNKNOWNCOMMAND);
 	}
+}
+
+void printMap(const std::map<std::string, std::string> &myMap) {
+    if (myMap.empty())
+        return;
+
+    std::cout << "[KEY] = VALUE\n";
+    for (std::map<std::string, std::string>::const_iterator it = myMap.begin();
+         it != myMap.end(); ++it) {
+        std::cout << "[" << it->first << "] = " << it->second << "\n";
+    }
+}
+
+void printVec(const std::vector<std::string> &myVec) {
+    if (myVec.empty())
+        return;
+
+    std::cout << "VECTOR:\n";
+    for (std::vector<std::string>::const_iterator it = myVec.begin();
+         it != myVec.end(); ++it) {
+        std::cout << *it << "\n";
+    }
 }

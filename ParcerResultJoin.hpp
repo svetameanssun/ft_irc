@@ -24,14 +24,13 @@ class ParcerResultJoin : public AParcerResult {
     bool isValidJoin(std::vector <std::string> messageVector);
     bool isValidChannelName(std::string channelName);
     bool isValidChannelNameChar(int c);
-    //void setJoinParams(std::vector<std::string> nickCommand,  ???);
-    //Do not remember what is important to pass to the server here =0
+    void setJoinParams(std::vector<std::string> joinCommand);
 
-    const std::map<std::string, std::string> getChannelNamePassMap(void) const;
-    const std::vector <std::string> getChannelNameVec(void) const;
+    const std::map<std::string, std::string> getJoinParamsMap(void) const;
+    const std::vector <std::string> getJoinParamsVec(void) const;
   private:
-    std::map<std::string, std::string> _joinResMap;
-    std::vector <std::string> _joinResVec;
+    std::map<std::string, std::string> _joinParamsMap;
+    std::vector <std::string> _joinParamsVec;
 };
 
 #endif

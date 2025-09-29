@@ -197,7 +197,7 @@
 #define ERR_NOCHANMODES        477 // Channel does not support channel modes (MODE, TOPIC)
 #define ERR_USERNOTINCHANNEL  441 // User is not on the specified channel (KICK, MODE)
 #define ERR_TOOMANYTARGETS     407 // Too many recipients/targets (applies to some cmds, incl. JOIN, PRIVMSG)
-
+#define ERR_WRONGINPUT          666 // Custom command, the number might change in the future
 
 #endif
 

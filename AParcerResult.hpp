@@ -15,6 +15,8 @@ class AParcerResult {
     AParcerResult(const AParcerResult &other);
     AParcerResult&operator=(const AParcerResult& other);
     virtual ~AParcerResult() {};
+    std::string getCommand()const;
+    
   protected:
     std::string _command;
 

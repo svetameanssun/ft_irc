@@ -1,25 +1,33 @@
 #include "CommandParcer.hpp"
 
 
-void CommandParcer::splitMessage(void){
+int CommandParcer::splitMessage(void){
 	// common message characteristics check
 	if (_message.length() > 512){
-		throw std::runtime_error("_message is too long\n");
+		return(0);
+		//throw std::runtime_error("_message is too long\n");
 	}
-	if (_message.at(_message.length() - 1 ) != '\n')
+
+	// the following condiions are set by US, so there is no need to check them, RIGHT??
+	/*if (_message.at(_message.length() - 1 ) != '\n')
 	{
-		throw std::runtime_error("no LF\n");
+		return(ERR_WRONGINPUT);
+		//throw std::runtime_error("no LF\n");
 	}
 	if (_message.at(_message.length() - 2) != '\r')
-		throw std::runtime_error("no CR\n");
+	{
+		return(ERR_WRONGINPUT);
+		//throw std::runtime_error("no CR\n");
+	}*/
 
-	// stpliting string into vector;
+	// spliting string into vector;
 	std::istringstream iss(_message);
 	std::string temp;
 	while(iss >> temp){
-		std::cout << temp << "\n";
+		//std::cout << temp << "\n";
 		this->_messageVec.push_back(temp);
 	}
+	return (1);
 }
 
 int CommandParcer::commandProccess(void){
@@ -31,13 +39,17 @@ int CommandParcer::commandProccess(void){
 
 int launchParcing(void){
 	std::vector<std::string> messageVec;
-	CommandParcer parcer("Invite        sveta       :42  gggg  fff 			\r\n");
+	//CommandParcer parcer("JOIN        sveta       :42  gggg  fff 			\r\n");
+	CommandParcer parcer("JOIN        chan1,chan2,chan3,chan4       11,22,33,11  ");
 
-	try{ 
-		parcer.splitMessage();
-	} catch (const std::exception & e){
-		std::cerr << "input error: " << e.what();
-		return (666);// CHECK what ERR_VARIANT I can apply here! 
+	if (!parcer.splitMessage()){
+		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 	return(parcer.commandProccess());
 }
+
+
+
+
+
+

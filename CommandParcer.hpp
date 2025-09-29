@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cctype>
 
+
 #include "CommandDispatcher.hpp"
 
 class CommandParcer {
@@ -20,7 +21,7 @@ class CommandParcer {
     CommandParcer&operator=(const CommandParcer&other);
     ~CommandParcer();
 
-    void splitMessage(void);
+    int splitMessage(void);
     int commandProccess(void);
     std::string getMessage(void) const;
     std::vector<std::string> getMessageVec(void) const;
@@ -43,5 +44,6 @@ class CommandParcer {
 
 //TEMPORAL, later this function (or its content) will fit into some part of the server's code
 int launchParcing(void);
+
 
 #endif
