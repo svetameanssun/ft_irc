@@ -5,19 +5,17 @@ CommandParcer::CommandParcer(const CommandParcer& other) : _message(other._messa
 	(void)other;
 }
 
-
 CommandParcer& CommandParcer::operator=(const CommandParcer& other){
 	(void)other;
 	return (*this);
 }
 
-
-std::vector<std::string> CommandParcer::getMessageVec(void) const{
-	return (this->_messageVec);
+std::string &CommandParcer::getMessage(void) const{
+	return (this->_message);
 }
 
-std::string CommandParcer::getMessage(void) const{
-	return (this->_message);
+std::vector<std::string> &CommandParcer::getMessageVec(void) const{
+	return (this->_messageVec);
 }
 
 CommandParcer::~CommandParcer(){}
