@@ -23,8 +23,8 @@ class CommandParcer {
 
     int splitMessage(void);
     int commandProccess(void);
-    std::string getMessage(void) const;
-    std::vector<std::string> getMessageVec(void) const;
+    std::string &getMessage(void) const;
+    std::vector<std::string> &getMessageVec(void) const;
   private:
     const std::string _message;
     std::vector<std::string> _messageVec;
