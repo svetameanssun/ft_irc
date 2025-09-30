@@ -22,7 +22,7 @@ class CommandDispatcher{
 		int dispatch(std::vector <std::string> messageVec);
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>)>& getDispatcherMap() const;
 	private:
-		AParcerResult *_parcerResult;
+		AParcerResult _parcerResult;
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> messageVec)> dispatcherMap;
 		int dispatchPass(std::vector <std::string> messageVec);
 		int dispatchNick(std::vector <std::string> messageVec);
