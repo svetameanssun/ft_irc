@@ -27,12 +27,11 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
 
 
     ParcerResultPass *resultPass = new ParcerResultPass();
-    //CHECK HOW THE PASS COMMAND WORKS!
+    //PASS <password>
     if (messageVec.size() <= 1 )
         return ERR_NEEDMOREPARAMS;
     if (messageVec.size() > 2)
         return ERR_NEEDLESSPARAMS;
-
     resultPass->setPassParams(messageVec);
 
     // Transfer ownership into _parcerResult
