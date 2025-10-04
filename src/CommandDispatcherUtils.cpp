@@ -1,27 +1,5 @@
 #include "CommandDispatcher.hpp"
 
-/*void printMap(const std::map<std::string, std::string> &myMap) {
-    if (myMap.empty())
-        return;
-
-    std::cout << "[KEY] = VALUE\n";
-    for (std::map<std::string, std::string>::const_iterator it = myMap.begin();
-         it != myMap.end(); ++it) {
-        std::cout << "[" << it->first << "] = " << it->second << "\n";
-    }
-}
-
-void printVec(const std::vector<std::string> &myVec) {
-    if (myVec.empty())
-        return;
-
-    std::cout << "VECTOR:\n";
-    for (std::vector<std::string>::const_iterator it = myVec.begin();
-         it != myVec.end(); ++it) {
-        std::cout << *it << "\n";
-    }
-}*/
-
 
 int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
 
@@ -78,10 +56,6 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
     _parcerResult = resultJoin;
 
     _parcerResult->printResult();
-    //printVec(resultJoin->getJoinParamsVec());
-    //printVec(messageVec);
-
-
     return RPL_WELCOME;
 }
 
