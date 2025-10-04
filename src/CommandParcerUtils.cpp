@@ -6,7 +6,6 @@ bool CommandParcer::splitMessage(void){
 		return(0);
 
 	}
-
 	// spliting string into vector;
 	std::istringstream iss(_message);
 	std::string temp;
@@ -33,9 +32,18 @@ int launchParcing(void){
 	//messageStr = "JOIN        sveta       :42  gggg  fff 			\r\n";
 	//messageStr = "JOIN        chan1,chan2,chan3,chan4       11,22,33,11  ";
 	//messageStr = "JOIN newChannel";
-	messageStr = "JOIN #newChannel";
+	//messageStr = "JOIN #newChannel";
+	//messageStr = "JOIN #newChannel,&anotherChannel,#wonderfulChannel,&a,&b 1234,9999,0000";
+	//messageStr = "JOIN #newChannel,&anotherChannel,#wonderfulChannel,&a,&b 1234,9999,0000,8,9,7,6,5,4";
+	//messageStr = "Join newChan"; // does not start with & or #
+	//messageStr = "Join &newChan"; // OK
+	//messageStr = "NICK newNick";
+	//messageStr = "NICK newNickname"; //  nickname no longer than 9 chars (?)
+	//messageStr = "NICK 1392r"; //  nickname cannotstart with digit
+	messageStr = "pass newNickname"; //
+
 	
-	
+
 	CommandParcer parcer(messageStr);
 
 	if (!parcer.splitMessage()){

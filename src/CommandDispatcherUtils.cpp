@@ -1,6 +1,6 @@
 #include "CommandDispatcher.hpp"
 
-void printMap(const std::map<std::string, std::string> &myMap) {
+/*void printMap(const std::map<std::string, std::string> &myMap) {
     if (myMap.empty())
         return;
 
@@ -20,15 +20,15 @@ void printVec(const std::vector<std::string> &myVec) {
          it != myVec.end(); ++it) {
         std::cout << *it << "\n";
     }
-}
+}*/
 
 
 int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
 
 
     ParcerResultPass *resultPass = new ParcerResultPass();
-
-    if (messageVec.size() == 1)
+    //CHECK HOW THE PASS COMMAND WORKS!
+    if (messageVec.size() <= 1 )
         return ERR_NEEDMOREPARAMS;
     if (messageVec.size() > 2)
         return ERR_NEEDLESSPARAMS;
@@ -38,8 +38,6 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
     // Transfer ownership into _parcerResult
     _parcerResult = resultPass;
     _parcerResult->printResult();
-    printVec(resultPass->getPassParams());
-    printVec(messageVec);
 
     return RPL_WELCOME;
 }
@@ -47,10 +45,13 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
 int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
         ParcerResultNick *resultNick = new ParcerResultNick();
 
-    if (messageVec.size() == 1)
+    if (messageVec.size() == 1){
         return ERR_NONICKNAMEGIVEN;
-    if (!resultNick->isValidNick(messageVec))
+    }
+    if (!resultNick->isValidNick(messageVec)){
+       
         return ERR_ERRONEUSNICKNAME;
+    }
 
     resultNick->setNickParams(messageVec);
 
@@ -77,8 +78,8 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
     // Transfer ownership to _parcerResult
     _parcerResult = resultJoin;
 
-    //_parcerResult->printResult();
-    printVec(resultJoin->getJoinParamsVec());
+    _parcerResult->printResult();
+    //printVec(resultJoin->getJoinParamsVec());
     //printVec(messageVec);
 
 
@@ -101,7 +102,6 @@ int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     std::cout << messageVec.at(0)<< std::endl;
     return (RPL_WELCOME);
 }
-
 
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
