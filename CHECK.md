@@ -1,7 +1,10 @@
 1) check the consistency of the parameters returned in the classes derived from AParcerResult.
       should I return a vector with the whole command  --> vector<string> vec = {"JOIN", "#channel"};
                                                                               OR
-      only a vector with command params                --> vector<string> vec = {"JOIN", "#channel"};
+      only a vector ONLY with command params           --> vector<string> vec = {"#channel"};
 
 2) Create a purely virtual function setParams() in AParcerResult, and then redefine it in every derived class:
       void setParamas(std::vector<std::string> commandMessage) = 0;
+
+3) Finish defining ParcerResultUser class
+

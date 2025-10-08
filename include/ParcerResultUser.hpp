@@ -15,9 +15,12 @@ class ParcerResultUser : public AParcerResult {
     ParcerResultUser& operator=(const ParcerResultUser& other);
     ~ParcerResultUser();
     
-    void setUserParams(std::vector<std::string> userCommand);
+    //void setUserParams(std::vector<std::string> userCommand);
+    void setParams(std::vector<std::string> userCommand);
     const std::vector<std::string> getUserParams(void) const;
     void printResult() const;
+    bool isProhibitedUserChar(char usernameChar);
+    int wrongUserParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _userParamsVec;
 };

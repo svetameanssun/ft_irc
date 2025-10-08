@@ -6,7 +6,7 @@
 ParcerResultPass::ParcerResultPass() : AParcerResult() {
   _command = "PASS";
 }
-ParcerResultPass::~ParcerResultPass() {};
+
 
 ParcerResultPass::ParcerResultPass(const ParcerResultPass& other):AParcerResult(){
   this->_command = other._command;
@@ -21,13 +21,15 @@ ParcerResultPass& ParcerResultPass::operator=(const ParcerResultPass& other) {
   }
   return (*this);
 }
+
+ParcerResultPass::~ParcerResultPass() {};
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultPass::setPassParams(std::vector<std::string> passCommand) {
+void ParcerResultPass::setParams(std::vector<std::string> passCommand) {
   if (!passCommand.empty()) {
     passCommand.erase(passCommand.begin());  // drop the first element, which is the command
   }

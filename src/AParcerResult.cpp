@@ -13,7 +13,7 @@ AParcerResult::AParcerResult(const AParcerResult &other){
 AParcerResult& AParcerResult::operator=(const AParcerResult& other){
     if (this != &other)
     {
-     this->_command = other._command;   
+        this->_command = other._command;
     }
     return (*this);
 }

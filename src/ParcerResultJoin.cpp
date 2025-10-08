@@ -31,7 +31,7 @@ ParcerResultJoin::~ParcerResultJoin() {
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultJoin::setJoinParams(std::vector<std::string> joinCommand) {
+void ParcerResultJoin::setParams(std::vector<std::string> joinCommand) {
     if(joinCommand.size() == 2) {
         if (!joinCommand.empty()) {
             joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself

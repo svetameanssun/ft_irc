@@ -28,7 +28,7 @@ ParcerResultNick& ParcerResultNick::operator=(const ParcerResultNick& other) {
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
-void ParcerResultNick::setNickParams(std::vector<std::string> nickCommand) {
+void ParcerResultNick::setParams(std::vector<std::string> nickCommand) {
     if(!nickCommand.empty()) {
         nickCommand.erase(nickCommand.begin());  // drop the first element, wich is the NICK command
     }

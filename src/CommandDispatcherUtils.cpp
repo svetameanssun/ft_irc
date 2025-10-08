@@ -10,7 +10,7 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
         return ERR_NEEDMOREPARAMS;
     if (messageVec.size() > 2)
         return ERR_NEEDLESSPARAMS;
-    resultPass->setPassParams(messageVec);
+    resultPass->setParams(messageVec);
 
     // Transfer ownership into _parcerResult
     _parcerResult = resultPass;
@@ -30,7 +30,7 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
         return ERR_ERRONEUSNICKNAME;
     }
 
-    resultNick->setNickParams(messageVec);
+    resultNick->setParams(messageVec);
 
     // Transfer ownership into _parcerResult
     _parcerResult = resultNick;
@@ -50,7 +50,7 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
         return ERR_UNKNOWNCOMMAND;
     }
 
-    resultJoin->setJoinParams(messageVec);
+    resultJoin->setParams(messageVec);
 
     // Transfer ownership to _parcerResult
     _parcerResult = resultJoin;
@@ -63,7 +63,17 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
 
 int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
+    //USER <username> <realname>
+    ParcerResultUser * resultUser = new ParcerResultUser();
+    if(int err = wrongUser(messageVec))
+    {
+        return (err);
+    }
     
+        // Transfer ownership to _parcerResult
+    _parcerResult = resultUser;
+
+    _parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
     return (RPL_WELCOME);
 }

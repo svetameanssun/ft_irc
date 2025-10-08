@@ -4,7 +4,6 @@ bool CommandParcer::splitMessage(void){
 	// common message characteristics check
 	if (_message.length() > 512){
 		return(0);
-
 	}
 	// spliting string into vector;
 	std::istringstream iss(_message);
