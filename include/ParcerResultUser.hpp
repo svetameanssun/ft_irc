@@ -1,5 +1,5 @@
 #ifndef PARCERRESULTUSER_HPP
-#define PARCERRESULTUSR_HPP
+#define PARCERRESULTUSER_HPP
 
 #include <iostream>
 #include <map>
@@ -19,10 +19,11 @@ class ParcerResultUser : public AParcerResult {
     void setParams(std::vector<std::string> userCommand);
     const std::vector<std::string> getUserParams(void) const;
     void printResult() const;
-    bool isProhibitedUserChar(char usernameChar);
-    int wrongUserParams(std::vector<std::string> messageVec);
+    bool isAllowedChar(char usernameChar);
+    int checkUserParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _userParamsVec;
+    std::string _userName;
 };
 
 #endif

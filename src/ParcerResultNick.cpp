@@ -8,21 +8,23 @@ ParcerResultNick::ParcerResultNick()
     : AParcerResult() {
     _command = "NICK";
 }
-ParcerResultNick::~ParcerResultNick() {}
+
 ParcerResultNick::ParcerResultNick(const ParcerResultNick& other): AParcerResult() {
     this->_command = other._command;
     this->_nickParamsVec = other._nickParamsVec;
-    this->_command = "NICK";
-};
+    this->_command = other._command;
+}
+
 
 ParcerResultNick& ParcerResultNick::operator=(const ParcerResultNick& other) {
     if(this != &other) {
         this->_nickParamsVec = other._nickParamsVec;
-        this->_command = "NICK";
+        this->_command = other._command;
     }
     return (*this);
 }
 
+ParcerResultNick::~ParcerResultNick() {}
 /*==========================================================*/
 
 /*----------------------------------------------------------*/

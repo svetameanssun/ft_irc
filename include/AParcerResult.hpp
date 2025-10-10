@@ -12,8 +12,7 @@ class AParcerResult {
   public:
     AParcerResult();
     AParcerResult(std::string command);
-    // does it even work in c++98??
-    AParcerResult(const AParcerResult &other){};
+    AParcerResult(const AParcerResult &other);
     AParcerResult& operator=(const AParcerResult& other);
 
     // Polymorphic base class → virtual destructor

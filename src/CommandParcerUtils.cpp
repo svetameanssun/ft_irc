@@ -39,13 +39,21 @@ int launchParcing(void){
 	//messageStr = "NICK newNick";
 	//messageStr = "NICK newNickname"; //  nickname no longer than 9 chars (?)
 	//messageStr = "NICK 1392r"; //  nickname cannotstart with digit
-	messageStr = "pass newNickname"; //
+	//messageStr = "user newNickname"; // not enough parameters
+	//messageStr = "user newNickname  dddd dddd"; // wrong input
+	//messageStr = "user newNickname  dddd:dddd"; // wrong input
+	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
+	messageStr = "USER $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
+	
+
+	
 
 	
 
 	CommandParcer parcer(messageStr);
-
 	if (!parcer.splitMessage()){
+		std::cout << "THIS";
+
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 	return (parcer.commandProccess());

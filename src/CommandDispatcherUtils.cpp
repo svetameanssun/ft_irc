@@ -1,15 +1,19 @@
 #include "CommandDispatcher.hpp"
 
-
 int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
 
 
     ParcerResultPass *resultPass = new ParcerResultPass();
     //PASS <password>
-    if (messageVec.size() <= 1 )
+    if (messageVec.size() <= 1 ){
+        delete(resultPass);
+
         return ERR_NEEDMOREPARAMS;
-    if (messageVec.size() > 2)
+    }
+    if (messageVec.size() > 2){
         return ERR_NEEDLESSPARAMS;
+        delete(resultPass);
+    }
     resultPass->setParams(messageVec);
 
     // Transfer ownership into _parcerResult
@@ -23,10 +27,11 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
         ParcerResultNick *resultNick = new ParcerResultNick();
 
     if (messageVec.size() == 1){
+        delete(resultNick);
         return ERR_NONICKNAMEGIVEN;
     }
     if (!resultNick->isValidNick(messageVec)){
-       
+        delete(resultNick);
         return ERR_ERRONEUSNICKNAME;
     }
 
@@ -42,11 +47,16 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
 
 int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
     ParcerResultJoin *resultJoin = new ParcerResultJoin();
-    if (messageVec.size() < 2)
+    if (messageVec.size() < 2){
+        delete(resultJoin);
         return ERR_NEEDMOREPARAMS;
-    if (messageVec.size() > 3)
+    }
+    if (messageVec.size() > 3){
+        delete(resultJoin);
         return ERR_NEEDLESSPARAMS;
+    }
     if (!resultJoin->isValidJoin(messageVec)){
+        delete(resultJoin);
         return ERR_UNKNOWNCOMMAND;
     }
 
@@ -65,12 +75,14 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
     //USER <username> <realname>
     ParcerResultUser * resultUser = new ParcerResultUser();
-    if(int err = wrongUser(messageVec))
+    //std::cout << "HERE\n";
+    if(int err = resultUser->checkUserParams(messageVec))
     {
+        delete(resultUser);
         return (err);
     }
-    
-        // Transfer ownership to _parcerResult
+    resultUser->setParams(messageVec);
+    // Transfer ownership to _parcerResult
     _parcerResult = resultUser;
 
     _parcerResult->printResult();

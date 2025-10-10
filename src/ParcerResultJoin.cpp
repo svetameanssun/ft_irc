@@ -19,6 +19,7 @@ ParcerResultJoin& ParcerResultJoin::operator=(const ParcerResultJoin& other) {
     if(this != &other) {
         this->_joinParamsVec = other._joinParamsVec;
         this->_joinParamsMap = other._joinParamsMap;
+        this->_command = other._command;
     }
     return (*this);
 }

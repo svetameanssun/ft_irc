@@ -7,22 +7,22 @@ ParcerResultPass::ParcerResultPass() : AParcerResult() {
   _command = "PASS";
 }
 
-
 ParcerResultPass::ParcerResultPass(const ParcerResultPass& other):AParcerResult(){
   this->_command = other._command;
   this->_passParamsVec = other._passParamsVec;
-  this->_command = "PASS";
-};
+}
+
 
 ParcerResultPass& ParcerResultPass::operator=(const ParcerResultPass& other) {
   if (this != &other) {
     this->_passParamsVec = other._passParamsVec;
-    this->_command = "PASS";
+    this->_command = other._command;
   }
   return (*this);
 }
 
-ParcerResultPass::~ParcerResultPass() {};
+ParcerResultPass::~ParcerResultPass() {}
+
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
@@ -34,7 +34,6 @@ void ParcerResultPass::setParams(std::vector<std::string> passCommand) {
     passCommand.erase(passCommand.begin());  // drop the first element, which is the command
   }
   this->_passParamsVec = passCommand;
-
 }
 
 const std::vector<std::string> ParcerResultPass::getPassParams(void) const {
