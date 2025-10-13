@@ -10,6 +10,9 @@
 #include <poll.h>
 #include <iostream>
 #include "Client.hpp"
+#include "CommandHandler.hpp"
+#include "ClientManager.hpp"
+#include "ChannelManager.hpp"
 
 class Client;   // forward declaration
 class Channel;  // forward declaration
@@ -18,13 +21,15 @@ class Server
 {
     private:
         const std::string           _serverName;    // Name of the server
-        int                         _listenFd;      // listening socket
+        int                         _listenFd;      // listening socket //TODO: review function of this
         int                         _port;          // port number
         std::string                 _password;      // optional server password
-        std::map<int, Client *>      _clients;       // fd -> Client*
-        std::map<std::string, Channel *> _channels;  // name -> Channel*
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
         bool                        _running;       // server loop flag
+
+        CommandHandler              _cmdHandler;    // entity that handles commands
+        ClientManager               _clientManager;
+        ChannelManager              _channelManager;
 
         Server(const Server &other);                // Copy of the server is not allowed
         Server &operator=(const Server& other);
@@ -40,25 +45,20 @@ class Server
         void    stop();
 
         // getters
-        const std::string &getServerName() const;
+        const   std::string &getServerName() const;
         int     getPort() const;
-        const std::string &getPassword() const;
+        const   std::string &getPassword() const;
 
         // setters
         void    setPort(int port);
         void    setPassword(const std::string password);
 
-        // client management
-        void    addClient(int fd);
-        void    removeClient(int fd);
-
-        // Channel management 
-        Channel *addChannel(const std::string &name);
-        Channel *findChannel(const std::string &name) const;
-        void    removeChannel(const std::string& name);
+        // Managers accessors
+        ClientManager &getClientManager() { return _clientManager; }
+        ChannelManager &getChannelManager() { return _channelManager; }
 
         // command handling 
-        void handleJoin(Client *client, const std::string &chanName, const std::string &key);
-        //void sendToClient(Client *client, const std::string &msg);
-        //void sendNumeric(Client *client, int code, const std::string &msg);
+        void    dispatchCommand(Client *client, const std::string &cmd,
+                            const std::vector<std::string> &args);
+
 };

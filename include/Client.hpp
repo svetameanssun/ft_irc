@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Server.hpp"
 #include <string>
 #include <vector>
 #include <netinet/in.h>     //for sockaddr_in, look if if there is another way
@@ -9,7 +8,7 @@ class Client
 {
     private:
         int         _fd;            //for the socket
-        std::string _nickname;      //9 chars max I believe it was
+        std::string _nickname;      //9 chars max, need to specifiy it 
         std::string _username;      //USER
         std::string _realname;      //Real name (from USER command)  <<---- check if there are this many fields
         std::string _hostname;      //Hostname (or IP string)
@@ -28,13 +27,13 @@ class Client
         ~Client();
 
         //getters
-        int     getFd() const;
+        int   getFd() const;
         const std::string &getNick() const;
         const std::string &getUser() const;
         const std::string &getRealName() const;
         const std::string &getHost() const;
         bool isRegistered() const;
-        bool isOperator() const;
+        bool isOperator() const;            //TODO: we might move the logic to the channel
 
         //setters
         void setNick(const std::string &nick);

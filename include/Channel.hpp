@@ -4,12 +4,13 @@
 #include <map>
 #include <set>
 #include <vector>
-#include "Client.hpp"
+
+class Client; 
 
 class Channel
 {
     private:
-        std::string             _name;      //channel name
+        std::string             _name;      //channel name; up to 200 chars
         std::string             _topic;     //current topic
         std::map<int, Client *> _members;   //Client has already its fd, check if this is necessary
         std::set<int>           _operators; //who are operators; check if this is a good approach
@@ -18,7 +19,7 @@ class Channel
         bool                    _lMode;     //If it has a limit
         std::string             _key;       //password if mode +k
         int                     _userLimit; //if mode +l
-        std::set<int>            _invited;   //invited clients; set to avoid duplicates
+        std::set<int>           _invited;   //invited clients; set to avoid duplicates
 
         //forbid copy
         Channel(const Channel &other);
@@ -29,13 +30,13 @@ class Channel
         ~Channel();
 
         //getters 
-        const std::string& getName() const;
-        const std::string& getTopic() const;
+        const std::string &getName() const;
+        const std::string &getTopic() const;
         int                getUserCount() const;
         bool               isInviteOnly() const;
         bool               hasKey() const;
         bool               hasLimit() const;
-        const std::string& getKey() const;
+        const std::string &getKey() const;
         int                getUserLimit() const;
         const std::map<int, Client *> getChannelMembers() const;
 
@@ -48,8 +49,8 @@ class Channel
         void setUserLimit(int limit);
 
         // membership management
-        bool addMember(Client* client, bool isOp = false);
-        void removeMember(Client* client);
+        bool addMember(Client *client, bool isOp = false);
+        void removeMember(Client *client);
         bool isMember(int fd) const;
         bool isOperator(int fd) const;
         void promoteToOp(int fd);
@@ -61,5 +62,8 @@ class Channel
 
         // broadcasting
         void broadcast(const std::string &message) const; //Check params
+
+        //aux functions
+        bool isEmpty();
 
 };

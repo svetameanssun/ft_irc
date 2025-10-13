@@ -2,7 +2,7 @@
 #include <iostream>
 
 // Send raw message
-void MessageSender::sendToClient(Client* client, const std::string& msg)
+void MessageSender::sendToClient(Client *client, const std::string &msg)
 {
     if (!client)
         return;
@@ -10,13 +10,14 @@ void MessageSender::sendToClient(Client* client, const std::string& msg)
     // For now, write to std::cout instead of socket
     std::cout << "Sending to " << client->getNick() << ": " << msg;
 
-    // Later: enable real network send
+    // TODO: Later: enable real network send message
+    // TODO: Define which structure we use 
     // ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 
 // Send numeric reply
-void MessageSender::sendNumeric(const std::string& serverName, Client* client,
-                                int code, const std::string& msg)
+void MessageSender::sendNumeric(const std::string &serverName, Client *client,
+                                int code, const std::string &msg)
 {
     if (!client)
         return;

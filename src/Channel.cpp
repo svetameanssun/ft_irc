@@ -1,4 +1,6 @@
 #include "Channel.hpp"
+#include "Client.hpp"
+#include "MessageSender.hpp"
 #include <algorithm>
 #include <iostream>
 
@@ -70,11 +72,15 @@ bool Channel::isInvited(int fd) const { return _invited.find(fd) != _invited.end
 void Channel::broadcast(const std::string &message) const
 {
     int excludeFd = -1;
-    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); ++it) {
-    if (it->first == excludeFd)
-        continue;
-    // TODO: integrate with Server::sendMessage() when we build it
-    std::cout << "Sending to " << it->second->getNick()
-              << ": " << message << std::endl;
+    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); ++it)
+    {
+        int fd = it->first;
+        Client *c = it->second;
+        if (!c) continue;
+        if (fd == excludeFd) continue; // skip excluded fd
+        // send raw message to each member
+        MessageSender::sendToClient(c, message);
     }
 }
+
+bool Channel::isEmpty() { return _members.empty(); }

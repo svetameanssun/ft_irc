@@ -9,6 +9,8 @@ OBJ_DIR  = obj/
 INC_FILES =		Server.hpp \
 				Client.hpp \
 				Channel.hpp \
+				ClientManager.hpp \
+				ChannelManager.hpp \
 				MessageSender.hpp \
 				CommandHandler.hpp \
 				utils.hpp
@@ -19,6 +21,8 @@ FILES    = 	main.cpp \
 			Server.cpp \
 			Client.cpp \
 			Channel.cpp \
+			ClientManager.cpp \
+			ChannelManager.cpp \
 			MessageSender.cpp \
 			CommandHandler.cpp \
 			utils.cpp
@@ -65,7 +69,9 @@ run:
 test:
 	@if [ ! -f "$(TEST)" ]; then \
     	$(CC) $(CFLAGS) -I $(INC_DIR) src/Channel.cpp src/Client.cpp src/Server.cpp \
-									src/MessageSender.cpp src/CommandHandler.cpp src/utils.cpp test.cpp -o $(TEST); \
+									src/MessageSender.cpp src/CommandHandler.cpp \
+									src/ClientManager.cpp src/ChannelManager.cpp \
+									cmdtests.cpp src/utils.cpp test.cpp -o $(TEST); \
 	fi
 	@./$(TEST)
 
