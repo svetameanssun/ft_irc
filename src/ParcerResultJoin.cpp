@@ -19,6 +19,7 @@ ParcerResultJoin& ParcerResultJoin::operator=(const ParcerResultJoin& other) {
     if(this != &other) {
         this->_joinParamsVec = other._joinParamsVec;
         this->_joinParamsMap = other._joinParamsMap;
+        this->_command = other._command;
     }
     return (*this);
 }
@@ -31,15 +32,19 @@ ParcerResultJoin::~ParcerResultJoin() {
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultJoin::setJoinParams(std::vector<std::string> joinCommand) {
+void ParcerResultJoin::setParams(std::vector<std::string> joinCommand) {
     if(joinCommand.size() == 2) {
+        if (!joinCommand.empty()) {
+            joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
+        }
         this->_joinParamsVec = joinCommand;
     } else if(joinCommand.size() == 3) {
-
+        if (!joinCommand.empty()) {
+            joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
+        }
         this->_joinParamsVec = joinCommand;
         this->_joinParamsMap = stringsToMap(joinCommand.at(1), joinCommand.at(2));
     } else {
-
         (void)joinCommand;
     }
 }

@@ -11,6 +11,7 @@ INC_FILES =	AParcerResult.hpp \
 	ParcerResultJoin.hpp \
 	ParcerResultNick.hpp \
 	ParcerResultPass.hpp \
+	ParcerResultUser.hpp \
 	Replies.hpp
 
 INCLUDE  = $(addprefix $(INC_DIR), $(INC_FILES))
@@ -23,6 +24,7 @@ SRC_FILES = AParcerResult.cpp \
 	ParcerResultJoin.cpp \
 	ParcerResultNick.cpp \
 	ParcerResultPass.cpp \
+	ParcerResultUser.cpp \
 	main.cpp
 
 SRCS     = $(addprefix $(SRC_DIR), $(SRC_FILES))

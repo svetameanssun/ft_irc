@@ -12,6 +12,7 @@
 #include "ParcerResultNick.hpp"
 #include "ParcerResultJoin.hpp"
 #include "ParcerResultPass.hpp"
+#include "ParcerResultUser.hpp"
 
 class CommandDispatcher{
 	public:
