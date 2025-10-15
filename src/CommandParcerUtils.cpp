@@ -43,7 +43,7 @@ int launchParcing(void){
 	//messageStr = "user newNickname  dddd dddd"; // wrong input
 	//messageStr = "user newNickname  dddd:dddd"; // wrong input
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
-	messageStr = "USER $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
+	messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	
 
 	

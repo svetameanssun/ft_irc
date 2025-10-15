@@ -50,22 +50,6 @@ const std::vector<std::string> ParcerResultUser::getUserParams(void) const{
 /*                      CHECK COMMAND                       */
 /*----------------------------------------------------------*/
 
-/*bool ParcerResultUser::isAllowedChar(char c){
-
-	if (c == '\0')
-		return (false);
-	else if (c == '@')
-		return (false);
-	else if (c == '\n')
-		return (false);
-	else if (c == '\r')
-		return (false);
-	else if (c == ' ')
-		return (false);
-	else
-		return  (true);
-}*/
-
 
 bool ParcerResultUser::isAllowedChar(char c){
 
