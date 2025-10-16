@@ -54,9 +54,9 @@ const std::vector<std::string> ParcerResultUser::getUserParams(void) const{
 bool ParcerResultUser::isAllowedChar(char c){
 
 
-    std::string specialChars;
-	specialChars.push_back('\0');
-	specialChars += "@\n\r ";
+    std::string allowedChars;
+	allowedChars.push_back('\0');
+	allowedChars += "@\n\r ";
     if(specialChars.find(c) == std::string::npos) {
 		
         return (true);

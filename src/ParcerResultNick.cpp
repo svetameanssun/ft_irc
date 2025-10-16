@@ -57,6 +57,7 @@ bool ParcerResultNick::isSpecialChar(int c) {
 }
 
 bool ParcerResultNick::isValidNick(std::vector<std::string> nickCommand) {
+    
     std::string nickname = nickCommand.at(1);
     std::cout << nickname << "\n";
     if(nickname.empty()) {

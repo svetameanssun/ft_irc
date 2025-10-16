@@ -62,7 +62,7 @@ const std::vector <std::string> ParcerResultJoin::getJoinParamsVec(void) const {
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
 
-bool ParcerResultJoin::isValidChannelNameChar(int c) {
+bool ParcerResultJoin::isValidChanNameChar(int c) {
     if(c == '\0')
         return (false);
     else if(c == '\a')
@@ -85,7 +85,7 @@ bool ParcerResultJoin::isValidChannelNameChar(int c) {
 //checks the channel name requirements
 // and checks whether this excact channelName complies with these requirements
 // returns false if the name is not valid.
-bool ParcerResultJoin::isValidChannelName(std::string channelName) {
+bool ParcerResultJoin::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -100,7 +100,7 @@ bool ParcerResultJoin::isValidChannelName(std::string channelName) {
     }
     i++;
     for(; i < channelName.length(); ++i) {
-        if(!isValidChannelNameChar(channelName.at(i))) {
+        if(!isValidChanNameChar(channelName.at(i))) {
             return (false);
         }
     }
@@ -115,7 +115,7 @@ bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector) {
     if(messageVector.size() == 2) {
         joinParamsVec = stringToVec(messageVector[1], ',');
         for(size_t i = 0; i < joinParamsVec.size(); i++) {
-            if(!isValidChannelName(joinParamsVec.at(i))) {
+            if(!isValidChanName(joinParamsVec.at(i))) {
                 return (false);
             }
         }
@@ -127,7 +127,7 @@ bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector) {
         }
         joinParamsMap = stringsToMap(messageVector[1], messageVector[2]);
         for(std::map<std::string, std::string>::iterator it = joinParamsMap.begin(); it != joinParamsMap.end(); ++it) {
-            if(!isValidChannelName(it->first))
+            if(!isValidChanName(it->first))
                 return (false);
         }
     } else

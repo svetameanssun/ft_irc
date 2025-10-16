@@ -19,7 +19,9 @@ class ParcerResultMode : public AParcerResult {
     void setParams(std::vector<std::string> modeCommand);
     const std::vector<std::string> getModeParams(void) const;
     void printResult() const;
-    //bool isAllowedChar(char usernameChar);
+    bool isValidChanFlag(std::string channelFlag);
+    bool isValidChanName(std::string channelName);
+    bool isValidChanParams(std::vector<std::string> messageVec);
     int checkModeParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _topicParamsVec;

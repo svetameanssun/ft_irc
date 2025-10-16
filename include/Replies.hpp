@@ -81,7 +81,6 @@
 // ---- CHANNEL MODE Command Errors ----
 #define ERR_KEYSET             467 // Channel already has a key set (+k)
 #define ERR_UNKNOWNMODE        472 // Unknown MODE flag for a channel
-#define RPL_UNIQOPIS           325 // List of channel operators with "@" or similar prefix
 
 
 
@@ -89,6 +88,7 @@
 
 // ---- CHANNEL MODE Command Replies ----
 #define RPL_CHANNELMODEIS      324 // Current channel modes
+#define RPL_UNIQOPIS           325 // List of channel operators with "@" or similar prefix
 #define RPL_BANLIST            367 // List of bans set on the channel
 #define RPL_ENDOFBANLIST       368 // End of ban list
 #define RPL_EXCEPTLIST         348 // List of exceptions to channel bans
