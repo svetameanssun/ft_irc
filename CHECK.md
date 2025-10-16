@@ -7,9 +7,7 @@ TODO:
       only a vector ONLY with command params           --> vector<string> vec = {"#channel"};
 
 
-
-2) specialChars - check how can i apply std:string find() function,
-      instead of else if. (in ParcerResultUser.cpp ParcerResultNick.cpp ParcerResultJoin.cpp )
+2) Should I include +I exception for MODE?
 
 
 
@@ -19,3 +17,6 @@ DONE:
       void setParamas(std::vector<std::string> commandMessage) = 0;
 
  - Finish defining ParcerResultUser class
+
+ - specialChars - check how can i apply std:string find() function,
+      instead of else if. (in ParcerResultUser.cpp ParcerResultNick.cpp ParcerResultJoin.cpp )
