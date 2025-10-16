@@ -14,7 +14,8 @@ class Channel
         std::string             _topic;     //current topic
         std::map<int, Client *> _members;   //Client has already its fd, check if this is necessary
         std::set<int>           _operators; //who are operators; check if this is a good approach
-        bool                    _inviteOnly; //if the channel is invite only (+i flag?)
+        bool                    _iMode;     //if the channel is invite only (+i flag?)
+        bool                    _tMode;     //It has a topic locked
         bool                    _kMode;     //If it has a password
         bool                    _lMode;     //If it has a limit
         std::string             _key;       //password if mode +k
@@ -36,6 +37,7 @@ class Channel
         bool               isInviteOnly() const;
         bool               hasKey() const;
         bool               hasLimit() const;
+        bool               isTopicLocked () const;
         const std::string &getKey() const;
         int                getUserLimit() const;
         const std::map<int, Client *> getChannelMembers() const;
@@ -45,6 +47,7 @@ class Channel
         void setInviteOnly(bool value);
         void setKey(const std::string& key);
         void setKMode(bool value);
+        void setTMode(bool value);
         void removeKey();
         void setUserLimit(int limit);
 

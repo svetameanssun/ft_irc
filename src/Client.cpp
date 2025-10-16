@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "utils.hpp"
 #include <algorithm>
 
 Client::Client() : _fd(-1), _registered(false), _isOperator(false) {}
@@ -23,7 +24,7 @@ void Client::setRegistered(bool value) { _registered = value; }
 void Client::setOperator(bool value) { _isOperator = value; }
 
 // Buffer handling
-void Client::appendToBuffer(const std::string& data) { _buffer += data; } //TODO: We need to work on this 
+void Client::appendToBuffer(const std::string &data) { _buffer += data; } //TODO: We need to work on this 
 
 std::vector<std::string> Client::extractMessages()
 {
@@ -42,21 +43,24 @@ std::vector<std::string> Client::extractMessages()
 
 // Channel handling; of course we will need to call the proper procedures to 
 // ask the server->ChannelManager to do it 
-//TODO: Change the logic to join a channel
-void Client::joinChannel(const std::string& name)
+void Client::joinChannel(const std::string &name)
 {
+    log_msg("Client: I want to join a channel :D");
     if (std::find(_channels.begin(), _channels.end(), name) == _channels.end())
         _channels.push_back(name);
 }
 
-//TODO: Same here, change the logic to leave the channel and call the channel procs
-void Client::leaveChannel(const std::string& name)
+void Client::leaveChannel(const std::string &name)
 {
+    log_msg("Client: I want to leave a channel :()");
     std::vector<std::string>::iterator it =
         std::find(_channels.begin(), _channels.end(), name);
     if (it != _channels.end())
         _channels.erase(it);
 }
 
-//TODO: Same here, we would need to implement a function to check the channels by calling channel procedures
-const std::vector<std::string>& Client::getChannels() const { return _channels; }
+const std::vector<std::string> &Client::getChannels() const
+{
+    log_debug("Hi I am client %s and these are my channels: ", getNick().c_str());
+    return _channels;
+}

@@ -1,5 +1,6 @@
 #include "ChannelManager.hpp"
 #include "Client.hpp"
+#include "utils.hpp"
 #include <iostream>
 
 ChannelManager::ChannelManager() {}
@@ -9,6 +10,7 @@ ChannelManager::~ChannelManager()
 {
     for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
         delete it->second;
+    log_msg("All channels have been deleted by the Channel Manager");
 }
 
 Channel *ChannelManager::addChannel(const std::string &name)
@@ -20,11 +22,11 @@ Channel *ChannelManager::addChannel(const std::string &name)
 
     Channel *chan = new Channel(name);
     _channels[name] = chan;
-    std::cout << "[ChannelManager] Created channel " << name << std::endl;
+    log_msg("ChannelManager created channel %s", name.c_str());
     return chan;
 }
 
-Channel* ChannelManager::findChannel(const std::string &name)
+Channel *ChannelManager::findChannel(const std::string &name)
 {
     for (std::map<std::string, Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); ++it)
     {
@@ -41,7 +43,7 @@ void ChannelManager::removeChannel(const std::string &name)
     {
         delete it->second;
         _channels.erase(it);
-        std::cout << "[ChannelManager] Removed channel " << name << std::endl;
+        log_msg("ChannelManager removed channel %s", name.c_str());
     }
 }
 
@@ -50,6 +52,7 @@ void ChannelManager::broadcastToChannel(const std::string &name, const std::stri
     Channel *chan = findChannel(name);
     if (chan) 
         chan->broadcast(msg);
+    log_debug("ChannelManager is looking for a channel to broadcast");
 }
 
 void ChannelManager::broadcastToJoinedChannels(int fd, const std::string &msg)
@@ -59,6 +62,8 @@ void ChannelManager::broadcastToJoinedChannels(int fd, const std::string &msg)
         if (it->second->isMember(fd))
             it->second->broadcast(msg);
     }
+    log_debug("ChannelManager is looking for all channels where user belongs to broadcast");
+
 }
 
 void ChannelManager::removeClientFromChannels(Client *client)
@@ -79,6 +84,8 @@ void ChannelManager::removeClientFromChannels(Client *client)
         }
         ++it;
     }
+    log_debug("ChannelManager is removing the user from all the channels");
+
 }
 
 void ChannelManager::printChannels() const
@@ -94,4 +101,5 @@ void ChannelManager::freeResources()
     for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
         delete it->second;
     _channels.clear();
+    log_debug("ChannelManager has ended its duty, goodbye!");
 }

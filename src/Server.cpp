@@ -24,6 +24,7 @@ Server::~Server()
     //free all clients & channels
     _clientManager.freeResources();
     _channelManager.freeResources();
+    log_msg("Hi I am the server, I am done here :)");
 }
 
 void Server::init(char *argv[])
@@ -31,10 +32,10 @@ void Server::init(char *argv[])
     //Check for input - password and port number
     //And remove the password
     setPassword(argv[2]);
-    log_msg("Password: %s", getPassword().c_str());
+    log_debug("Password: %s", getPassword().c_str());
 
     setPort(atoi(argv[1]));
-    log_msg("Server listening in port number: %d", getPort());
+    log_debug("Server listening in port number: %d", getPort());
 }
 
 //setters

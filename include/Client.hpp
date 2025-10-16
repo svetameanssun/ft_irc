@@ -33,7 +33,7 @@ class Client
         const std::string &getRealName() const;
         const std::string &getHost() const;
         bool isRegistered() const;
-        bool isOperator() const;            //TODO: we might move the logic to the channel
+        bool isOperator() const;
 
         //setters
         void setNick(const std::string &nick);
