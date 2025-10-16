@@ -9,6 +9,10 @@
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
 //TODO: Maybe break these function into smaller 
+//TODO: ALL THE FUNCTIONS; right now they are copied, we have to adapt logic
+//TODO: We need to review each of them to check that everything works as intended
+//TODO: See if all the commands match with the specification of the subject and the partner has the same
+
 
 // Entry point: dispatch commands
 void CommandHandler::execute(Client *client, const std::string &command,
@@ -144,7 +148,6 @@ void CommandHandler::cmdJoin(Client *client, const std::vector<std::string> &arg
     MessageSender::sendNumeric(_server.getServerName(), client, 366, chanName + " :End of /NAMES list");
 }
 
-//TODO: ALL THE FUNCTIONS; right now they are copied, we have to adapt logic
 void CommandHandler::cmdNick(Client *client, const std::vector<std::string> &args)
 {
     if (!client)
