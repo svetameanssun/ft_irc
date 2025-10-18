@@ -2,7 +2,10 @@
 
 #include <map>
 #include <string>
+#include <iostream>
+#include "utils.hpp"
 #include "Channel.hpp"
+#include "Client.hpp"
 
 class Server;
 

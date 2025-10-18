@@ -1,6 +1,4 @@
 #include "MessageSender.hpp"
-#include "utils.hpp"
-#include <iostream>
 
 // Send raw message
 void MessageSender::sendToClient(Client *client, const std::string &msg)
@@ -13,7 +11,7 @@ void MessageSender::sendToClient(Client *client, const std::string &msg)
 
     // TODO: Later: enable real network send message
     // TODO: Define which structure we use
-    log_err("MessageSender: connection not established");
+    log_warning("MessageSender: connection not established");
     // ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 

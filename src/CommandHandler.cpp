@@ -1,10 +1,6 @@
 #include "CommandHandler.hpp"
-#include "MessageSender.hpp"
-#include "Channel.hpp"
 #include "Server.hpp"
-#include "Client.hpp"
-#include "utils.hpp"
-#include <sstream>
+#include "Channel.hpp"
 
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 

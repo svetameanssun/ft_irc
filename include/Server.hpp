@@ -13,6 +13,10 @@
 #include "CommandHandler.hpp"
 #include "ClientManager.hpp"
 #include "ChannelManager.hpp"
+#include "Channel.hpp"
+#include "utils.hpp"
+#include <sstream>
+
 
 class Client;   // forward declaration
 class Channel;  // forward declaration
@@ -27,7 +31,7 @@ class Server
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
         bool                        _running;       // server loop flag
 
-        CommandHandler              _cmdHandler;    // entity that handles commands
+        CommandHandler              _cmdHandler;    
         ClientManager               _clientManager;
         ChannelManager              _channelManager;
 

@@ -1,9 +1,4 @@
 #include "Channel.hpp"
-#include "Client.hpp"
-#include "MessageSender.hpp"
-#include "utils.hpp"
-#include <algorithm>
-#include <iostream>
 
 //Constructor 
 Channel::Channel(const std::string &name)
@@ -11,7 +6,7 @@ Channel::Channel(const std::string &name)
 
 Channel::~Channel()
 {
-    log_err("Resources from the channel not freed");
+    log_warning("Resources from the channel not freed");
 }
 
 //Getters

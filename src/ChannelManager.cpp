@@ -1,7 +1,4 @@
 #include "ChannelManager.hpp"
-#include "Client.hpp"
-#include "utils.hpp"
-#include <iostream>
 
 ChannelManager::ChannelManager() {}
 //ChannelManager::ChannelManager(Server &server) : _server(server) {}

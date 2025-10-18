@@ -1,6 +1,10 @@
 #pragma once
 
 #include <map>
+#include <algorithm>
+#include <iostream>
+#include <unistd.h>
+#include "utils.hpp"
 #include <string>
 #include "Client.hpp"
 

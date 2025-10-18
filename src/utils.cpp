@@ -24,10 +24,10 @@ void log_warning(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
-    std::cerr << ORANGE << "[WARNING]: ";
+    std::cout << ORANGE << "[WARNING]: ";
     vprintf(format, args);
     va_end(args);
-    std::cerr << std::endl << RESET;  
+    std::cout << std::endl << RESET;  
 }
 
 

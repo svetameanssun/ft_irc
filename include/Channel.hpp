@@ -4,8 +4,12 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
+#include <algorithm>
+#include "Client.hpp"
+#include "MessageSender.hpp"
+#include "utils.hpp"
 
-class Client; 
 
 class Channel
 {

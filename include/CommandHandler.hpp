@@ -2,10 +2,16 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
+
 #include "MessageSender.hpp"
+#include "utils.hpp"
+#include "Client.hpp"
+
 
 class Server;
 class Client;
+
 
 class CommandHandler
 {
