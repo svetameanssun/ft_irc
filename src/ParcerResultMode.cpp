@@ -147,8 +147,8 @@ bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
             k o l
     */
     
-    if (messageVec.at(2).length > 3){
-        retrun (false);
+    if (messageVec.at(2).length() > 3){
+        return (false);
     }
     std::string flags = messageVec.at(2);
     for (int i = 0; i < flags.length(); ++i){
