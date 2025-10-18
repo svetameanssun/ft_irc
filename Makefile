@@ -30,7 +30,6 @@ FILES    = 	main.cpp \
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))
 OBJS     = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 
-
 # Colores para mensajes en el Makefile
 GREEN  = \033[0;32m
 YELLOW = \033[0;33m
@@ -64,7 +63,7 @@ fclean: clean
 re: fclean all
 
 run: 
-	@./$(NAME) 9000 9@atoi2025
+	@./$(NAME) 9000 9@ft_irc2025
 
 test:
 	@if [ ! -f "$(TEST)" ]; then \
