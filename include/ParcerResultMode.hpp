@@ -21,10 +21,11 @@ class ParcerResultMode : public AParcerResult {
     void printResult() const;
     bool isValidChanFlag(std::string channelFlag);
     bool isValidChanName(std::string channelName);
+    bool isValidChanNameChar(int c);
     bool isValidChanParams(std::vector<std::string> messageVec);
     int checkModeParams(std::vector<std::string> messageVec);
   private:
-    std::vector <std::string> _topicParamsVec;
+    std::vector <std::string> _modeParamsVec;
 };
 
 #endif

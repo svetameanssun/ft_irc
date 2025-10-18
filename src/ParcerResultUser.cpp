@@ -57,7 +57,7 @@ bool ParcerResultUser::isAllowedChar(char c){
     std::string allowedChars;
 	allowedChars.push_back('\0');
 	allowedChars += "@\n\r ";
-    if(specialChars.find(c) == std::string::npos) {
+    if(allowedChars.find(c) == std::string::npos) {
 		
         return (true);
     }
