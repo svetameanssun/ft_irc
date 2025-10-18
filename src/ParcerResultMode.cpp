@@ -33,7 +33,7 @@ void ParcerResultMode::setParams(std::vector<std::string> modeCommand){
     this->_modeParamsVec = modeCommand;
 }
 
-const std::vector<std::string> getModeParams(void) const{
+const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
     return (this->_modeParamsVec);
 }
 /*==========================================================*/
@@ -41,7 +41,28 @@ const std::vector<std::string> getModeParams(void) const{
 /*----------------------------------------------------------*/
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
-bool ParcerResultJoin::isValidChanName(std::string channelName) {
+
+bool ParcerResultMode::isValidChanNameChar(int c) {
+    if(c == '\0')
+        return (false);
+    else if(c == '\a')
+        return (false);
+    else if(c == '\r')
+        return (false);
+    else if(c == '\n')
+        return (false);
+    else if(c == ' ')
+        return (false);
+    else if(c == ',')
+        return (false);
+    else if(c == ':')
+        return (false);
+    else {
+        return (true);
+    }
+}
+
+bool ParcerResultMode::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -69,7 +90,7 @@ bool checkFlagCombin(int c, std::vector <std::string> messageVec){
     std::string withParamsFlags = "kol\0";
     if ((withParamsFlags.find(c)) )
     if (c == 'k'  && messageVec.size() != 4){
-        retrun (false);
+        return (false);
     }
     if (c == 'o' && messageVec.size() != 4){
         return (false);

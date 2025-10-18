@@ -13,6 +13,12 @@
 #include "ParcerResultJoin.hpp"
 #include "ParcerResultPass.hpp"
 #include "ParcerResultUser.hpp"
+#include "ParcerResultMode.hpp"
+#include "ParcerResultPrivmsg.hpp"
+#include "ParcerResultTopic.hpp"
+#include "ParcerResultKick.hpp"
+#include "ParcerResultInvite.hpp"
+
 
 class CommandDispatcher{
 	public:

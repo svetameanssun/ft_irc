@@ -31,7 +31,7 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
     }
     if (messageVec.size() > 2){
         return ERR_NEEDLESSPARAMS;
-        delete(resultPass);
+        delete(resultNick);
     }
     if (!resultNick->isValidNick(messageVec)){
         delete(resultNick);
@@ -89,7 +89,6 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
 }
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
-    std::cout << messageVec.at(0)<< std::endl;
     ParcerResultMode * resultMode = new ParcerResultMode();
     if (messageVec.size() < 3){
         delete(resultMode);
