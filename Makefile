@@ -1,22 +1,34 @@
-NAME     = ircserv
-CC       = c++
-CFLAGS   = -Wall -Wextra -Werror -std=c++98
-SRC_DIR  = src/
-INC_DIR  = include/
-OBJ_DIR  = obj/
+NAME  = ircparcer
+CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+SRC_DIR = src/
+INC_DIR = include/
+OBJ_DIR = obj/
 
-INC_FILES =		Server.hpp \
-				utils.hpp
+INC_FILES =	AParcerResult.hpp \
+	CommandDispatcher.hpp \
+	CommandParcer.hpp \
+	ParcerResultJoin.hpp \
+	ParcerResultNick.hpp \
+	ParcerResultPass.hpp \
+	ParcerResultUser.hpp \
+	Replies.hpp
 
 INCLUDE  = $(addprefix $(INC_DIR), $(INC_FILES))
 
-FILES    = 	main.cpp \
-			Server.cpp \
-			utils.cpp
+SRC_FILES = AParcerResult.cpp \
+	CommandDispatcher.cpp \
+	CommandDispatcherUtils.cpp \
+	CommandParcer.cpp \
+	CommandParcerUtils.cpp \
+	ParcerResultJoin.cpp \
+	ParcerResultNick.cpp \
+	ParcerResultPass.cpp \
+	ParcerResultUser.cpp \
+	main.cpp
 
-SRCS     = $(addprefix $(SRC_DIR), $(FILES))
+SRCS     = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJS     = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
-
 
 # Colores para mensajes en el Makefile
 GREEN  = \033[0;32m
@@ -25,17 +37,16 @@ BLUE   = \033[0;34m
 RED    = \033[0;31m
 RESET  = \033[0m
 
-
 all: $(NAME)
 
 $(NAME): $(OBJS) $(INCLUDE)
-	@$(CC) $(CFLAGS) -I $(INC_DIR) $(OBJS) -o $(NAME)
+	@$(CXX) $(CXXFLAGS) -I $(INC_DIR) $(OBJS) -o $(NAME)
 	@echo "$(GREEN)Compiled! $(RESET)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@echo "$(GREEN) Creating obj folder... $(RESET)"
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -I $(INC_DIR) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -I $(INC_DIR) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
@@ -48,6 +59,6 @@ fclean: clean
 re: fclean all
 
 run: 
-	@./$(NAME) 9000 9@atoi2025
+	@./$(NAME) 9000 9@ft_irc2025
 
 .PHONY: all clean fclean re run
