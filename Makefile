@@ -1,33 +1,33 @@
-NAME  = ircparcer
-CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
-SRC_DIR = src/
-INC_DIR = include/
-OBJ_DIR = obj/
+NAME     = ircserv
+TEST	 = test
+CC       = c++
+CFLAGS   = -Wall -Wextra -Werror -std=c++98
+SRC_DIR  = src/
+INC_DIR  = include/
+OBJ_DIR  = obj/
 
-INC_FILES =	AParcerResult.hpp \
-	CommandDispatcher.hpp \
-	CommandParcer.hpp \
-	ParcerResultJoin.hpp \
-	ParcerResultNick.hpp \
-	ParcerResultPass.hpp \
-	ParcerResultUser.hpp \
-	Replies.hpp
+INC_FILES =		Server.hpp \
+				Client.hpp \
+				Channel.hpp \
+				ClientManager.hpp \
+				ChannelManager.hpp \
+				MessageSender.hpp \
+				CommandHandler.hpp \
+				utils.hpp
 
 INCLUDE  = $(addprefix $(INC_DIR), $(INC_FILES))
 
-SRC_FILES = AParcerResult.cpp \
-	CommandDispatcher.cpp \
-	CommandDispatcherUtils.cpp \
-	CommandParcer.cpp \
-	CommandParcerUtils.cpp \
-	ParcerResultJoin.cpp \
-	ParcerResultNick.cpp \
-	ParcerResultPass.cpp \
-	ParcerResultUser.cpp \
-	main.cpp
+FILES    = 	main.cpp \
+			Server.cpp \
+			Client.cpp \
+			Channel.cpp \
+			ClientManager.cpp \
+			ChannelManager.cpp \
+			MessageSender.cpp \
+			CommandHandler.cpp \
+			utils.cpp
 
-SRCS     = $(addprefix $(SRC_DIR), $(SRC_FILES))
+SRCS     = $(addprefix $(SRC_DIR), $(FILES))
 OBJS     = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 
 # Colores para mensajes en el Makefile
@@ -37,16 +37,19 @@ BLUE   = \033[0;34m
 RED    = \033[0;31m
 RESET  = \033[0m
 
-all: $(NAME)
 
-$(NAME): $(OBJS) $(INCLUDE)
-	@$(CXX) $(CXXFLAGS) -I $(INC_DIR) $(OBJS) -o $(NAME)
-	@echo "$(GREEN)Compiled! $(RESET)"
+all: $(OBJ_DIR) $(NAME) 
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
+$(OBJ_DIR):
 	@echo "$(GREEN) Creating obj folder... $(RESET)"
 	@mkdir -p $(OBJ_DIR)
-	@$(CXX) $(CXXFLAGS) -I $(INC_DIR) -c $< -o $@
+
+$(NAME): $(OBJS) $(INCLUDE)
+	@$(CC) $(CFLAGS) -I $(INC_DIR) $(OBJS) -o $(NAME)
+	@echo "$(GREEN) Compiled! $(RESET)"
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
+	@$(CC) $(CFLAGS) -I $(INC_DIR) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
@@ -54,6 +57,7 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
+	@if [ -n "$(TEST)" ]; then rm -rf $(TEST); fi
 	@echo "$(GREEN) Removal completed :D $(RESET)"
 
 re: fclean all
@@ -61,4 +65,13 @@ re: fclean all
 run: 
 	@./$(NAME) 9000 9@ft_irc2025
 
-.PHONY: all clean fclean re run
+test:
+	@if [ ! -f "$(TEST)" ]; then \
+    	$(CC) $(CFLAGS) -I $(INC_DIR) src/Channel.cpp src/Client.cpp src/Server.cpp \
+									src/MessageSender.cpp src/CommandHandler.cpp \
+									src/ClientManager.cpp src/ChannelManager.cpp \
+									cmdtests.cpp src/utils.cpp test.cpp -o $(TEST); \
+	fi
+	@./$(TEST)
+
+.PHONY: all clean fclean re run test
