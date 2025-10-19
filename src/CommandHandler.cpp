@@ -14,7 +14,7 @@ CommandHandler::CommandHandler(Server &server) : _server(server) {}
 void CommandHandler::execute(Client *client, const std::string &command,
                              const std::vector<std::string> &args)
 {
-    //Change for switch, or pointers to functions :)
+    //TODO:Change for switch, or pointers to functions :)
     if (command == "PASS")
         cmdPass(client, args);
     else if (command == "JOIN")
@@ -64,7 +64,7 @@ void CommandHandler::cmdPass(Client *client, const std::vector<std::string> &arg
         return;
     }
 
-    const std::string& pass = args[0];
+    const std::string &pass = args[0];
 
     if (!_server.getPassword().empty() && pass != _server.getPassword())
     {

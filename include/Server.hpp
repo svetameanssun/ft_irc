@@ -14,6 +14,7 @@
 #include "ClientManager.hpp"
 #include "ChannelManager.hpp"
 #include "Channel.hpp"
+#include "CommandParcer.hpp"
 #include "utils.hpp"
 #include <sstream>
 
@@ -30,10 +31,12 @@ class Server
         std::string                 _password;      // optional server password
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
         bool                        _running;       // server loop flag
+        AParcerResult              *_parcingResult; // result of the parse
 
         CommandHandler              _cmdHandler;    
         ClientManager               _clientManager;
         ChannelManager              _channelManager;
+
 
         Server(const Server &other);                // Copy of the server is not allowed
         Server &operator=(const Server& other);
@@ -61,8 +64,11 @@ class Server
         ClientManager &getClientManager() { return _clientManager; }
         ChannelManager &getChannelManager() { return _channelManager; }
 
+        int     launchParcing(std::string messageStr);
         // command handling 
         void    dispatchCommand(Client *client, const std::string &cmd,
                             const std::vector<std::string> &args);
 
+        // aux
+        void    deleteParserResult(); 
 };
