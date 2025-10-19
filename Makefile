@@ -27,7 +27,17 @@ FILES    = 	main.cpp \
 			CommandHandler.cpp \
 			utils.cpp
 
+FILES_TEST	=	Server.cpp \
+				Client.cpp \
+				Channel.cpp \
+				ClientManager.cpp \
+				ChannelManager.cpp \
+				MessageSender.cpp \
+				CommandHandler.cpp \
+				utils.cpp
+
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))
+SRCS_TEST = $(addprefix $(SRC_DIR), $(FILES_TEST))
 OBJS     = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 
 # Colores para mensajes en el Makefile
@@ -67,10 +77,8 @@ run:
 
 test:
 	@if [ ! -f "$(TEST)" ]; then \
-    	$(CC) $(CFLAGS) -I $(INC_DIR) src/Channel.cpp src/Client.cpp src/Server.cpp \
-									src/MessageSender.cpp src/CommandHandler.cpp \
-									src/ClientManager.cpp src/ChannelManager.cpp \
-									cmdtests.cpp src/utils.cpp test.cpp -o $(TEST); \
+    	$(CC) $(CFLAGS) -I $(INC_DIR) $(SRCS_TEST) \
+									cmdtests.cpp test.cpp -o $(TEST); \
 	fi
 	@./$(TEST)
 

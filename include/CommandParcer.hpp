@@ -14,6 +14,7 @@
 
 #include "CommandDispatcher.hpp"
 
+
 class CommandParcer {
   public:
     CommandParcer(const std::string &message): _message(message) {};
@@ -25,6 +26,8 @@ class CommandParcer {
     int commandProccess(void);
     const std::string &getMessage(void) const;
     const std::vector<std::string> &getMessageVec(void) const;
+    const CommandDispatcher & getCommandDispatcher()const ;
+
   private:
     const std::string &_message;
     std::vector<std::string> _messageVec; // this is the initial vector!
@@ -43,7 +46,7 @@ class CommandParcer {
  */
 
 //TEMPORAL, later this function (or its content) will fit into some part of the server's code
-int launchParcing(void);
+//int launchParcing(std::string messageStr);
 
 
 #endif

@@ -27,7 +27,9 @@ void runTestJoin(Server &server, Client *client,
     if (!key.empty())
         args.push_back(key);
 
+    server.launchParcing(args);
     server.dispatchCommand(client, "JOIN", args);
+    server.deleteParserResult();
 
     std::cout << "===========================================\n";
 }
