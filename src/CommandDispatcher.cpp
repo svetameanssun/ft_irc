@@ -5,14 +5,13 @@ CommandDispatcher::CommandDispatcher() {
     dispatcherMap["PASS"] = &CommandDispatcher::dispatchPass;
     dispatcherMap["NICK"] = &CommandDispatcher::dispatchNick;
 	dispatcherMap["USER"] = &CommandDispatcher::dispatchUser;
-	dispatcherMap["QUIT"] = &CommandDispatcher::dispatchQuit;
 	dispatcherMap["JOIN"] = &CommandDispatcher::dispatchJoin;
+	dispatcherMap["QUIT"] = &CommandDispatcher::dispatchQuit;
 	dispatcherMap["MODE"] = &CommandDispatcher::dispatchMode;
 	dispatcherMap["TOPIC"] = &CommandDispatcher::dispatchTopic;
 	dispatcherMap["INVITE"] = &CommandDispatcher::dispatchInvite;
 	dispatcherMap["KICK"] = &CommandDispatcher::dispatchKick;
 	dispatcherMap["PRIVMSG"] = &CommandDispatcher::dispatchPrivmsg;
-	dispatcherMap["INFO"] = &CommandDispatcher::dispatchInfo;
 }
 
 
@@ -48,7 +47,4 @@ int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 	}
 }
 
-AParcerResult *CommandDispatcher::getParcerResult() { return this->_parcerResult; }
-
-
-
+AParcerResult *CommandDispatcher::getParcerResult() const { return this->_parcerResult; }

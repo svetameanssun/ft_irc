@@ -98,11 +98,11 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
         delete(resultMode);
         return ERR_NEEDLESSPARAMS;
     }
-    if(int err = resultMode->checkModeParams(messageVec))
+    /*if(int err = resultMode->checkModeParams(messageVec))
     {
         delete(resultMode);
         return (err);
-    }
+    }*/
     resultMode->setParams(messageVec);
     this->_parcerResult = resultMode;
     this->_parcerResult->printResult();
@@ -151,16 +151,6 @@ int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
     //check the command vector
     resultPrivmsg->setParams(messageVec);
     this->_parcerResult = resultPrivmsg;
-    this->_parcerResult->printResult();
-    std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
-}
-
-int CommandDispatcher::dispatchInfo(std::vector <std::string> &messageVec){
-    ParcerResultInfo * resultInfo = new ParcerResultInfo();
-    //check the command vector
-    resultInfo->setParams(messageVec);
-    this->_parcerResult = resultInfo;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
     return (RPL_WELCOME);

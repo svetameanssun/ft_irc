@@ -13,7 +13,21 @@ INC_FILES =		Server.hpp \
 				ChannelManager.hpp \
 				MessageSender.hpp \
 				CommandHandler.hpp \
-				utils.hpp
+				AParcerResult.hpp \
+				CommandDispatcher.hpp \
+				CommandParcer.hpp \
+				ParcerResultJoin.hpp \
+				ParcerResultNick.hpp \
+				ParcerResultPass.hpp \
+				ParcerResultTopic.hpp \
+				ParcerResultInvite.hpp \
+				ParcerResultMode.hpp \
+				ParcerResultPrivmsg.hpp \
+				ParcerResultUser.hpp \
+				ParcerResultKick.hpp \
+				Replies.hpp \
+				cmdtests.hpp \
+				utils.hpp \
 
 INCLUDE  = $(addprefix $(INC_DIR), $(INC_FILES))
 
@@ -25,6 +39,21 @@ FILES    = 	main.cpp \
 			ChannelManager.cpp \
 			MessageSender.cpp \
 			CommandHandler.cpp \
+			AParcerResult.cpp \
+			CommandDispatcher.cpp \
+			CommandDispatcherUtils.cpp \
+			CommandParcer.cpp \
+			CommandParcerUtils.cpp \
+			ParcerResultJoin.cpp \
+			ParcerResultNick.cpp \
+			ParcerResultPass.cpp \
+			ParcerResultTopic.cpp \
+			ParcerResultInvite.cpp \
+			ParcerResultMode.cpp \
+			ParcerResultPrivmsg.cpp \
+			ParcerResultUser.cpp \
+			ParcerResultKick.cpp \
+			cmdtests.cpp \
 			utils.cpp
 
 FILES_TEST	=	Server.cpp \
@@ -34,6 +63,20 @@ FILES_TEST	=	Server.cpp \
 				ChannelManager.cpp \
 				MessageSender.cpp \
 				CommandHandler.cpp \
+				AParcerResult.cpp \
+				CommandDispatcher.cpp \
+				CommandDispatcherUtils.cpp \
+				CommandParcer.cpp \
+				CommandParcerUtils.cpp \
+				ParcerResultJoin.cpp \
+				ParcerResultNick.cpp \
+				ParcerResultPass.cpp \
+				ParcerResultTopic.cpp \
+				ParcerResultInvite.cpp \
+				ParcerResultMode.cpp \
+				ParcerResultPrivmsg.cpp \
+				ParcerResultUser.cpp \
+				ParcerResultKick.cpp \
 				utils.cpp
 
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))
@@ -55,7 +98,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJS) $(INCLUDE)
-	@$(CC) $(CFLAGS) -I $(INC_DIR) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) -I $(INC_DIR) $(OBJS)  -o $(NAME)
 	@echo "$(GREEN) Compiled! $(RESET)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
@@ -73,7 +116,7 @@ fclean: clean
 re: fclean all
 
 run: 
-	@./$(NAME) 9000 9@ft_irc2025
+	@./$(NAME) //9000 9@ft_irc2025
 
 test:
 	@if [ ! -f "$(TEST)" ]; then \

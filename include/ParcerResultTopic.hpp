@@ -15,12 +15,11 @@ class ParcerResultTopic : public AParcerResult {
     ParcerResultTopic& operator=(const ParcerResultTopic& other);
     ~ParcerResultTopic();
     
-    //void setUserParams(std::vector<std::string> userCommand);
     void setParams(std::vector<std::string> topicCommand);
     const std::vector<std::string> getTopicParams(void) const;
     void printResult() const;
     //bool isAllowedChar(char usernameChar);
-    int checkTopicParams(std::vector<std::string> messageVec);
+    //int checkTopicParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _topicParamsVec;
 };

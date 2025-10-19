@@ -66,8 +66,7 @@ class Server
 
         int     launchParcing(std::string messageStr);
         // command handling 
-        void    dispatchCommand(Client *client, const std::string &cmd,
-                            const std::vector<std::string> &args);
+        void    dispatchCommand(Client *client, const std::string &cmd);
 
         // aux
         void    deleteParserResult(); 

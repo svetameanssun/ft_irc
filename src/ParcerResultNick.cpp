@@ -12,7 +12,6 @@ ParcerResultNick::ParcerResultNick()
 ParcerResultNick::ParcerResultNick(const ParcerResultNick& other): AParcerResult() {
     this->_command = other._command;
     this->_nickParamsVec = other._nickParamsVec;
-    this->_command = other._command;
 }
 
 

@@ -15,8 +15,7 @@ class ParcerResultPass : public AParcerResult {
     ParcerResultPass(const ParcerResultPass &other);
     ParcerResultPass& operator=(const ParcerResultPass& other);
     ~ParcerResultPass();
-    
-    //void setPassParams(std::vector<std::string> passCommand);
+  
     void setParams(std::vector<std::string> passCommand);
     const std::vector<std::string> getPassParams(void) const;
     void printResult() const;

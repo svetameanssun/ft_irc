@@ -42,7 +42,7 @@ const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
 
-bool ParcerResultMode::isValidChanNameChar(int c) {
+/*bool ParcerResultMode::isValidChanNameChar(int c) {
     if(c == '\0')
         return (false);
     else if(c == '\a')
@@ -60,9 +60,9 @@ bool ParcerResultMode::isValidChanNameChar(int c) {
     else {
         return (true);
     }
-}
+}*/
 
-bool ParcerResultMode::isValidChanName(std::string channelName) {
+/*bool ParcerResultMode::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -82,9 +82,9 @@ bool ParcerResultMode::isValidChanName(std::string channelName) {
         }
     }
     return (true);
-}
+}*/
 
-bool checkFlagCombin(int c, std::vector <std::string> messageVec){
+/*bool checkFlagCombin(int c, std::vector <std::string> messageVec){
 
     std::string noParamsFlags = "it\0";
     std::string withParamsFlags = "kol\0";
@@ -111,7 +111,7 @@ bool ParcerResultMode::isValidChanFlag(std::string channelFlag){
         }
     }
     return (true);
-}
+}*/
 /*Valid combinations of flags (with no parameters)
     +i
     +t
@@ -137,15 +137,15 @@ bool ParcerResultMode::isValidChanFlag(std::string channelFlag){
 (Any order is allowed, as long as parameters follow the same order.)*/
 
 
-bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
-    /* MODE #channame -flag params 
+/*bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
+     MODE #channame -flag params 
         0       1       2    3
         itkol
         NO PARAMS:
             i t 
         WITH PARAMS:
             k o l
-    */
+    
     
     if (messageVec.at(2).length() > 3){
         return (false);
@@ -157,7 +157,7 @@ bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
     }
     //TODO
     return (true);
-}
+}*/
 
 /* itkol
 ---------------------------------------------------------------------
@@ -190,7 +190,7 @@ bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
 
 */
 
-int ParcerResultMode::checkModeParams(std::vector<std::string> messageVec){
+/*int ParcerResultMode::checkModeParams(std::vector<std::string> messageVec){
     if (!isValidChanName(messageVec.at(1))){
         return (ERR_NOSUCHCHANNEL);
     }
@@ -201,7 +201,7 @@ int ParcerResultMode::checkModeParams(std::vector<std::string> messageVec){
         return (ERR_UNKNOWNCOMMAND);
     }
     return (0);
-}
+}*/
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
@@ -243,4 +243,3 @@ void ParcerResultMode::printResult() const{
 
 /* MODE #channel
             the server will return the current modes of that channel: */
-

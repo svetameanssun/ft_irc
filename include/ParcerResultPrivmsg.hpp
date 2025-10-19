@@ -8,7 +8,7 @@
 #include "AParcerResult.hpp"
 
 
-class ParcerResultPrivmsg : public AParcerPrivmsg {
+class ParcerResultPrivmsg : public AParcerResult {
   public:
     ParcerResultPrivmsg();
     ParcerResultPrivmsg(const ParcerResultPrivmsg &other);
@@ -18,8 +18,9 @@ class ParcerResultPrivmsg : public AParcerPrivmsg {
     void setParams(std::vector<std::string> privmsgCommand);
     const std::vector<std::string> getPrivmsgParams(void) const;
     void printResult() const;
+    //TODO
     //bool isAllowedChar(char usernameChar);
-    int checkPrivmsgParams(std::vector<std::string> messageVec);
+    //int checkPrivmsgParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _privmsgParamsVec;
 };

@@ -49,10 +49,8 @@ void runTestUser(Server &server, Client *client,
 
 // === JOIN Test ===
 void runTestJoin(Server &server, Client *client,
-                 const std::string &channel, const std::string &whatever)
+                 const std::string &channel, const std::string &key = "")
 {
-    (void) whatever;
-    const std::string &key = "";
     std::cout << "\n=== TEST: " << client->getNick() << " JOIN " << channel << " ===\n";
 
     std::string rawCommand = "JOIN " + channel;
