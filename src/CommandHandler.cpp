@@ -11,51 +11,52 @@ CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
 
 // Entry point: dispatch commands
-void CommandHandler::execute(Client *client, const std::string &command,
-                             const std::vector<std::string> &args)
+void CommandHandler::execute(Client *client, const std::string &command, AParcerResult *result)
 {
     //TODO:Change for switch, or pointers to functions :)
     if (command == "PASS")
-        cmdPass(client, args);
-    else if (command == "JOIN")
-        cmdJoin(client, args);
+        cmdPass(client, result);
     else if (command == "NICK")
-        cmdNick(client, args);
+        cmdNick(client, result);
     else if (command == "USER")
-        cmdUser(client, args);
-    else if (command == "PRIVMSG")
-        cmdPrivmsg(client, args);
-    else if (command == "PART")
-        cmdPart(client, args);
-    else if (command == "QUIT")
-        cmdQuit(client, args);
-    else if (command == "PING")
-        cmdPing(client, args);
-    else if (command == "PONG")
-        cmdPong(client, args);
-    else if (command == "MODE")
-        cmdMode(client, args);
-    else if (command == "TOPIC")
-        cmdTopic(client, args);
-    else if (command == "KICK")
-        cmdKick(client, args);
-    else if (command == "INVITE")
-        cmdInvite(client, args);
+        cmdUser(client, result);
+    else if (command == "JOIN")
+        cmdJoin(client, result);
+    //else if (command == "PRIVMSG")
+    //    cmdPrivmsg(client, result);
+    //else if (command == "PART")
+    //    cmdPart(client, result);
+    //else if (command == "QUIT")
+    //    cmdQuit(client, result);
+    //else if (command == "PING")
+    //    cmdPing(client, result);
+    //else if (command == "PONG")
+    //    cmdPong(client, result);
+    //else if (command == "MODE")
+    //    cmdMode(client, result);
+    //else if (command == "TOPIC")
+    //    cmdTopic(client, result);
+    //else if (command == "KICK")
+    //    cmdKick(client, result);
+    //else if (command == "INVITE")
+    //    cmdInvite(client, result);
     else
         MessageSender::sendNumeric(_server.getServerName(), client, 421, command + " :Unknown command");
 }
 
 // PASS
-void CommandHandler::cmdPass(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdPass(Client *client, AParcerResult *result)
 {
     if (!client) return;
-
-    if (args.empty())
-    {
-        // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "PASS :Not enough parameters");
-        return;
-    }
+    
+    ParcerResultPass *result2 = static_cast<ParcerResultPass*>(result);
+    // Already parsed
+    //if (args.empty())
+    //{
+    //    // 461 ERR_NEEDMOREPARAMS
+    //    MessageSender::sendNumeric(_server.getServerName(), client, 461, "PASS :Not enough parameters");
+    //    return;
+    //}
 
     if (client->isRegistered())
     {
@@ -64,7 +65,9 @@ void CommandHandler::cmdPass(Client *client, const std::vector<std::string> &arg
         return;
     }
 
-    const std::string &pass = args[0];
+    std::vector<std::string> params = result2->getPassParams();
+
+    const std::string &pass = params.at(0);
 
     if (!_server.getPassword().empty() && pass != _server.getPassword())
     {
@@ -78,16 +81,21 @@ void CommandHandler::cmdPass(Client *client, const std::vector<std::string> &arg
 
 
 // Implementation: JOIN
-void CommandHandler::cmdJoin(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
 {
-    if (args.empty())
-    {
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "JOIN :Not enough parameters");
-        return;
-    }
+    ParcerResultJoin *result2 = static_cast<ParcerResultJoin*>(result);
 
-    std::string chanName = args[0];
-    std::string key = (args.size() > 1) ? args[1] : "";
+    //Should be done by the parser
+    //if (args.empty())
+    //{
+    //    MessageSender::sendNumeric(_server.getServerName(), client, 461, "JOIN :Not enough parameters");
+    //    return;
+    //}
+    //TODO: Can have multiple channels, we need to adapt the logic; right now it is made for just one channel
+    const std::map<std::string, std::string> &joinParams = result2->getJoinParamsMap();
+    std::map<std::string, std::string>::const_iterator it = joinParams.begin(); 
+    std::string chanName = it->first;
+    std::string key = it->second;
 
     Channel *chan = _server.getChannelManager().findChannel(chanName);
 
@@ -144,26 +152,30 @@ void CommandHandler::cmdJoin(Client *client, const std::vector<std::string> &arg
     MessageSender::sendNumeric(_server.getServerName(), client, 366, chanName + " :End of /NAMES list");
 }
 
-void CommandHandler::cmdNick(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdNick(Client *client, AParcerResult *result)
 {
     if (!client)
         return;
 
-    if (args.empty())
-    {
-        // 431 ERR_NONICKNAMEGIVEN
-        MessageSender::sendNumeric(_server.getServerName(), client, 431, ":No nickname given");
-        return;
-    }
+    ParcerResultNick *result2 = static_cast<ParcerResultNick*>(result);
 
-    const std::string newNick = args[0];
+    //Done in the parsing 
+    //if (args.empty())
+    //{
+    //    // 431 ERR_NONICKNAMEGIVEN
+    //    MessageSender::sendNumeric(_server.getServerName(), client, 431, ":No nickname given");
+    //    return;
+    //}
 
+    const std::string newNick = result2->getNickParams().at(0);
+
+    //It should be done in the parser 
     // check nickname validity basic rules (length > 0). We can add further validation later.
-    if (newNick.empty())
-    {
-        MessageSender::sendNumeric(_server.getServerName(), client, 431, ":No nickname given");
-        return;
-    }
+    //if (newNick.empty())
+    //{
+    //    MessageSender::sendNumeric(_server.getServerName(), client, 431, ":No nickname given");
+    //    return;
+    //}
 
     // check if nick already in use by another client; look at how to validate
     Client *other = _server.getClientManager().findByNick(newNick);
@@ -195,20 +207,22 @@ void CommandHandler::cmdNick(Client *client, const std::vector<std::string> &arg
     }
 }
 
-void CommandHandler::cmdUser(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdUser(Client *client, AParcerResult *result)
 {
+    ParcerResultUser *result2 = static_cast<ParcerResultUser*>(result);
     if (!client) return;
 
+    //It should be done in the parser 
     // We accept a simplified form: USER <username> <realname>
-    if (args.size() < 2)
-    {
-        // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "USER :Not enough parameters");
-        return;
-    }
+    //if (args.size() < 2)
+    //{
+    //    // 461 ERR_NEEDMOREPARAMS
+    //    MessageSender::sendNumeric(_server.getServerName(), client, 461, "USER :Not enough parameters");
+    //    return;
+    //}
 
-    const std::string username = args[0];
-    const std::string realname = args[1];
+    const std::string username = result2->getUserParams().at(0);
+    const std::string realname = result2->getUserParams().at(1);
 
     client->setUser(username);
     client->setRealName(realname);
@@ -223,7 +237,7 @@ void CommandHandler::cmdUser(Client *client, const std::vector<std::string> &arg
     }
 }
 
-void CommandHandler::cmdPrivmsg(Client *client, const std::vector<std::string> &args)
+/*void CommandHandler::cmdPrivmsg(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -272,7 +286,7 @@ void CommandHandler::cmdPrivmsg(Client *client, const std::vector<std::string> &
     }
 }
 
-void CommandHandler::cmdPart(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdPart(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -306,7 +320,7 @@ void CommandHandler::cmdPart(Client *client, const std::vector<std::string> &arg
 }
 
 
-void CommandHandler::cmdQuit(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdQuit(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -329,7 +343,7 @@ void CommandHandler::cmdQuit(Client *client, const std::vector<std::string> &arg
 }
 
 
-void CommandHandler::cmdPing(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdPing(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -347,7 +361,7 @@ void CommandHandler::cmdPing(Client *client, const std::vector<std::string> &arg
 }
 
 
-void CommandHandler::cmdPong(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdPong(Client *client, AParcerResult *result)
 {
     if (!client) return;
     // Usually no reply is required
@@ -357,7 +371,7 @@ void CommandHandler::cmdPong(Client *client, const std::vector<std::string> &arg
     }
 }
 //TODO: Very big command, change it into smaller pieces; refactor and adapt the logic 
-void CommandHandler::cmdMode(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdMode(Client *client, AParcerResult *result)
 {
     if (!client)
         return;
@@ -528,7 +542,7 @@ void CommandHandler::cmdMode(Client *client, const std::vector<std::string> &arg
 }
 
 //TODO: Adapt logic so it is only done by operators of the channel
-void CommandHandler::cmdTopic(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -575,7 +589,7 @@ void CommandHandler::cmdTopic(Client *client, const std::vector<std::string> &ar
     chan->broadcast(topicMsg);
 }
 
-void CommandHandler::cmdKick(Client* client, const std::vector<std::string>& args)
+void CommandHandler::cmdKick(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -634,7 +648,7 @@ void CommandHandler::cmdKick(Client* client, const std::vector<std::string>& arg
     }
 }
 
-void CommandHandler::cmdInvite(Client *client, const std::vector<std::string> &args)
+void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -697,3 +711,4 @@ void CommandHandler::cmdInvite(Client *client, const std::vector<std::string> &a
     // Acknowledge to inviter (341 RPL_INVITING)
     MessageSender::sendNumeric(_server.getServerName(), client, 341, targetNick + " " + chanName);
 }
+*/

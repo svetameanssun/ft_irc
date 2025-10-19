@@ -15,15 +15,14 @@ class ParcerResultMode : public AParcerResult {
     ParcerResultMode& operator=(const ParcerResultMode& other);
     ~ParcerResultMode();
     
-    //void setUserParams(std::vector<std::string> userCommand);
     void setParams(std::vector<std::string> modeCommand);
     const std::vector<std::string> getModeParams(void) const;
     void printResult() const;
-    bool isValidChanFlag(std::string channelFlag);
-    bool isValidChanName(std::string channelName);
-    bool isValidChanNameChar(int c);
-    bool isValidChanParams(std::vector<std::string> messageVec);
-    int checkModeParams(std::vector<std::string> messageVec);
+    //bool isValidChanFlag(std::string channelFlag);
+    //bool isValidChanName(std::string channelName);
+    //bool isValidChanNameChar(int c);
+    //bool isValidChanParams(std::vector<std::string> messageVec);
+    //int checkModeParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _modeParamsVec;
 };

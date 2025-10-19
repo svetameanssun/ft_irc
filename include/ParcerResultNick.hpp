@@ -15,7 +15,6 @@ class ParcerResultNick : public AParcerResult {
     ParcerResultNick(const ParcerResultNick &other);
     ParcerResultNick& operator=(const ParcerResultNick& other);
     ~ParcerResultNick();
-    //void setNickParams(std::vector<std::string> nickCommand);
     void setParams(std::vector<std::string> nickCommand);
     const std::vector<std::string> getNickParams(void) const;
     void printResult() const;

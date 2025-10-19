@@ -43,11 +43,7 @@ int Server::getPort() const { return _port; }
 const std::string &Server::getPassword() const { return _password; }
 
 
-void Server::dispatchCommand(Client *client, const std::string &cmd,
-                             const std::vector<std::string> &args)
-{
-    _cmdHandler.execute(client, cmd, args);
-}
+void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parcingResult); }
 
 int Server::launchParcing(std::string messageStr)
 {
@@ -73,9 +69,9 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	
 	CommandParcer parcer(messageStr);
-	if (!parcer.splitMessage()){
+	if (!parcer.splitMessage())
+	{
 		std::cout << "THIS";
-
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 	

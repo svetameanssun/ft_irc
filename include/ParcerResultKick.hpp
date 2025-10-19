@@ -14,12 +14,12 @@ class ParcerResultKick : public AParcerResult {
     ParcerResultKick(const ParcerResultKick &other);
     ParcerResultKick& operator=(const ParcerResultKick& other);
     ~ParcerResultKick();
-    
+    //TODO
+    //bool isAllowedChar(char usernameChar);
+    //int checkKickParams(std::vector<std::string> messageVec);
     void setParams(std::vector<std::string> kickCommand);
     const std::vector<std::string> getKickParams(void) const;
     void printResult() const;
-    //bool isAllowedChar(char usernameChar);
-    int checkKickParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _kickParamsVec;
 };
