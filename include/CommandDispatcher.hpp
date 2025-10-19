@@ -27,6 +27,7 @@ class CommandDispatcher{
 		CommandDispatcher&operator=(const CommandDispatcher &other);
 		~CommandDispatcher();
 		int dispatch(std::vector <std::string> &messageVec);
+		AParcerResult * getParcerResult();
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& getDispatcherMap() const;
 	private:
 		AParcerResult *_parcerResult; // We have to delete it manually after pasing the data!!!

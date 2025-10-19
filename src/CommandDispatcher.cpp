@@ -48,4 +48,7 @@ int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 	}
 }
 
+AParcerResult *CommandDispatcher::getParcerResult() { return this->_parcerResult; }
+
+
 

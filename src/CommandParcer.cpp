@@ -19,3 +19,5 @@ const std::vector<std::string> &CommandParcer::getMessageVec(void) const{
 }
 
 CommandParcer::~CommandParcer(){}
+
+const CommandDispatcher &CommandParcer::getCommandDispatcher() const { return this->_cmdDisp; }
