@@ -9,7 +9,7 @@ TODO:
 
 2) Should I include +I exception for MODE?
 
-
+3) vprintf - NO EXISTE EN c++98 !!!!!
 
 
 DONE:
