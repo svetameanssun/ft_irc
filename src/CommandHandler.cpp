@@ -47,8 +47,7 @@ void CommandHandler::execute(Client *client, const std::string &command, AParcer
 // PASS
 void CommandHandler::cmdPass(Client *client, AParcerResult *result)
 {
-    if (!client) return;
-    if (!result) return;
+    if (!client || !result) return;
     
     ParcerResultPass *result2 = static_cast<ParcerResultPass*>(result);
     
@@ -71,7 +70,7 @@ void CommandHandler::cmdPass(Client *client, AParcerResult *result)
         // 464 ERR_PASSWDMISMATCH
         client->setPassAccepted(false);
         log_debug("Password not correct, user cannot register");
-        
+
         MessageSender::sendNumeric(_server.getServerName(),
                                     client, ERR_PASSWDMISMATCH,
                                     ":Password incorrect");
@@ -86,6 +85,17 @@ void CommandHandler::cmdPass(Client *client, AParcerResult *result)
 // Implementation: JOIN
 void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
 {
+    if (!client || !result)
+        return;
+
+    if (!client->isRegistered())
+    {
+        //TODO: No available error for "not registered user"
+        MessageSender::sendNumeric(_server.getServerName(), client, 451,
+                                   ":You have not registered");
+        return;
+    }
+
     ParcerResultJoin *result2 = static_cast<ParcerResultJoin*>(result);
 
     //Should be done by the parser
@@ -96,68 +106,124 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
     //}
     //TODO: Can have multiple channels, we need to adapt the logic; right now it is made for just one channel
     const std::map<std::string, std::string> &joinParams = result2->getJoinParamsMap();
-    std::map<std::string, std::string>::const_iterator it = joinParams.begin(); 
-    std::string chanName = it->first;
-    std::string key = it->second;
-
-    Channel *chan = _server.getChannelManager().findChannel(chanName);
-
-    if (!chan)
+    
+    //// ✅ Special case: JOIN 0 → leave all channels
+    //if (joinParams.size() == 1 && joinParams.begin()->first == "0")
+    //{
+    //    std::vector<std::string> chanNames =
+    //        _server.getClientManager().findByFd(client->getFd())->getChannels();
+//
+    //    for (size_t i = 0; i < chanNames.size(); i++)
+    //    {
+    //        Channel *chan = _server.getChannelManager().findChannel(chanNames[i]);
+    //        if (chan)
+    //            chan->removeMember(client);
+    //    }
+    //    return;
+    //}
+    //TODO: refactor this function and create a join_aux file
+    // ✅ Iterate over channel,key pairs
+    for (std::map<std::string, std::string>::const_iterator it = joinParams.begin();
+         it != joinParams.end(); ++it)
     {
-        // create new channel
-        chan = _server.getChannelManager().addChannel(chanName);
-        //chan = _server.findChannel(chanName);
-        chan->addMember(client, true); // creator is operator
-    }
-    else
-    {
-        // check modes
-        if (chan->isInviteOnly() && !chan->isInvited(client->getFd()))
-        {
-            MessageSender::sendNumeric(_server.getServerName(), client, 473, chanName + " :Cannot join channel (+i)");
-            return;
-        }
-        if (chan->hasKey() && chan->getKey() != key)
-        {
-            MessageSender::sendNumeric(_server.getServerName(), client, 475, chanName + " :Cannot join channel (+k)");
-            return;
-        }
-        if (chan->getUserLimit() > 0 && chan->getUserCount() >= chan->getUserLimit())
-        {
-            MessageSender::sendNumeric(_server.getServerName(), client, 471, chanName + " :Cannot join channel (+l)");
-            return;
-        }
-        chan->addMember(client, false);
-    }
+        const std::string &key = it->first;
+        const std::string &chanName = it->second;
 
-    // JOIN reply
-    std::string joinMsg = ":" + client->getNick() + "!" + client->getUser() + "@" +
-                          client->getHost() + " JOIN :" + chanName + "\r\n";
-    chan->broadcast(joinMsg);
+        // ✅ Validate channel name format
+        if (chanName.empty() || chanName[0] != '#')
+        {
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_BADCHANMASK,
+                                       chanName + " :Bad Channel Mask");
+            continue;
+        }
 
-    // Topic
-    if (!chan->getTopic().empty())
-        MessageSender::sendNumeric(_server.getServerName(), client, 332, chanName + " :" + chan->getTopic());
-    else
-        MessageSender::sendNumeric(_server.getServerName(), client, 331, chanName + " :No topic is set");
+        Channel *chan = _server.getChannelManager().findChannel(chanName);
 
-    // NAMES list
-    std::ostringstream oss;
-    oss << "= " << chanName << " :";
-    const std::map<int, Client*> &members = chan->getChannelMembers(); // add getter in Channel
-    for (std::map<int, Client*>::const_iterator it = members.begin(); it != members.end(); ++it) {
-        if (chan->isOperator(it->first))
-            oss << "@" << it->second->getNick() << " ";
+        if (!chan)
+        {
+            chan = _server.getChannelManager().addChannel(chanName);
+            chan->addMember(client, true); // Creator is operator
+        }
         else
-            oss << it->second->getNick() << " ";
+        {
+            // ✅ Check mode restrictions
+            if (chan->userExists(client->getFd()))
+            {
+                //TODO: implement this
+                // Already joined → still reply NAMES & topic
+                // RFC allows re-send of JOIN message
+            }
+            else
+            {
+                if (chan->isInviteOnly() && !chan->isInvited(client->getFd()))
+                {
+                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_INVITEONLYCHAN,
+                                               chanName + " :Cannot join channel (+i)");
+                    continue;
+                }
+                if (chan->hasKey() && chan->getKey() != key)
+                {
+                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_BADCHANNELKEY,
+                                               chanName + " :Cannot join channel (+k)");
+                    continue;
+                }
+                if (chan->getUserLimit() > 0 &&
+                    chan->getUserCount() >= chan->getUserLimit())
+                {
+                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANNELISFULL,
+                                               chanName + " :Cannot join channel (+l)");
+                    continue;
+                }
+
+                chan->addMember(client, false);
+            }
+        }
+
+        // ✅ JOIN broadcast
+        std::string joinMsg = ":" + client->getPrefix() +
+                              " JOIN " + chanName + "\r\n";
+        chan->broadcast(joinMsg);
+
+        //TODO: Look if this is necessary
+        // ✅ Send topic (related numerics)
+        if (!chan->getTopic().empty())
+        {
+            MessageSender::sendNumeric(_server.getServerName(), client, RPL_TOPIC,
+                                       chanName + " :" + chan->getTopic());
+        }
+        else
+        {
+            MessageSender::sendNumeric(_server.getServerName(), client, RPL_NOTOPIC,
+                                       chanName + " :No topic is set");
+        }
+
+        //TODO: Check if this is necessary
+        // ✅ Send names list (353 + 366)
+        std::ostringstream oss;
+        oss << "= " << chanName << " :";
+
+        const std::map<int, Client*> &members = chan->getChannelMembers();
+        for (std::map<int, Client*>::const_iterator m = members.begin();
+             m != members.end(); m++)
+        {
+            if (chan->isOperator(m->first))
+                oss << "@" << m->second->getNick() << " ";
+            else
+                oss << m->second->getNick() << " ";
+        }
+
+        MessageSender::sendNumeric(_server.getServerName(), client, RPL_NAMREPLY, oss.str());
+        MessageSender::sendNumeric(_server.getServerName(), client, RPL_ENDOFNAMES,
+                                   chanName + " :End of /NAMES list");
+
+        // ✅ Remove invite after success
+        chan->removeFromInviteList(client->getFd());
     }
-    MessageSender::sendNumeric(_server.getServerName(), client, 353, oss.str());
-    MessageSender::sendNumeric(_server.getServerName(), client, 366, chanName + " :End of /NAMES list");
 }
 
 void CommandHandler::cmdNick(Client *client, AParcerResult *result)
 {
-    if (!client)
+    if (!client || !result)
         return;
 
     ParcerResultNick *result2 = static_cast<ParcerResultNick*>(result);
@@ -201,9 +267,10 @@ void CommandHandler::cmdNick(Client *client, AParcerResult *result)
     }
 
     // If both NICK and USER are set and client not registered, complete registration
-    if (!client->isRegistered() && !client->getUser().empty())
+    if (!client->isRegistered()) // && !client->getUser().empty())
     {
         client->setRegistered(true);
+        client->setNick(newNick);
         // RPL_WELCOME 001
         MessageSender::sendNumeric(_server.getServerName(), client, 1, ":Welcome to the IRC network, " + client->getNick());
         // Optionally send other welcome numerics (002,003,004) per RFC later

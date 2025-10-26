@@ -19,6 +19,12 @@ bool Channel::hasLimit() const { return _lMode; }
 bool Channel::isTopicLocked() const { return _tMode; }
 const std::string& Channel::getKey() const { return _key; }
 int Channel::getUserLimit() const { return _userLimit; }
+bool Channel::userExists(int fd) const
+{
+    const std::map<int, Client*> &members = _members;
+    return members.find(fd) != members.end();
+}
+
 const std::map<int, Client *> Channel::getChannelMembers() const { return _members; }
 
 
@@ -36,13 +42,13 @@ bool Channel::addMember(Client *client, bool isOp)
 {
     if (_userLimit > 0 && (int)_members.size() >= _userLimit)
     {
-        log_msg("Channel is full, cannot add the member");
+        log_err("Channel is full, cannot add the member");
         return false;
     }
     int fd = client->getFd();
     if (_members.find(fd) != _members.end())
     {
-        log_msg("Channel: the user is already a member");
+        log_err("Channel: the user is already a member");
         return false; // already member
     }
     _members[fd] = client;
@@ -80,6 +86,20 @@ void Channel::demoteFromOp(int fd) { _operators.erase(fd); }
 void Channel::invite(int fd) { _invited.insert(fd); }
 
 bool Channel::isInvited(int fd) const { return _invited.find(fd) != _invited.end(); }
+
+void Channel::removeFromInviteList(int fd)
+{
+    if (_invited.find(fd) != _invited.end())
+    {
+        log_msg("Channel: client deleted from invited list");
+        _invited.erase(fd);
+    }
+    else
+    {
+        log_warning("Channel: client was not in the invite list");
+    }
+}
+
 
 void Channel::broadcast(const std::string &message) const
 {

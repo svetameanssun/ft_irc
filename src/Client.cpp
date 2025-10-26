@@ -13,6 +13,7 @@ const std::string &Client::getNick() const { return _nickname; }
 const std::string &Client::getUser() const { return _username; }
 const std::string &Client::getRealName() const { return _realname; }
 const std::string &Client::getHost() const { return _hostname; }
+std::string Client::getPrefix() const { return getNick() + "!" + getUser() + "@" + getHost(); }
 bool Client::isRegistered() const { return _registered; }
 bool Client::isOperator() const { return _isOperator; }
 bool Client::getPassAccepted() const { return _passAccepted; }

@@ -44,6 +44,7 @@ class Channel
         bool               isTopicLocked () const;
         const std::string &getKey() const;
         int                getUserLimit() const;
+        bool               userExists(int fd) const;
         const std::map<int, Client *> getChannelMembers() const;
 
         // mutators
@@ -56,7 +57,7 @@ class Channel
         void setUserLimit(int limit);
 
         // membership management
-        bool addMember(Client *client, bool isOp = false);
+        bool addMember(Client *client, bool isOp);
         void removeMember(Client *client);
         bool isMember(int fd) const;
         bool isOperator(int fd) const;
@@ -66,6 +67,7 @@ class Channel
         // invite handling
         void invite(int fd);
         bool isInvited(int fd) const;
+        void removeFromInviteList(int fd);
 
         // broadcasting
         void broadcast(const std::string &message) const; //Check params

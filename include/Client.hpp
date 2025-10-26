@@ -33,6 +33,7 @@ class Client
         const std::string &getUser() const;
         const std::string &getRealName() const;
         const std::string &getHost() const;
+        std::string getPrefix() const;
         bool isRegistered() const;
         bool isOperator() const;
         bool getPassAccepted() const;
