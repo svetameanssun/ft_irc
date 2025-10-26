@@ -51,18 +51,13 @@ void CommandHandler::cmdPass(Client *client, AParcerResult *result)
     if (!result) return;
     
     ParcerResultPass *result2 = static_cast<ParcerResultPass*>(result);
-    //Already parsed
-    if (result2->getPassParams().empty())
-    {
-        // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "PASS :Not enough parameters");
-        return;
-    }
-
+    
     if (client->isRegistered())
     {
         // 462 ERR_ALREADYREGISTRED
-        MessageSender::sendNumeric(_server.getServerName(), client, 462, ":You may not reregister");
+        MessageSender::sendNumeric(_server.getServerName(),
+                                    client, ERR_ALREADYREGISTRED,
+                                    ":You may not reregister");
         return;
     }
 
@@ -72,11 +67,19 @@ void CommandHandler::cmdPass(Client *client, AParcerResult *result)
 
     if (!_server.getPassword().empty() && pass != _server.getPassword())
     {
+        //TODO: the RFC does not specify this, but to me it is pretty logic to implement it
         // 464 ERR_PASSWDMISMATCH
-        MessageSender::sendNumeric(_server.getServerName(), client, 464, ":Password incorrect");
+        client->setPassAccepted(false);
+        log_debug("Password not correct, user cannot register");
+        
+        MessageSender::sendNumeric(_server.getServerName(),
+                                    client, ERR_PASSWDMISMATCH,
+                                    ":Password incorrect");
         return;
     }
-    log_debug("[DEBUG] PASS accepted for client fd=%d", client->getFd());
+
+    client->setPassAccepted(true);
+    log_debug("PASS accepted for client fd=%d", client->getFd());
 }
 
 

@@ -7,7 +7,7 @@
 #include "MessageSender.hpp"
 #include "utils.hpp"
 #include "Client.hpp"
-
+#include "Replies.hpp"
 
 class Server;
 class Client;

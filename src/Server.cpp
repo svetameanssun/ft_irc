@@ -94,7 +94,10 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
         deleteParserResult();
     }
     else
+	{
+		log_warning("Error case not yet implemented");
         MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
+	}
 
 }
 
