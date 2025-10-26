@@ -48,15 +48,16 @@ void CommandHandler::execute(Client *client, const std::string &command, AParcer
 void CommandHandler::cmdPass(Client *client, AParcerResult *result)
 {
     if (!client) return;
+    if (!result) return;
     
     ParcerResultPass *result2 = static_cast<ParcerResultPass*>(result);
-    // Already parsed
-    //if (args.empty())
-    //{
-    //    // 461 ERR_NEEDMOREPARAMS
-    //    MessageSender::sendNumeric(_server.getServerName(), client, 461, "PASS :Not enough parameters");
-    //    return;
-    //}
+    //Already parsed
+    if (result2->getPassParams().empty())
+    {
+        // 461 ERR_NEEDMOREPARAMS
+        MessageSender::sendNumeric(_server.getServerName(), client, 461, "PASS :Not enough parameters");
+        return;
+    }
 
     if (client->isRegistered())
     {
@@ -75,8 +76,7 @@ void CommandHandler::cmdPass(Client *client, AParcerResult *result)
         MessageSender::sendNumeric(_server.getServerName(), client, 464, ":Password incorrect");
         return;
     }
-
-    std::cout << "[DEBUG] PASS accepted for client fd=" << client->getFd() << std::endl;
+    log_debug("[DEBUG] PASS accepted for client fd=%d", client->getFd());
 }
 
 

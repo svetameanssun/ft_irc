@@ -1,7 +1,7 @@
 #include "CommandDispatcher.hpp"
 
 
-CommandDispatcher::CommandDispatcher() {
+CommandDispatcher::CommandDispatcher()  {
     dispatcherMap["PASS"] = &CommandDispatcher::dispatchPass;
     dispatcherMap["NICK"] = &CommandDispatcher::dispatchNick;
 	dispatcherMap["USER"] = &CommandDispatcher::dispatchUser;
@@ -29,7 +29,7 @@ CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
 }
 
 CommandDispatcher::~CommandDispatcher(){
-	delete (_parcerResult);
+	//delete (_parcerResult);
 }
 
 const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& CommandDispatcher::getDispatcherMap() const {

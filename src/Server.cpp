@@ -76,8 +76,26 @@ int Server::launchParcing(std::string messageStr)
 	}
 	
 	int result = parcer.commandProccess();//
+	if (!parcer.getCommandDispatcher().getParcerResult())
+		return (result);
 	this->_parcingResult = parcer.getCommandDispatcher().getParcerResult();
-	return (result);
+	return result;
+}
+
+//TODO: Remove the const char param and put the return message correctly
+void Server::executeRoutine(Client *client, std::string &rawCommand, const char *cmd)
+{
+	(void) cmd;
+	int ret = launchParcing(rawCommand);
+    log_debug("return value is: %d", ret);
+    if (isAllowed(ret))
+    {
+        dispatchCommand(client, this->_parcingResult->getCommand());
+        deleteParserResult();
+    }
+    else
+        MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
+
 }
 
 void    Server::deleteParserResult() { delete _parcingResult; }

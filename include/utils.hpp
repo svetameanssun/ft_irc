@@ -18,3 +18,6 @@ void log_msg(const char *format, ...);
 void log_debug(const char *format, ...);
 void log_warning(const char *format, ...);
 void log_err(const char *format, ...);
+
+bool isAllowed(int ret);
+void getRetMsg(int ret);

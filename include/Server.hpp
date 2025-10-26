@@ -64,9 +64,10 @@ class Server
         ClientManager &getClientManager() { return _clientManager; }
         ChannelManager &getChannelManager() { return _channelManager; }
 
-        int     launchParcing(std::string messageStr);
         // command handling 
+        int     launchParcing(std::string messageStr);
         void    dispatchCommand(Client *client, const std::string &cmd);
+        void    executeRoutine(Client *client, std::string &rawCommand, const char *cmd);
 
         // aux
         void    deleteParserResult(); 

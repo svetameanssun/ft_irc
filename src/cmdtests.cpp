@@ -9,9 +9,7 @@ void runTestPass(Server &server, Client *client, const std::string &password)
     std::cout << "\n=== TEST: " << client->getNick() << " PASS " << password << " ===\n";
 
     std::string rawCommand = "PASS " + password;
-    server.launchParcing(rawCommand);
-    server.dispatchCommand(client, "PASS");
-    server.deleteParserResult();
+    server.executeRoutine(client, rawCommand, "PASS");
 
     std::cout << "===========================================\n";
 }
@@ -23,9 +21,7 @@ void runTestNick(Server &server, Client *client, const std::string &newNick)
     std::cout << "\n=== TEST: " << client->getNick() << " NICK " << newNick << " ===\n";
 
     std::string rawCommand = "NICK " + newNick;
-    server.launchParcing(rawCommand);
-    server.dispatchCommand(client, "NICK");
-    server.deleteParserResult();
+    server.executeRoutine(client, rawCommand, "NICK");
 
     std::cout << "===========================================\n";
 }
@@ -39,9 +35,7 @@ void runTestUser(Server &server, Client *client,
               << " " << realname << " ===\n";
 
     std::string rawCommand = "USER " + username + " " + realname;
-    server.launchParcing(rawCommand);
-    server.dispatchCommand(client, "USER");
-    server.deleteParserResult();
+    server.executeRoutine(client, rawCommand, "USER");
 
     std::cout << "===========================================\n";
 }
@@ -49,17 +43,13 @@ void runTestUser(Server &server, Client *client,
 
 // === JOIN Test ===
 void runTestJoin(Server &server, Client *client,
-                 const std::string &channel, const std::string &key = "")
+                 const std::string &channel, const std::string &whatever)
 {
+    const std::string &key = "";
     std::cout << "\n=== TEST: " << client->getNick() << " JOIN " << channel << " ===\n";
 
-    std::string rawCommand = "JOIN " + channel;
-    if (!key.empty())
-        rawCommand += " " + key;
-
-    server.launchParcing(rawCommand);
-    server.dispatchCommand(client, "JOIN");
-    server.deleteParserResult();
+    std::string rawCommand = "JOIN " + channel + whatever;
+    server.executeRoutine(client, rawCommand, "JOIN");
 
     std::cout << "===========================================\n";
 }
