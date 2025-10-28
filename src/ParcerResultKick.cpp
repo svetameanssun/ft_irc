@@ -5,7 +5,7 @@
 
 ParcerResultKick::ParcerResultKick()
     : AParcerResult() {
-    _command = "Kick";
+    _command = "KICK";
 }
 
 ParcerResultKick::ParcerResultKick(const ParcerResultKick& other): AParcerResult() {

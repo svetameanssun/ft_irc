@@ -98,12 +98,12 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
         delete(resultMode);
         return ERR_NEEDLESSPARAMS;
     }
-    /*if(int err = resultMode->checkModeParams(messageVec))
+    resultMode->setParams(messageVec);
+    if(int err = resultMode->checkModeParams(messageVec))
     {
         delete(resultMode);
         return (err);
-    }*/
-    resultMode->setParams(messageVec);
+    }
     this->_parcerResult = resultMode;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;

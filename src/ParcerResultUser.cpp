@@ -51,14 +51,17 @@ const std::vector<std::string> ParcerResultUser::getUserParams(void) const{
 /*----------------------------------------------------------*/
 
 
+
+
 bool ParcerResultUser::isAllowedChar(char c){
 
 
     std::string allowedChars;
+	//BAD NAMING OR BAD CODE
 	allowedChars.push_back('\0');
 	allowedChars += "@\n\r ";
     if(allowedChars.find(c) == std::string::npos) {
-		
+		//if we HAVN't found c in allowedChars  retrun true
         return (true);
     }
 	std::cout << "THIS " << c;
