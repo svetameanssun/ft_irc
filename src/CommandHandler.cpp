@@ -91,7 +91,8 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
     if (!client->isRegistered())
     {
         //TODO: No available error for "not registered user"
-        MessageSender::sendNumeric(_server.getServerName(), client, 451,
+        MessageSender::sendNumeric(_server.getServerName(),
+                                    client, 451,
                                    ":You have not registered");
         return;
     }
@@ -132,7 +133,8 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
         // ✅ Validate channel name format
         if (chanName.empty() || chanName[0] != '#')
         {
-            MessageSender::sendNumeric(_server.getServerName(), client, ERR_BADCHANMASK,
+            MessageSender::sendNumeric(_server.getServerName(),
+                                       client, ERR_BADCHANMASK,
                                        chanName + " :Bad Channel Mask");
             continue;
         }
@@ -157,21 +159,24 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
             {
                 if (chan->isInviteOnly() && !chan->isInvited(client->getFd()))
                 {
-                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_INVITEONLYCHAN,
-                                               chanName + " :Cannot join channel (+i)");
+                    MessageSender::sendNumeric(_server.getServerName(),
+                                                client, ERR_INVITEONLYCHAN,
+                                                chanName + " :Cannot join channel (+i)");
                     continue;
                 }
                 if (chan->hasKey() && chan->getKey() != key)
                 {
-                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_BADCHANNELKEY,
-                                               chanName + " :Cannot join channel (+k)");
+                    MessageSender::sendNumeric(_server.getServerName(),
+                                                client, ERR_BADCHANNELKEY,
+                                                chanName + " :Cannot join channel (+k)");
                     continue;
                 }
                 if (chan->getUserLimit() > 0 &&
                     chan->getUserCount() >= chan->getUserLimit())
                 {
-                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANNELISFULL,
-                                               chanName + " :Cannot join channel (+l)");
+                    MessageSender::sendNumeric(_server.getServerName(), client,
+                                                ERR_CHANNELISFULL,
+                                                chanName + " :Cannot join channel (+l)");
                     continue;
                 }
 
@@ -188,13 +193,15 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
         // ✅ Send topic (related numerics)
         if (!chan->getTopic().empty())
         {
-            MessageSender::sendNumeric(_server.getServerName(), client, RPL_TOPIC,
-                                       chanName + " :" + chan->getTopic());
+            MessageSender::sendNumeric(_server.getServerName(),
+                                        client, RPL_TOPIC,
+                                        chanName + " :" + chan->getTopic());
         }
         else
         {
-            MessageSender::sendNumeric(_server.getServerName(), client, RPL_NOTOPIC,
-                                       chanName + " :No topic is set");
+            MessageSender::sendNumeric(_server.getServerName(), client,
+                                        RPL_NOTOPIC,
+                                        chanName + " :No topic is set");
         }
 
         //TODO: Check if this is necessary
@@ -212,9 +219,12 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
                 oss << m->second->getNick() << " ";
         }
 
-        MessageSender::sendNumeric(_server.getServerName(), client, RPL_NAMREPLY, oss.str());
-        MessageSender::sendNumeric(_server.getServerName(), client, RPL_ENDOFNAMES,
-                                   chanName + " :End of /NAMES list");
+        MessageSender::sendNumeric(_server.getServerName(),
+                                    client, RPL_NAMREPLY, oss.str());
+
+        MessageSender::sendNumeric(_server.getServerName(),
+                                    client, RPL_ENDOFNAMES,
+                                    chanName + " :End of /NAMES list");
 
         // ✅ Remove invite after success
         chan->removeFromInviteList(client->getFd());
@@ -247,11 +257,14 @@ void CommandHandler::cmdNick(Client *client, AParcerResult *result)
     //}
 
     // check if nick already in use by another client; look at how to validate
-    Client *other = _server.getClientManager().findByNick(newNick);
+    Client *other = _server.getClientManager().findByFd(client->getFd());
+    
     if (other && other != client)
     {
-        // 433 ERR_NICKNAMEINUSE
-        MessageSender::sendNumeric(_server.getServerName(), client, 433, newNick + " :Nickname is already in use");
+        // 436 ERR_NICKCOLLISION
+        MessageSender::sendNumeric(_server.getServerName(),
+                                    client, ERR_NICKCOLLISION,
+                                    newNick + " :Nickname is already in use");
         return;
     }
 
@@ -261,26 +274,30 @@ void CommandHandler::cmdNick(Client *client, AParcerResult *result)
     // If the user already had a nick (a rename), broadcast NICK change to channels
     if (!oldNick.empty())
     {
-        std::string nickChangeMsg = ":" + oldNick + "!" + client->getUser() + "@" + client->getHost()
-                                 + " NICK :" + newNick + "\r\n";
+        std::string nickChangeMsg = ":" + oldNick + "!" + client->getUser()
+                                    + "@" + client->getHost()
+                                    + " NICK :" + newNick + "\r\n";
+
         _server.getChannelManager().broadcastToJoinedChannels(client->getFd(), nickChangeMsg);
     }
 
-    // If both NICK and USER are set and client not registered, complete registration
-    if (!client->isRegistered()) // && !client->getUser().empty())
+    //If already a USERname and not registered, complete it
+    if (!client->isRegistered() && !client->getUser().empty())
     {
         client->setRegistered(true);
-        client->setNick(newNick);
         // RPL_WELCOME 001
-        MessageSender::sendNumeric(_server.getServerName(), client, 1, ":Welcome to the IRC network, " + client->getNick());
+        MessageSender::sendNumeric(_server.getServerName(), client, RPL_WELCOME,
+                                    ":Welcome to the IRC network, " + client->getNick());
         // Optionally send other welcome numerics (002,003,004) per RFC later
     }
 }
 
 void CommandHandler::cmdUser(Client *client, AParcerResult *result)
 {
+    if (!client || !result) return;
+    
     ParcerResultUser *result2 = static_cast<ParcerResultUser*>(result);
-    if (!client) return;
+    
 
     //It should be done in the parser 
     // We accept a simplified form: USER <username> <realname>
@@ -291,18 +308,22 @@ void CommandHandler::cmdUser(Client *client, AParcerResult *result)
     //    return;
     //}
 
+    std::cout << "=================== PARAMS FROM USER COMMAND =====================" << std::endl;
+    result2->printResult();
+    std::cout << "==================================================================" << std::endl;
     const std::string username = result2->getUserParams().at(0);
     const std::string realname = result2->getUserParams().at(1);
 
     client->setUser(username);
     client->setRealName(realname);
 
-    // If both NICK and USER are set and client not registered, complete registration
+    //If already a NICK and is not registered, complete it
     if (!client->isRegistered() && !client->getNick().empty())
     {
         client->setRegistered(true);
         // RPL_WELCOME 001
-        MessageSender::sendNumeric(_server.getServerName(), client, 1, ":Welcome to the IRC network, " + client->getNick());
+        MessageSender::sendNumeric(_server.getServerName(), client, RPL_WELCOME,
+                                    ":Welcome to the IRC network, " + client->getNick());
         // Optionally send other welcome numerics (002,003,004)
     }
 }

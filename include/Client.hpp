@@ -24,6 +24,7 @@ class Client
     
     public:
         Client();
+        Client(int fd);
         Client(int fd, const std::string &hostname);
         ~Client();
 

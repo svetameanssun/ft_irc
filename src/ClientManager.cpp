@@ -10,9 +10,9 @@ ClientManager::~ClientManager()
         delete it->second;
 }
 
-void ClientManager::addClient(int fd, const std::string &hostname)
+void ClientManager::addClient(int fd) //Add hostname if needed; maybe override, const std::string &hostname)
 {
-    Client *client = new Client(fd, hostname);  // TODO: resolve actual hostname with getpeername() maybe??
+    Client *client = new Client(fd);  // TODO: resolve actual hostname with getpeername() maybe??
     _clients[fd] = client;
     log_err("addClient: Connection not established yet");
 
@@ -24,7 +24,7 @@ void ClientManager::addClient(int fd, const std::string &hostname)
     //pfd.revents = 0;
     //_pollFds.push_back(pfd);
 
-    log_msg("[ClientManager] Added client fd=", fd);
+    log_msg("[ClientManager] Added client fd=%d", fd);
 }
 
 void ClientManager::removeClient(int fd)
@@ -47,6 +47,9 @@ void ClientManager::removeClient(int fd)
     // Close socket
     close(fd);
 }
+
+bool ClientManager::clientExists(int fd) { return _clients.find(fd) != _clients.end(); }
+
 
 Client *ClientManager::findByFd(int fd)
 {

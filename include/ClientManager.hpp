@@ -23,8 +23,9 @@ public:
     ~ClientManager();
 
     // Management
-    void addClient(int fd, const std::string &hostname);
+    void addClient(int fd); // Add the hostname if ever needed, const std::string &hostname);
     void removeClient(int fd);
+    bool clientExists(int fd);
     Client *findByFd(int fd);
     Client *findByNick(const std::string &nick);
 
