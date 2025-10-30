@@ -114,7 +114,10 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
 int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
     //trailing params
     ParcerResultTopic * resultTopic = new ParcerResultTopic();
-    //check the command vector
+    if (!resultTopic->checkTopicParams(messageVec)){
+        delete(resultTopic);
+        return  ERR_UNKNOWNCOMMAND;
+    }
     resultTopic->setParams(messageVec);
     this->_parcerResult = resultTopic;
     this->_parcerResult->printResult();
@@ -124,7 +127,11 @@ int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
 
 int CommandDispatcher::dispatchInvite(std::vector <std::string> &messageVec){
     ParcerResultInvite * resultInvite = new ParcerResultInvite();
-    //check the command vector
+    if (!resultInvite->checkInviteParams(messageVec))
+    {
+        delete resultInvite;
+        return ERR_UNKNOWNCOMMAND;
+    }
     resultInvite->setParams(messageVec);
     this->_parcerResult = resultInvite;
     this->_parcerResult->printResult();
@@ -136,7 +143,11 @@ int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
     //trailing params
     
     ParcerResultKick * resultKick = new ParcerResultKick();
-    //check the command vector
+    if (!resultKick->checkKickParams(messageVec))
+    {
+        delete resultKick;
+        return ERR_UNKNOWNCOMMAND;
+    }
     resultKick->setParams(messageVec);
     this->_parcerResult = resultKick;
     this->_parcerResult->printResult();
@@ -148,7 +159,11 @@ int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
     //trailing params
     
     ParcerResultPrivmsg * resultPrivmsg = new ParcerResultPrivmsg();
-    //check the command vector
+    if (!resultPrivmsg->checkPrivmsgParams(messageVec))
+    {
+        delete resultPrivmsg;
+        return ERR_UNKNOWNCOMMAND;
+    }
     resultPrivmsg->setParams(messageVec);
     this->_parcerResult = resultPrivmsg;
     this->_parcerResult->printResult();
@@ -158,7 +173,7 @@ int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
 
 int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     //trailing params
-
+    
     std::cout << messageVec.at(0)<< std::endl;
     return (RPL_WELCOME);
 }
