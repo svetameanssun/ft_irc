@@ -309,7 +309,10 @@ void CommandHandler::cmdUser(Client *client, AParcerResult *result)
     //}
 
     std::cout << "=================== PARAMS FROM USER COMMAND =====================" << std::endl;
-    result2->printResult();
+    if (result2)
+        result2->printResult();
+    else 
+        return log_err("No args here");
     std::cout << "==================================================================" << std::endl;
     const std::string username = result2->getUserParams().at(0);
     const std::string realname = result2->getUserParams().at(1);
@@ -328,72 +331,137 @@ void CommandHandler::cmdUser(Client *client, AParcerResult *result)
     }
 }
 
-/*void CommandHandler::cmdPrivmsg(Client *client, AParcerResult *result)
+void CommandHandler::cmdPrivmsg(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result)
+        return;
 
-    if (args.size() < 2) {
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "PRIVMSG :Not enough parameters");
+    if (!client->isRegistered())
+    {
+        MessageSender::sendNumeric(_server.getServerName(), client, 451,
+                                   ":You have not registered");
         return;
     }
 
-    const std::string &target = args[0];
-    const std::string &message = args[1];
+    ParcerResultPrivmsg *res = static_cast<ParcerResultPrivmsg*>(result);
+    std::vector<std::string> params = res->getPrivmsgParams();
 
-    // Message format
-    std::string msg = ":" + client->getNick() + "!" + client->getUser() + "@" +
-                      client->getHost() + " PRIVMSG " + target + " :" + message + "\r\n";
+    if (params.size() < 2)
+    {
+        if (params.empty())
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NORECIPIENT,
+                                       ":No recipient given (PRIVMSG)");
+        else
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTEXTTOSEND,
+                                       ":No text to send");
+        return;
+    }
 
+    const std::string &target = params[0];
+    const std::string &message = params[1];
+
+    // Channel message
     if (!target.empty() && target[0] == '#')
     {
-        // Channel target
         Channel *chan = _server.getChannelManager().findChannel(target);
         if (!chan)
         {
-            // 403 ERR_NOSUCHCHANNEL
-            MessageSender::sendNumeric(_server.getServerName(), client, 403, target + " :No such channel");
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL,
+                                       target + " :No such channel");
             return;
         }
-        if (!chan->isMember(client->getFd()))
+        if (!chan->userExists(client->getFd()))
         {
-            // 442 ERR_NOTONCHANNEL
-            MessageSender::sendNumeric(_server.getServerName(), client, 442, target + " :You're not on that channel");
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL,
+                                       target + " :You're not on that channel");
             return;
         }
-        // Broadcast to channel, excluding sender
-        chan->broadcast(msg);//, client->getFd());
+
+        std::string msg = ":" + client->getPrefix() + " PRIVMSG " + target +
+                          " :" + message + "\r\n";
+        chan->broadcast(msg); // broadcast to others
     }
+    // User message
     else
     {
-        // User target
-        Client *dest = _server.getClientManager().findByNick(target);
-        if (!dest)
+        Client *receiver = _server.getClientManager().findByNick(target);
+        if (!receiver)
         {
-            // 401 ERR_NOSUCHNICK
-            MessageSender::sendNumeric(_server.getServerName(), client, 401, target + " :No such nick/channel");
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHNICK,
+                                       target + " :No such nick");
             return;
         }
-        MessageSender::sendToClient(dest, msg);
+
+        std::string msg = ":" + client->getPrefix() + " PRIVMSG " + target +
+                          " :" + message + "\r\n";
+        MessageSender::sendToClient(receiver, msg);
+    }
+}
+
+void CommandHandler::cmdNotice(Client *client, AParcerResult *result)
+{
+    if (!client || !result)
+        return;
+    if (!client->isRegistered())
+        return; // No replies for NOTICE
+
+    ParcerResultPrivmsg *res = static_cast<ParcerResultPrivmsg*>(result);
+    std::vector<std::string> params = res->getPrivmsgParams();
+
+    if (params.size() < 2)
+        return; // Silently ignore
+
+    const std::string &target = params[0];
+    const std::string &message = params[1];
+
+    // Channel message
+    if (!target.empty() && target[0] == '#')
+    {
+        Channel *chan = _server.getChannelManager().findChannel(target);
+        if (!chan || !chan->userExists(client->getFd()))
+            return; // ignore silently
+
+        std::string msg = ":" + client->getPrefix() + " NOTICE " + target +
+                          " :" + message + "\r\n";
+        chan->broadcast(msg);
+    }
+    // User message
+    else
+    {
+        Client *receiver = _server.getClientManager().findByNick(target);
+        if (!receiver)
+            return; // ignore silently
+
+        std::string msg = ":" + client->getPrefix() + " NOTICE " + target +
+                          " :" + message + "\r\n";
+        MessageSender::sendToClient(receiver, msg);
     }
 }
 
 void CommandHandler::cmdPart(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result) return;
 
-    if (args.empty())
+    //TODO: Change for the good class type
+    AParcerResult *result2 = static_cast<ParcerResultPrivmsg*>(result);
+
+    if (result2->getCommand().c_str()[0] != 'P')
     {
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "PART :Not enough parameters");
+        log_err("PART: Not implemented yet");
+
+        //MessageSender::sendNumeric(_server.getServerName(), client, 461,
+                                    //"PART :Not enough parameters");
         return;
     }
-
-    std::string chanName = args[0];
+    //TODO:change this
+    std::string chanName = result2->getCommand();
     Channel *chan = _server.getChannelManager().findChannel(chanName);
 
     if (!chan || !chan->isMember(client->getFd()))
     {
         // 442 ERR_NOTONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 442, chanName + " :You're not on that channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, 442,
+                                    chanName + " :You're not on that channel");
         return;
     }
 
@@ -411,9 +479,9 @@ void CommandHandler::cmdPart(Client *client, AParcerResult *result)
 }
 
 
-void CommandHandler::cmdQuit(Client *client, AParcerResult *result)
+/*void CommandHandler::cmdQuit(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result) return;
 
     std::string quitMsg = "Client Quit";
     if (!args.empty())
@@ -432,35 +500,39 @@ void CommandHandler::cmdQuit(Client *client, AParcerResult *result)
     // Remove client from server
     _server.getClientManager().removeClient(client->getFd());
 }
+*/
 
-
-void CommandHandler::cmdPing(Client *client, AParcerResult *result)
+/*void CommandHandler::cmdPing(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result)
+        return;
 
-    if (args.empty())
+    ParcerResultPing *result2 = static_cast<ParcerResultPing*>(result);
+
+    if (parsed->getParams().empty())
     {
-        // 409 ERR_NOORIGIN
-        MessageSender::sendNumeric(_server.getServerName(), client, 409, ":No origin specified");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOORIGIN, ":No origin specified");
         return;
     }
 
-    const std::string& token = args[0];
-    std::string pongMsg = ":" + _server.getServerName() + " PONG " + _server.getServerName() +
-                          " :" + token + "\r\n";
-    MessageSender::sendToClient(client, pongMsg);
+    const std::string &token = parsed->getParams()[0];
+    std::string reply = "PONG :" + token + "\r\n";
+    MessageSender::sendToClient(client, reply);
 }
-
+}*/
 
 void CommandHandler::cmdPong(Client *client, AParcerResult *result)
 {
+    (void) result;
+
     if (!client) return;
-    // Usually no reply is required
-    if (!args.empty()) {
-        std::cout << "[DEBUG] Received PONG from " << client->getNick()
-                  << " with token: " << args[0] << std::endl;
-    }
+
+    // You could log it or update a timestamp to track idle clients
+    log_debug("[DEBUG] PONG received from %s (fd=%d)",
+                client->getNick().c_str(), client->getFd());
 }
+
+/*
 //TODO: Very big command, change it into smaller pieces; refactor and adapt the logic 
 void CommandHandler::cmdMode(Client *client, AParcerResult *result)
 {
@@ -631,47 +703,60 @@ void CommandHandler::cmdMode(Client *client, AParcerResult *result)
 
     chan->broadcast(oss.str());
 }
+*/
+
 
 //TODO: Adapt logic so it is only done by operators of the channel
 void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result) return;
 
-    if (args.empty())
+    ParcerResultTopic *result2 = static_cast<ParcerResultTopic*>(result);
+    const std::vector<std::string> params = result2->getTopicParams();
+    if (params.empty())
     {
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "TOPIC :Not enough parameters");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NEEDMOREPARAMS,
+                                    "TOPIC :Not enough parameters");
         return;
     }
 
-    const std::string &chanName = args[0];
+    //TODO: Check which parameter is the channame
+    const std::string &chanName = params.at(1);
+
     Channel *chan = _server.getChannelManager().findChannel(chanName);
 
     if (!chan)
     {
         // 403 ERR_NOSUCHCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 403, chanName + " :No such channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL,
+                                    chanName + " :No such channel");
         return;
     }
 
     if (!chan->isMember(client->getFd()))
     {
         // 442 ERR_NOTONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 442, chanName + " :You're not on that channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL,
+                                    chanName + " :You're not on that channel");
         return;
     }
 
     // --- Query topic ---
-    if (args.size() == 1)
+    //TODO: Check how many parameters do we usually have
+    if (params.size() == 2)
     {
         if (chan->getTopic().empty())
-            MessageSender::sendNumeric(_server.getServerName(), client, 331, chanName + " :No topic is set");
+            MessageSender::sendNumeric(_server.getServerName(), client, RPL_NOTOPIC,
+                                        chanName + " :No topic is set");
         else
-            MessageSender::sendNumeric(_server.getServerName(), client, 332, chanName + " :" + chan->getTopic());
+            MessageSender::sendNumeric(_server.getServerName(), client, RPL_TOPIC,
+                                        chanName + " :" + chan->getTopic());
         return;
     }
 
     // --- Set topic ---
-    std::string newTopic = args[1];
+    //TODO: Check the order and the number of arguments to see the position of the topic
+    std::string newTopic = params.at(3);
     chan->setTopic(newTopic);
 
     // Broadcast topic change to channel
@@ -680,7 +765,7 @@ void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
     chan->broadcast(topicMsg);
 }
 
-void CommandHandler::cmdKick(Client *client, AParcerResult *result)
+/*void CommandHandler::cmdKick(Client *client, AParcerResult *result)
 {
     if (!client) return;
 
@@ -738,6 +823,7 @@ void CommandHandler::cmdKick(Client *client, AParcerResult *result)
         _server.getChannelManager().removeChannel(chanName);
     }
 }
+
 
 void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
 {

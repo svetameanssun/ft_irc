@@ -17,4 +17,5 @@ class MessageSender
         // send numeric reply (RFC numerics)
         static void sendNumeric(const std::string &serverName, Client *client,
                             int code, const std::string &msg);
+
 };

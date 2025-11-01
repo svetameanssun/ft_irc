@@ -24,15 +24,17 @@ class CommandHandler
         void cmdNick(Client *client, AParcerResult *result);
         void cmdUser(Client *client, AParcerResult *result);
         void cmdJoin(Client *client, AParcerResult *result);
-        //void cmdPrivmsg(Client *client, AParcerResult *result);
-        //void cmdPart(Client *client, AParcerResult *result);
+        void cmdPrivmsg(Client *client, AParcerResult *result);
+        void cmdNotice(Client *client, AParcerResult *result);
+        void cmdPart(Client *client, AParcerResult *result);
         //void cmdQuit(Client *client, AParcerResult *result);
         //void cmdPing(Client *client, AParcerResult *result);
-        //void cmdPong(Client *client, AParcerResult *result);
+        void cmdPong(Client *client, AParcerResult *result);
         //void cmdMode(Client *client, AParcerResult *result);
-        //void cmdTopic(Client *client, AParcerResult *result);
-        //void cmdKick(Client *client, AParcerResult *result);
+        void cmdTopic(Client *client, AParcerResult *result);
+        void cmdKick(Client *client, AParcerResult *result);
         //void cmdInvite(Client *client, AParcerResult *result);
+
 
         // Disallow copying (orthodox canonical form, non-copyable)
         CommandHandler(const CommandHandler &);
