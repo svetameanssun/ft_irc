@@ -33,7 +33,7 @@ class CommandHandler
         //void cmdMode(Client *client, AParcerResult *result);
         void cmdTopic(Client *client, AParcerResult *result);
         void cmdKick(Client *client, AParcerResult *result);
-        //void cmdInvite(Client *client, AParcerResult *result);
+        void cmdInvite(Client *client, AParcerResult *result);
 
 
         // Disallow copying (orthodox canonical form, non-copyable)

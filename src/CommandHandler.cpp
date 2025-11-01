@@ -122,7 +122,6 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
     //    }
     //    return;
     //}
-    //TODO: refactor this function and create a join_aux file
     // ✅ Iterate over channel,key pairs
     for (std::map<std::string, std::string>::const_iterator it = joinParams.begin();
          it != joinParams.end(); ++it)
@@ -765,39 +764,48 @@ void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
     chan->broadcast(topicMsg);
 }
 
-/*void CommandHandler::cmdKick(Client *client, AParcerResult *result)
+void CommandHandler::cmdKick(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result) return;
 
-    if (args.size() < 2) {
+    ParcerResultKick *result2 = static_cast<ParcerResultKick*>(result);
+
+    const std::vector<std::string> params = result2->getKickParams();
+    if (params.size() < 2)
+    {
         // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "KICK :Not enough parameters");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NEEDMOREPARAMS,
+                                    "KICK :Not enough parameters");
         return;
     }
 
-    const std::string &chanName = args[0];
-    const std::string &targetNick = args[1];
-    std::string reason = (args.size() > 2) ? args[2] : "Kicked";
+    //TODO: be sure which one is in which position
+    const std::string &chanName = params.at(0);
+    const std::string &targetNick = params.at(1);
+    std::string reason = (params.size() > 2) ? params.at(2) : "Kicked";
 
     Channel *chan = _server.getChannelManager().findChannel(chanName);
     if (!chan)
     {
         // 403 ERR_NOSUCHCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 403, chanName + " :No such channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL,
+                                    chanName + " :No such channel");
         return;
     }
 
     if (!chan->isMember(client->getFd()))
     {
         // 442 ERR_NOTONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 442, chanName + " :You're not on that channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL,
+                                    chanName + " :You're not on that channel");
         return;
     }
 
     if (!chan->isOperator(client->getFd()))
     {
         // 482 ERR_CHANOPRIVSNEEDED
-        MessageSender::sendNumeric(_server.getServerName(), client, 482, chanName + " :You're not channel operator");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED,
+                                    chanName + " :You're not channel operator");
         return;
     }
 
@@ -805,7 +813,7 @@ void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
     if (!target || !chan->isMember(target->getFd()))
     {
         // 441 ERR_USERNOTINCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 441,
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_USERNOTINCHANNEL,
                                    targetNick + " " + chanName + " :They aren't on that channel");
         return;
     }
@@ -818,39 +826,40 @@ void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
     // Remove the target
     chan->removeMember(target);
 
-    if (chan->isEmpty())
-    {
-        _server.getChannelManager().removeChannel(chanName);
-    }
+    if (chan->isEmpty()) { _server.getChannelManager().removeChannel(chanName); }
 }
-
 
 void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
 {
-    if (!client) return;
+    if (!client || !result) return;
 
-    if (args.size() < 2)
+    ParcerResultInvite *result2 = static_cast<ParcerResultInvite*>(result);
+    const std::vector<std::string> params = result2->getInviteParams();
+    if (params.size() < 2)
     {
         // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "INVITE :Not enough parameters");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NEEDMOREPARAMS,
+                                    "INVITE :Not enough parameters");
         return;
     }
 
-    const std::string &targetNick = args[0];
-    const std::string &chanName = args[1];
+    const std::string &targetNick = params.at(0);
+    const std::string &chanName = params.at(1);
 
     Channel *chan = _server.getChannelManager().findChannel(chanName);
     if (!chan)
     {
         // 403 ERR_NOSUCHCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 403, chanName + " :No such channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL,
+                                    chanName + " :No such channel");
         return;
     }
 
     if (!chan->isMember(client->getFd()))
     {
         // 442 ERR_NOTONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 442, chanName + " :You're not on that channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL,
+                                    chanName + " :You're not on that channel");
         return;
     }
 
@@ -858,7 +867,8 @@ void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
     if (chan->isInviteOnly() && !chan->isOperator(client->getFd()))
     {
         // 482 ERR_CHANOPRIVSNEEDED
-        MessageSender::sendNumeric(_server.getServerName(), client, 482, chanName + " :You're not channel operator");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED,
+                                    chanName + " :You're not channel operator");
         return;
     }
 
@@ -866,14 +876,16 @@ void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
     if (!target)
     {
         // 401 ERR_NOSUCHNICK
-        MessageSender::sendNumeric(_server.getServerName(), client, 401, targetNick + " :No such nick/channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHNICK,
+                                    targetNick + " :No such nick/channel");
         return;
     }
 
     if (chan->isMember(target->getFd()))
     {
         // 443 ERR_USERONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 443, targetNick + " " + chanName + " :is already on channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_USERONCHANNEL,
+                                    targetNick + " " + chanName + " :is already on channel");
         return;
     }
 
@@ -886,6 +898,6 @@ void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
     MessageSender::sendToClient(target, inviteMsg);
 
     // Acknowledge to inviter (341 RPL_INVITING)
-    MessageSender::sendNumeric(_server.getServerName(), client, 341, targetNick + " " + chanName);
+    MessageSender::sendNumeric(_server.getServerName(), client, RPL_INVITING,
+                                targetNick + " " + chanName);
 }
-*/
