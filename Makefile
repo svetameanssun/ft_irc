@@ -39,6 +39,18 @@ FILES    = 	main.cpp \
 			ChannelManager.cpp \
 			MessageSender.cpp \
 			CommandHandler.cpp \
+			CmdPass.cpp \
+			CmdJoin.cpp \
+			CmdNick.cpp \
+			CmdUser.cpp \
+			CmdPrivmsg.cpp \
+			CmdNotice.cpp \
+			CmdQuit.cpp \
+			CmdPingPong.cpp \
+			CmdMode.cpp \
+			CmdTopic.cpp \
+			CmdKick.cpp \
+			CmdInvite.cpp \
 			AParcerResult.cpp \
 			CommandDispatcher.cpp \
 			CommandDispatcherUtils.cpp \
@@ -63,6 +75,7 @@ FILES_TEST	=	Server.cpp \
 				ChannelManager.cpp \
 				MessageSender.cpp \
 				CommandHandler.cpp \
+				CmdPass.cpp \
 				AParcerResult.cpp \
 				CommandDispatcher.cpp \
 				CommandDispatcherUtils.cpp \
