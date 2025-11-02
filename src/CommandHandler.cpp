@@ -11,7 +11,7 @@ CommandHandler::CommandHandler(Server &server) : _server(server) {}
 // Entry point: dispatch commands
 void CommandHandler::execute(Client *client, const std::string &command, AParcerResult *result)
 {
-    //TODO:Change for switch, or pointers to functions :)
+    //TODO:(Optional) Change for switch, or pointers to functions :)
     if (command == "PASS")
         cmdPass(client, result);
     else if (command == "NICK")
