@@ -46,9 +46,9 @@ const std::vector<std::string> ParcerResultKick::getKickParams(void) const{
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
-/*                   IS_VALID / IS_SPECIAL                  */
+/*                   IS_VALID_CHANNEL_NAME                  */
 /*----------------------------------------------------------*/
-bool ParcerResultJoin::isValidChanNameChar(int c) {
+bool ParcerResultKick::isValidChanNameChar(int c) {
     if(c == '\0')
         return (false);
     else if(c == '\a')
@@ -68,7 +68,7 @@ bool ParcerResultJoin::isValidChanNameChar(int c) {
     }
 }
 
-bool ParcerResultJoin::isValidChanName(std::string channelName) {
+bool ParcerResultKick::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -90,11 +90,61 @@ bool ParcerResultJoin::isValidChanName(std::string channelName) {
     return (true);
 }
 
-int ParcerResultJoin::checkKickCommand(std::vector <std::string> messageVector){
+/*==========================================================*/
+
+/*----------------------------------------------------------*/
+/*                     IS_VALID_NICKNAME                    */
+/*----------------------------------------------------------*/
+
+bool ParcerResultKick::isSpecialChar(int c) {
+    std::string specialChars = "[]\\`^{}";
+    if(specialChars.find(c) == std::string::npos) {
+        std::cout << "char: " << c << "\n";
+        return (0);
+    }
+    return (1);
+}
+
+bool ParcerResultKick::isValidNick(std::string nickname) {
+    std::cout << nickname << "\n";
+    if(nickname.empty()) {
+        return (0);
+    }
+    if(nickname.at(0) == '-' || isdigit(nickname.at(0))) {
+        return (0);
+    }
+    if(!isalpha(nickname.at(0)) && !isSpecialChar(nickname.at(0))) {
+        return (0);
+    }
+    if(nickname.length() > 9) {
+        return (0);
+    }
+    for(long unsigned int i = 1; i < nickname.length(); ++i) {
+        if(!isdigit(nickname.at(i)) && !isalpha(nickname.at(i)) &&
+                !isSpecialChar(nickname.at(i)) && nickname.at(i) != '-') {
+            return (0);
+        }
+    }
+    return (1);
+}
+
+int ParcerResultKick::checkKickCommand(std::vector <std::string> messageVector){
 	if (messageVector.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
-	
-	
+	int res;
+	if (res = setKickComment(messageVector) > 0); // if :trailing param exists, we will set it as _kickComment, if not, it will be default
+	// setKikComment also checks if the trailing comment is valid
+	{
+		return res;
+	}
+	//after that the _kickParamsVec should already be set, without trailing params
+	if(messageVector.at(1).find(',') == std::string::npos){ // if there is  NO ',' in the string, there will be( one channel) AND (one OR many users) 
+		res = treatOneChannel(messageVector);
+	}
+	else {
+		res = treatManyChannels(messageVector);
+	}
+	return (res);
 }
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
