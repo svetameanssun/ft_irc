@@ -48,8 +48,54 @@ const std::vector<std::string> ParcerResultKick::getKickParams(void) const{
 /*----------------------------------------------------------*/
 /*                   IS_VALID / IS_SPECIAL                  */
 /*----------------------------------------------------------*/
+bool ParcerResultJoin::isValidChanNameChar(int c) {
+    if(c == '\0')
+        return (false);
+    else if(c == '\a')
+        return (false);
+    else if(c == '\r')
+        return (false);
+    else if(c == '\n')
+        return (false);
+    else if(c == ' ')
+        return (false);
+    else if(c == ',')
+        return (false);
+    else if(c == ':')
+        return (false);
+    else {
+        return (true);
+    }
+}
 
+bool ParcerResultJoin::isValidChanName(std::string channelName) {
+    size_t i = 0;
+    if(channelName.empty()) {
+        // NOT FORGET EVERYWHERE!
+        return false;
+    }
+    if((channelName.at(0) != '#') && (channelName.at(0) != '&')) {
+        std::cout << "THIS\n";
+        return (false);
+    }
+    if((channelName.length() > 200) || (channelName.length() == 1)) {
+        return (false);
+    }
+    i++;
+    for(; i < channelName.length(); ++i) {
+        if(!isValidChanNameChar(channelName.at(i))) {
+            return (false);
+        }
+    }
+    return (true);
+}
 
+int ParcerResultJoin::checkKickCommand(std::vector <std::string> messageVector){
+	if (messageVector.size() <= 2){
+		return (ERR_NEEDMOREPARAMS);
+	
+	
+}
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
@@ -74,4 +120,6 @@ void ParcerResultKick::printResult()const {
    
    If a "comment" is given, this will be sent instead of the default message,
    the Kickname of the user issuing the KICK.
+
+   Ex: KICK #Finnish John :Speaking English
  */
