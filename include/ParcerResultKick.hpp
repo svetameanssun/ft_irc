@@ -22,6 +22,7 @@ class ParcerResultKick : public AParcerResult {
     void printResult() const;
   private:
     std::vector <std::string> _kickParamsVec;
+    std::string kickComment;
 };
 
 #endif
