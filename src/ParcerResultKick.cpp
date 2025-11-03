@@ -40,9 +40,6 @@ const std::vector<std::string> ParcerResultKick::getKickParams(void) const{
 	return (_kickParamsVec);
 }
 
-
-
-
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
@@ -201,7 +198,7 @@ int ParcerResultKick::checkKickParams(std::vector <std::string> messageVector){
 		return res;
 	}
 	//after that the _kickParamsVec should already be set, without trailing params
-	res = checkChanAndNick(messageVector);
+	res = fillKickParams(messageVector);
 	return (res);
 }
 /*==========================================================*/
@@ -221,7 +218,24 @@ const std::vector<std::string> ParcerResultKick::stringToVec(std::string str, ch
 }
 
 std::map<int, std::vector<std::string>> ParcerResultKick::vectorsToMap(std::vector<std::string> channels, std::vector<std::string>users){
-	for (size_t i = 0; )
+	std::map <int, std::vector<std::string>> map;
+	if (channels.size() == 1 && users.size() == 1){
+		map[0].push_back(channels[0]);
+        map[0].push_back(users[0]);
+	}
+	else if (channels.size() == 1){
+		for (size_t i = 0; i < users.size(); ++i){
+			map[i].push_back(channels[0]);
+			map[i].push_back(users[i]);
+		}
+	}
+	else{
+		for (size_t i = 0; i < users.size(); ++i){
+			map[i].push_back(channels[i]);
+			map[i].push_back(users[i]);
+		}
+	}
+	return map;
 }
 
 /*----------------------------------------------------------*/
