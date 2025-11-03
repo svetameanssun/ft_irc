@@ -143,10 +143,12 @@ int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
     //trailing params
     
     ParcerResultKick * resultKick = new ParcerResultKick();
-    if (!resultKick->checkKickParams(messageVec))
+    int res;
+    //if checkKickParams returns anything other then 0 - the command input is wrong
+    if (res = resultKick->checkKickParams(messageVec) > 0)
     {
         delete resultKick;
-        return ERR_UNKNOWNCOMMAND;
+        return (res);
     }
     resultKick->setParams(messageVec);
     this->_parcerResult = resultKick;
