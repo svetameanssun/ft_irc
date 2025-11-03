@@ -23,7 +23,7 @@ class ParcerResultKick : public AParcerResult {
   private:
     std::vector <std::string> _kickParamsVec;
     std::string _kickComment;
-    std::map <std::string, std::string> _kickParamsVec;
+    std::map <int, std::vector<std::string>> _kickParamsMap;
 };
 
 #endif
