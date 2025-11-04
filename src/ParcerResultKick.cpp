@@ -96,10 +96,9 @@ bool ParcerResultKick::isValidChanName(std::string channelName) {
 bool ParcerResultKick::isSpecialChar(int c) {
     std::string specialChars = "[]\\`^{}";
     if(specialChars.find(c) == std::string::npos) {
-        std::cout << "char: " << c << "\n";
-        return (0);
+        return (false);
     }
-    return (1);
+    return (true);
 }
 
 bool ParcerResultKick::isValidNick(std::string nickname) {
@@ -132,18 +131,18 @@ bool ParcerResultKick::isValidNick(std::string nickname) {
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
 int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector){
-	for(int i; i <messageVector.size(); i++){
+	for(int i = 0; i < messageVector.size(); i++){
 		if (messageVector[i].find(':') != std::string::npos)
 			break;
 	}
-	if (i + 1 == messageVec.size()){
+	if (i == messageVector.size()){
 		this->_kickComment = "default";
 	}
 	else{
 		int save_i = i;
-		this->_kickComment.push_back('\0');
-		for (;i < messageVector.size(); i++){
-			this->_kickComment+=messageVector[i];
+		//this->_kickComment.push_back('\0'); chatgpt said it was not necessary, because it is not C-string
+		for (; i < messageVector.size(); i++){
+			this->_kickComment += messageVector[i];
 		}
 		messageVector.resize(save_i + 1);
 	}
@@ -156,45 +155,45 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 }
 
 int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
-	std:vector <std::string> channels;
+	std::vector <std::string> channels;
 	std:vector <std::string> users;
 	if (messageVector[1].find(',') != std::string::npos){
 		channels = stringToVec(messageVector[1], ',');
 	}
 	else{
-		channels[0] = messageVector[1];
+		channels.push_back(messageVector[1]);
 	}
 	if (messageVector[2].find(',') != std::string::npos){
 		users = stringToVec(messageVector[2], ',');
 	}
 	else{
-		users[0] = messageVector[2];
+		users.push_back(messageVector[2]);
 	}
 	if (channels.size() != 1 && channels.size() != users.size()){
 		return (ERR_NEEDLESSPARAMS);
 	}
 	for (size_t i = 0; i < users.size(); i++){
-		(!isValidNick(users[i])){
+		if (!isValidNick(users[i])){
 			return (ERR_UNKNOWNCOMMAND);
 		}
 		if (i < channels.size()){
-			if(!isValidChanName(channels[i])){
+			if (!isValidChanName(channels[i])){
 				return (ERR_UNKNOWNCOMMAND);
 			}
 		}
 	}
 	this->_kickParamsMap = vectorsToMap(channels, users);
 	//if everything is OK returns 0;
-	return (0):
+	return (0);
 }
 
 int ParcerResultKick::checkKickParams(std::vector <std::string> messageVector){
 	if (messageVector.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
-	int res;
-	if (res = checkKickComment(messageVector) > 0); // if :trailing param exists, we will set it as _kickComment, if not, it will be default
-	// setKickComment also checks if the trailing comment is valid
-	{
+	}
+	int res = checkKickComment(messageVector);
+	if (res > 0); // if :trailing param exists, we will set it as _kickComment, if not, it will be default
+	// setKickComment also checks if the trailing comment is valid{
 		return res;
 	}
 	//after that the _kickParamsVec should already be set, without trailing params
