@@ -131,7 +131,7 @@ int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
     this->_parcerResult = resultTopic;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    return (res); // it will return 0 when the server will send the topic to the client.
 }
 
 int CommandDispatcher::dispatchInvite(std::vector <std::string> &messageVec){
