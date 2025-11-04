@@ -40,6 +40,17 @@ ParcerResultPrivmsg::~ParcerResultPrivmsg(){}
  ’*’ and ’?’ characters. This extension to the PRIVMSG command is
  only available to operators.
 
+Numeric Replies:
+ ERR_NORECIPIENT
+ ERR_NOTEXTTOSEND
+ ERR_CANNOTSENDTOCHAN
+ ERR_NOTOPLEVEL
+ ERR_WILDTOPLEVEL
+ ERR_TOOMANYTARGETS
+ ERR_NOSUCHNICK
+ RPL_AWAY
+
+
  Examples:
  :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message ?
                                                          Message from Angel to Wiz.
