@@ -34,7 +34,7 @@ void ParcerResultUser::setParams(std::vector<std::string> userCommand){
   	}
   	this->_userParamsVec = userCommand;
 
-	_userName.push_back('\0');
+	//_userName.push_back('\0'); if it will be treated later as a C-string, it will MIGHT BE useful
 	for (size_t i = 1; i < userCommand.size(); i++)
 	{
 		_userName += userCommand.at(i);
