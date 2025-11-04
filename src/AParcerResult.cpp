@@ -50,6 +50,9 @@ bool AParcerResult::isValidChanNameChar(int c) {
     }
 }
 
+//checks the channel name requirements
+// and checks whether this excact channelName complies with these requirements
+// returns false if the name is not valid.
 bool AParcerResult::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
