@@ -18,8 +18,12 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
     // Transfer ownership into _parcerResult
     this->_parcerResult = resultPass;
     this->_parcerResult->printResult();
-
-    return RPL_WELCOME;
+    //the command PASS sould send the reply welcome,
+    // along with 002, and 003, but I the replying to the client is not treated here, so
+    // on success returna 0;
+    // on failure returns ERR_;
+    //return RPL_WELCOME;
+    return(0);
 }
 
 int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
@@ -41,7 +45,8 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
     // Transfer ownership into _parcerResult
     this->_parcerResult = resultNick;
     this->_parcerResult->printResult();
-    return RPL_WELCOME;
+    //return RPL_WELCOME;
+    return(0);
 }
 
 
@@ -65,7 +70,8 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
     // Transfer ownership to _parcerResult
     this->_parcerResult = resultJoin;
     this->_parcerResult->printResult();
-    return RPL_WELCOME;
+    //return RPL_WELCOME;
+    return(0);
 }
 
 
@@ -75,7 +81,8 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //USER <username> <realname>
     ParcerResultUser * resultUser = new ParcerResultUser();
     //std::cout << "HERE\n";
-    if(int err = resultUser->checkUserParams(messageVec))
+    int err = resultUser->checkUserParams(messageVec); 
+    if(err > 0)
     {
         delete(resultUser);
         return (err);
@@ -85,7 +92,8 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     this->_parcerResult = resultUser;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    //return (RPL_WELCOME);
+    return(0);
 }
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
@@ -107,7 +115,8 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
     this->_parcerResult = resultMode;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    //return (RPL_WELCOME);
+    return(0);
 }
 
 int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
@@ -136,7 +145,8 @@ int CommandDispatcher::dispatchInvite(std::vector <std::string> &messageVec){
     this->_parcerResult = resultInvite;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    //return (RPL_WELCOME);
+    return(0);
 }
 
 int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
@@ -154,7 +164,8 @@ int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
     this->_parcerResult = resultKick;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    //return (RPL_WELCOME);
+    return(0);
 }
 
 int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
@@ -170,12 +181,14 @@ int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
     this->_parcerResult = resultPrivmsg;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    //return (RPL_WELCOME);
+    return(0);
 }
 
 int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     //trailing params
     
     std::cout << messageVec.at(0)<< std::endl;
-    return (RPL_WELCOME);
+    //return (RPL_WELCOME);
+    return(0);
 }
