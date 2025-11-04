@@ -101,7 +101,13 @@ int ParcerResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         std::cout << this->_topicMessage(); //I have to send the message to the client from here!!!
         return (0);
     }
-    
+    if (messageVector[2][0] != ':'){
+        return (ERR_UNKNOWNCOMMAND);
+    }
+    for (int i = 2; i < messageVector.size(); i++){
+        this->_topicMessage+= messageVector[i];
+    }
+    return (0);
 }
 
 /*==========================================================*/
