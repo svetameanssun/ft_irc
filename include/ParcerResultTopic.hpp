@@ -22,6 +22,7 @@ class ParcerResultTopic : public AParcerResult {
     //int checkTopicParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _topicParamsVec;
+    std::string _topicMessage;
 };
 
 #endif
