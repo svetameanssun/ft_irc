@@ -107,14 +107,14 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
     this->_parcerResult = resultMode;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-
     return (RPL_WELCOME);
 }
 
 int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
     //trailing params
     ParcerResultTopic * resultTopic = new ParcerResultTopic();
-    if (!resultTopic->checkTopicParams(messageVec)){
+    int res = resultTopic->checkTopicParams(messageVec);
+    if (res > 0){
         delete(resultTopic);
         return  ERR_UNKNOWNCOMMAND;
     }
