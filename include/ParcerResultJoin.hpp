@@ -22,8 +22,8 @@ class ParcerResultJoin : public AParcerResult {
     const std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
     
     bool isValidJoin(std::vector <std::string> messageVector);
-    bool isValidChanName(std::string channelName);
-    bool isValidChanNameChar(int c);
+    //bool isValidChanName(std::string channelName);
+    //bool isValidChanNameChar(int c);
     void setParams(std::vector<std::string> joinCommand);
 
     const std::map<std::string, std::string> getJoinParamsMap(void) const;
