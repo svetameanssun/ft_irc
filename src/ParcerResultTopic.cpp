@@ -39,52 +39,6 @@ void ParcerResultTopic::setParams(std::vector<std::string> topicCommand) {
 const std::vector<std::string> ParcerResultTopic::getTopicParams(void) const {
   return (this->_topicParamsVec);
 }
-/*----------------------------------------------------------*/
-/*                   IS_VALID_CHANNEL_NAME                  */
-/*----------------------------------------------------------*/
-bool ParcerResultKick::isValidChanNameChar(int c) {
-    if(c == '\0')
-        return (false);
-    else if(c == '\a')
-        return (false);
-    else if(c == '\r')
-        return (false);
-    else if(c == '\n')
-        return (false);
-    else if(c == ' ')
-        return (false);
-    else if(c == ',')
-        return (false);
-    else if(c == ':')
-        return (false);
-    else {
-        return (true);
-    }
-}
-
-bool ParcerResultKick::isValidChanName(std::string channelName) {
-    size_t i = 0;
-    if(channelName.empty()) {
-        // NOT FORGET EVERYWHERE!
-        return (false);
-    }
-    if((channelName.at(0) != '#') && (channelName.at(0) != '&')) {
-        std::cout << "THIS\n";
-        return (false);
-    }
-    if((channelName.length() > 200) || (channelName.length() == 1)) {
-        return (false);
-    }
-    i++;
-    for(; i < channelName.length(); ++i) {
-        if(!isValidChanNameChar(channelName.at(i))) {
-            return (false);
-        }
-    }
-    return (true);
-}
-
-/*==========================================================*/
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
