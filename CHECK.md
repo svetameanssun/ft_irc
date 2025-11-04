@@ -1,13 +1,15 @@
 TODO:
+1) remove all the ':' from the ParcerResult.. parameters
+2) CHECK KICK (I am not sure IF the checkKickParams is ACTUALLY corrrect :D
 
-1) TOPIC command - TOPIC #mychan
+3) TOPIC command - TOPIC #mychan
    in this example, topic message is sent to the client.
    Check how it is handled, because I can assign/check it in ParcerResultTopic,
    but I cannot be sure how the topic is assigned to the channel
 
-3) Make MODE command execute not all the flags at once, but each flag one by one.
+4) Make MODE command execute not all the flags at once, but each flag one by one.
 
-4) vprintf - NO EXISTE EN c++98 !!!!!
+5) vprintf - NO EXISTE EN c++98 !!!!!
 
 
 DONE:
