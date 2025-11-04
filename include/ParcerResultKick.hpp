@@ -21,8 +21,8 @@ public:
     const std::vector<std::string> getKickParams(void) const;
 
     /*================= VALIDATION ======================*/
-    bool isValidChanNameChar(int c);
-    bool isValidChanName(std::string channelName);
+    //bool isValidChanNameChar(int c);
+    //bool isValidChanName(std::string channelName);
 
     bool isSpecialChar(int c);
     bool isValidNick(std::string nickname);
