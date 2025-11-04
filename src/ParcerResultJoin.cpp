@@ -59,53 +59,8 @@ const std::vector <std::string> ParcerResultJoin::getJoinParamsVec(void) const {
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
-/*                       IS_VALID...                        */
+/*                       IS_VALID_JOIN                      */
 /*----------------------------------------------------------*/
-
-bool ParcerResultJoin::isValidChanNameChar(int c) {
-    if(c == '\0')
-        return (false);
-    else if(c == '\a')
-        return (false);
-    else if(c == '\r')
-        return (false);
-    else if(c == '\n')
-        return (false);
-    else if(c == ' ')
-        return (false);
-    else if(c == ',')
-        return (false);
-    else if(c == ':')
-        return (false);
-    else {
-        return (true);
-    }
-}
-
-//checks the channel name requirements
-// and checks whether this excact channelName complies with these requirements
-// returns false if the name is not valid.
-bool ParcerResultJoin::isValidChanName(std::string channelName) {
-    size_t i = 0;
-    if(channelName.empty()) {
-        // NOT FORGET EVERYWHERE!
-        return false;
-    }
-    if((channelName.at(0) != '#') && (channelName.at(0) != '&')) {
-        std::cout << "THIS\n";
-        return (false);
-    }
-    if((channelName.length() > 200) || (channelName.length() == 1)) {
-        return (false);
-    }
-    i++;
-    for(; i < channelName.length(); ++i) {
-        if(!isValidChanNameChar(channelName.at(i))) {
-            return (false);
-        }
-    }
-    return (true);
-}
 
 bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector) {
 
