@@ -23,8 +23,52 @@ ParcerResultPrivmsg& ParcerResultPrivmsg::operator=(const ParcerResultPrivmsg& o
 }
 
 ParcerResultPrivmsg::~ParcerResultPrivmsg(){}
+/*==========================================================*/
 
+/*----------------------------------------------------------*/
+/*                    SETTERS / GETTERS                     */
+/*----------------------------------------------------------*/
+
+void ParcerResultPrivmsg::setParams(std::vector<std::string> privmsgCommand) {
+  if (!privmsgCommand.empty()) {
+    privmsgCommand.erase(privmsgCommand.begin());  // drop the first element, which is the command
+  }
+  this->_privmsgParamsVec = privmsgCommand;
+}
+
+const std::vector<std::string> ParcerResultPrivmsg::getPrivmsgParams(void) const {
+  return (this->_privmsgParamsVec);
+}
+
+/*==========================================================*/
+/*----------------------------------------------------------*/
+/*                       IS_VALID...                        */
+/*----------------------------------------------------------*/
+int ParcerResultTopic::checkPrivmsgParams(std::vector <std::string> messageVector){
+    if (messageVector.size() == 1 || messageVector.size() == 2){
+        return (ERR_NEEDMOREPARAMS);
+    }
+    if (!isValidChanName(messageVector.at(1))){
+        return (ERR_NOSUCHCHAN);
+    }
+    if (messageVector[2][0] != ':'){
+        return (ERR_UNKNOWNCOMMAND);
+    }
+
+    return (0);
+}
 /*
+
+Privmsg
+The command mIRC use when you are chatting in channels and queries.
+
+privmsg <target> :<message>
+<target> is where you want the message to end up. Can be multiple targets if you seperate them with a , (comma).
+<message> needs to be prefixed with a : (semicolon),
+!!!!!!------> OTHERWISE the IRC server will only take the first word after target. <------ !!!!!!!
+
+
+
 1 Private messages
  Command: PRIVMSG
  Parameters: <msgtarget> <text to be sent>
@@ -52,6 +96,9 @@ Numeric Replies:
 
 
  Examples:
+ /privmsg Dana,#help.script :How are you?                It will send "How are you?"
+                                                         to both Dana and #help.script,
+                                                         from https://script.quakenet.org/wiki/Privmsg
  :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message ?
                                                          Message from Angel to Wiz.
  PRIVMSG Angel :yes I’m receiving it !
