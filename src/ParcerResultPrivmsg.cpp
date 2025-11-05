@@ -9,22 +9,22 @@ ParcerResultPrivmsg::ParcerResultPrivmsg()
 
 ParcerResultPrivmsg::ParcerResultPrivmsg(const ParcerResultPrivmsg &other){
     this->_command = other._command;
-    //this->_privmsgParamsVec = other._privmsgParamsVec;
-    //this->_privmsgParamsMap = other._privmsgParamsMap;
+    this->_privmsgParamsVec = other._privmsgParamsVec;
+    this->_targetVec = other._targetVec;
 }
 
 ParcerResultPrivmsg& ParcerResultPrivmsg::operator=(const ParcerResultPrivmsg& other){
     if(this != &other) {
-        //this->_privmsgParamsVec = other._privmsgParamsVec;
-        //this->_privmsgParamsMap = other._privmsgParamsMap;
+        this->_privmsgParamsVec = other._privmsgParamsVec;
+        this->_targetVec = other._targetVec;
         this->_command = other._command;
     }
     return (*this);
 }
 
 ParcerResultPrivmsg::~ParcerResultPrivmsg(){}
-/*==========================================================*/
 
+/*==========================================================*/
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
@@ -38,27 +38,103 @@ void ParcerResultPrivmsg::setParams(std::vector<std::string> privmsgCommand) {
 
 const std::vector<std::string> ParcerResultPrivmsg::getPrivmsgParams(void) const {
   return (this->_privmsgParamsVec);
+
+/*==========================================================*/
+/*----------------------------------------------------------*/
+/*                        SPLIT                             */
+/*----------------------------------------------------------*/
+const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, char delim) {
+    std::vector<std::string> result;
+    std::stringstream ss(str);
+    std::string item;
+
+    while(getline(ss, item, delim)) {
+        result.push_back(item);
+    }
+    return result;
 }
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
-/*                       IS_VALID...                        */
+/*                      IS_VALID_NICK                       */
 /*----------------------------------------------------------*/
-int ParcerResultTopic::checkPrivmsgParams(std::vector <std::string> messageVector){
-    if (messageVector.size() == 1 || messageVector.size() == 2){
-        return (ERR_NEEDMOREPARAMS);
+bool ParcerResultNick::isSpecialChar(int c) {
+    std::string specialChars = "[]\\`^{}";
+    if(specialChars.find(c) == std::string::npos) {
+        std::cout << "char: " << c << "\n";
+        return (0);
     }
-    if (!isValidChanName(messageVector.at(1))){
-        return (ERR_NOSUCHCHAN);
-    }
-    if (messageVector[2][0] != ':'){
-        return (ERR_UNKNOWNCOMMAND);
-    }
+    return (1);
+}
 
+bool ParcerResultNick::isValidNick(std::vector<std::string> nickCommand) {
+    std::string nickname = nickCommand.at(1);
+    std::cout << nickname << "\n";
+    if(nickname.empty()) {
+        return (0);
+    }
+    if(nickname.at(0) == '-' || isdigit(nickname.at(0))) {
+        return (0);
+    }
+    if(!isalpha(nickname.at(0)) && !isSpecialChar(nickname.at(0))) {
+        return (0);
+    }
+    if(nickname.length() > 9) {
+        return (0);
+    }
+    for(long unsigned int i = 1; i < nickname.length(); ++i) {
+        if(!isdigit(nickname.at(i)) && !isalpha(nickname.at(i)) &&
+                !isSpecialChar(nickname.at(i)) && nickname.at(i) != '-') {
+            return (0);
+        }
+    }
+    return (1);
+}
+
+/*==========================================================*/
+/*----------------------------------------------------------*/
+/*                       IS_VALID_PARA                      */
+/*----------------------------------------------------------*/
+int ParcerResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
+    std::vector <string> targetVec;
+    targetVec = stringToVec(privmsgTarget, ',');
+    for (string elem : targetVec){
+        if (!isValidChanName(elem) && !isValidNick(elem)){
+            return (ERR_WRONGINPUT);
+        }
+        else{
+            this->_targetVec.push_back(elem);
+        }
+    }
     return (0);
 }
-/*
 
+int ParcerResultTopic::checkPrivmsgParams(std::vector <std::string> messageVector){
+    if (messageVector.size() == 1 ){
+        return (ERR_NORECIPIENT);
+    }
+    if (messageVector.size() == 2 ){
+        return (ERR_NOTEXTTOSEND);
+    }
+    if (messageVector[2][0] != ':'){
+        this->_privmsgMessage = messageVector[2]; 
+    }
+    else{
+        for (int i = 2; i < messageVector.size(); ++i){
+            this->_privmsgMessage += messageVector[i];
+        }
+        this->_privmsgMessage.erase(0, 1); // It removes the 1st char
+                                            // (which in this case is ':')
+    }
+    int res = checkPrivmsgTarget(messageVector[1]);
+    if (res > 0){
+        return res;
+    }
+    return (res);
+}
+/*==========================================================*/
+
+/*
 Privmsg
 The command mIRC use when you are chatting in channels and queries.
 
@@ -66,9 +142,6 @@ privmsg <target> :<message>
 <target> is where you want the message to end up. Can be multiple targets if you seperate them with a , (comma).
 <message> needs to be prefixed with a : (semicolon),
 !!!!!!------> OTHERWISE the IRC server will only take the first word after target. <------ !!!!!!!
-
-
-
 1 Private messages
  Command: PRIVMSG
  Parameters: <msgtarget> <text to be sent>
