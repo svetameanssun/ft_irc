@@ -18,11 +18,15 @@ class ParcerResultPrivmsg : public AParcerResult {
     void setParams(std::vector<std::string> privmsgCommand);
     const std::vector<std::string> getPrivmsgParams(void) const;
     void printResult() const;
-    //TODO
-    //bool isAllowedChar(char usernameChar);
-    //int checkPrivmsgParams(std::vector<std::string> messageVec);
+    const std::vector<std::string> stringToVec(std::string str, char delim);
+    bool isSpecialChar(int c);
+    bool isValidNick(std::vector<std::string> nickCommand);
+    int checkPrivmsgTarget(std::string privmsgTarget);
+    int checkPrivmsgParams(std::vector <std::string> messageVector);
   private:
+    std::vector <std::string> _targetVec;
     std::vector <std::string> _privmsgParamsVec;
+    std::string _privmsgMessage;
 };
 
 #endif
