@@ -136,7 +136,8 @@ int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
 
 int CommandDispatcher::dispatchInvite(std::vector <std::string> &messageVec){
     ParcerResultInvite * resultInvite = new ParcerResultInvite();
-    if (!resultInvite->checkInviteParams(messageVec))
+    int res = resultInvite->checkInviteParams(messageVec);
+    if (res > 0)
     {
         delete resultInvite;
         return ERR_UNKNOWNCOMMAND;
