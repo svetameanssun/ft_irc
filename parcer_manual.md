@@ -1,5 +1,8 @@
-AParcerResult *result is a variable that will keep the address of</br>
-the object of a class derived from AParcerResult.</br>
+**-------A WORD ABOUT COMMAND DISPATCHER-------** </br>
+The AParcerResult * _parcerResult is an attribute of the class CommandDispatcher.</br>
+This class checks whether the input command is valid, and launches a parcing process</br>
+depending on the command that entered, and fills AParcerResult *result variable with the address</br>
+of the object of a class derived from AParcerResult.</br>
 
 Every derived class has similar content, but as far as all commands are different,</br>
 the attributes and methods of classes also differ, and should be implemented</br>
@@ -10,15 +13,15 @@ with examples.</br>
 
 **-------COMMON FEATURES-------** </br>
 Obvously, all the subclasses will share the methods and attributes of their base class.</br>
-<p>The base class AParcerResult methods that can be accessed through derived classes are:</br>
+The base class AParcerResult methods that can be accessed through derived classes are:</br>
 - getCommand();
 - bool isValidChanName(string chanName)
 -    and its helper, bool isValidChanNameChar(int i);
-</p>
-<p>There are   are 2 pure virtual functions:</br>
+    
+   There are   are 2 pure virtual functions:</br>
 - virtual void printResult() const = 0;
 - virtual void setParams(std::vector<std::string> commandMessage) = 0;
-</p>
+
 Pure virtual functions are not defined in AParcerResult,</br>
 I had to define them in every derived class, because depending on the attributes of the derived class,</br>
 these 2 methods can vary.</br>
@@ -26,12 +29,41 @@ these 2 methods can vary.</br>
 There is only 1 attrubute of the base class -> string _command, which can be accessed through getCommand.</br>
 It comntains the name of the command, the  result of which is being kept in the AParcerResult * _parcerResult;</br>
 
-**-------A WORD ABOUT COMMAND DISPATCHER-------** </br>
-The AParcerResult * _parcerResult is an attribute of the class CommandDispatcher.</br>
-This class checks whether the input command is valid, and launches a parcing process</br>
-depending on the command that entered.</br>
+Every subclass, in its turn, has a vector of parameters, which is named always using the same "logic":
+    vector<string> _commandParamsVec, so that the elements of the command were kept in this vector.
+    Example:
+        **INVITE NickName #channelName** --> _inviteParamsVec = {"NickName", "#channelName"}
+    N.B! "INVITE" is not included in the _inviteParamsVec, because we already have the info about
+    the command type in the base class (_command, getCommand());
+    
+    Note that, if the command contains only 1 element, the class will still have it as an array, containing only 1 element.
+    Example:
+        **PASS 1234** --> _passParamsVec = {"1234"}
+        
+
 
 **-------------PASS------------** </br>
+Every user registration starts with the PASS command.
+As mentioned before, PASS command has no other parameters than <password>.
+
+We check the number of command parameters in the dispatchPass itself.
+If there are more than 1 parameter, the dispatchPass returns ERR_NEEDLESSPARAMS,
+if there are no parameters, the dispatchPass returns ERR_NEEDMOREPARAMS.
+If the parcing went well, dispatchPass return 0;
+
+The server doesn't have to send any reply after this command to the client, because
+users registration hasn't been finished yet.
+
+The _parcerResult pointer will keep and address of the PassParcerResult object,
+with a vector containing password.
+
+I tried to avoid  getter "getPassword" because of the security considirations.
+To get the password for verification, you will have to get the vector through getPassParams,
+and access its first element.
+
+
+**-------------NICK------------** </br>
+
 
 **-------------KICK------------** </br>
 I pass a map<int, vector<string>> to the command pointer.</br>
