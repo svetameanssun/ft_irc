@@ -32,7 +32,8 @@ It comntains the name of the command, the  result of which is being kept in the 
 Every subclass, in its turn, has a vector of parameters,
 which is named always using the same "logic": vector<string> _commandParamsVec,
 so that the elements of the command were kept in this vector.</br>
-   Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());
+
+    Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());
     Example:
         **INVITE NickName #channelName** --> _inviteParamsVec = {"NickName", "#channelName"}
 
@@ -41,9 +42,9 @@ so that the elements of the command were kept in this vector.</br>
        **PASS 1234** --> _passParamsVec = {"1234"}
         
 **-------------PASS------------** </br>
-        |- - - - - - - - -|</br>
+        |-------------------|</br>
         | PASS `<password>` |</br>
-        |- - - - - - - - -|</br>
+        |-------------------|</br>
 Every user registration starts with the PASS command.
 As mentioned before, PASS command has no other parameters than <password>.
 
@@ -64,9 +65,9 @@ and access its first element.
 
 
 **-------------NICK------------** </br>
-        |- - - - - - - - -|</br>
+        |-------------------|</br>
         | NICK `<nickname>` |</br>
-        |- - - - - - - - -|</br>
+        |-------------------|</br>
 After password verification, the user will have to introduce the command NICK
 to set the nickname that they will use for this network.
 There is set of restrictions for setting a nickname. We check them in the method
