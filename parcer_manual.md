@@ -11,7 +11,7 @@ with examples.
 **----------- KICK -----------** </br>
 I pass a map<int, vector<string>> to the command pointer. The int — to make it easier to handle — and the vector (of 2 elements) stores which channel I perform the KICK to and which I kick.
 
-**EXAMPLE**
+**EXAMPLE**</br>
 From this command: 
 KICK #channel person1,person2, person3
 
