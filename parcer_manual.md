@@ -14,8 +14,8 @@ Obvously, all the subclasses will share the methods and attributes of their base
 - getCommand();
 - bool isValidChanName(string chanName)
 -    and its helper, bool isValidChanNameChar(int i);
-</br></p>
-<p>There are 2 pure virtual functions:</br>
+</p>
+<p>There are   are 2 pure virtual functions:</br>
 - virtual void printResult() const = 0;
 - virtual void setParams(std::vector<std::string> commandMessage) = 0;
 </p>
