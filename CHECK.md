@@ -15,6 +15,14 @@ TODO:
 
 
 DONE:
+ - JOIN
+ - KICK
+ - PRIVMSG
+ - TOPIC
+ - USER
+ - PASS
+ - NICK
+ - 
  -  Create a purely virtual function setParams() in AParcerResult, and then redefine it in every derived class:
       void setParamas(std::vector<std::string> commandMessage) = 0;
 
