@@ -44,6 +44,27 @@ const std::vector<std::string> ParcerResultInvite::getInviteParams(void) const{
 /*----------------------------------------------------------*/
 /*                   IS_VALID / IS_SPECIAL                  */
 /*----------------------------------------------------------*/
+int ParcerResultInvite::checkInviteParams(std::vector<std::string> messageVec){
+	if (messageVec.size() < 3){
+		return (ERR_NEEDMOREPARAMS);
+	}
+	if (message.size() > 3){
+		return (ERR_NEEDLESSPARAMS);
+	}
+	if (!userOnChannel(myName, channelName)){ // bool userOnChannel(std::stirng myName, std::string channelName) (not sure about parameters)
+		return(ERR_NOTONCHANNEL);
+	}
+	if (inviteFlagOn() && !iAmOperator()){ //  bool inviteFlagOn(); bool iAmOperator();
+			return (ERR_CHANOPRIVSNEEDED);
+	}	
+	if (!userExists(messageVec[1])){  // bool userExists(std::string userName).
+		return (ERR_NOSUCHNICK);
+	}
+	if (userOnChannel(messageVec[1], channelName) // same as the ast one{
+		return (ERR_USERONCHANNEL);
+	}
+	return (0);
+}
 
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
