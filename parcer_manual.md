@@ -29,20 +29,21 @@ these 2 methods can vary.</br>
 There is only 1 attrubute of the base class -> string _command, which can be accessed through getCommand.</br>
 It comntains the name of the command, the  result of which is being kept in the AParcerResult * _parcerResult;</br>
 
-Every subclass, in its turn, has a vector of parameters, which is named always using the same "logic":
-    vector<string> _commandParamsVec, so that the elements of the command were kept in this vector.
+Every subclass, in its turn, has a vector of parameters,
+which is named always using the same "logic": vector<string> _commandParamsVec,
+so that the elements of the command were kept in this vector.
+   Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());
     Example:
         **INVITE NickName #channelName** --> _inviteParamsVec = {"NickName", "#channelName"}
-    N.B! "INVITE" is not included in the _inviteParamsVec, because we already have the info about
-    the command type in the base class (_command, getCommand());
-    
+
     Note that, if the command contains only 1 element, the class will still have it as an array, containing only 1 element.
     Example:
-        **PASS 1234** --> _passParamsVec = {"1234"}
+       **PASS 1234** --> _passParamsVec = {"1234"}
         
-
-
 **-------------PASS------------** </br>
+        |- - - - - - - - -|
+        | PASS <password> |
+        |- - - - - - - - -| 
 Every user registration starts with the PASS command.
 As mentioned before, PASS command has no other parameters than <password>.
 
@@ -63,6 +64,19 @@ and access its first element.
 
 
 **-------------NICK------------** </br>
+        |- - - - - - - - -|
+        | NICK <nickname> |
+        |- - - - - - - - -|
+After password verification, the user will have to introduce the command NICK
+to set the nickname that they will use for this network.
+There is set of restrictions for setting a nickname. We check them in the method
+isvalidNickname().
+<div style="background-color: lightred; padding: 10px;">
+    Important notes:
+</div>
+<div style="background-color: pink; padding: 10px;">
+isValidNickName() used.
+</div>
 
 
 **-------------KICK------------** </br>
