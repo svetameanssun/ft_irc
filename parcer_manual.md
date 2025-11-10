@@ -11,12 +11,12 @@ with examples.</br>
 **-------COMMON FEATURES-------** </br>
 Obvously, all the subclasses will share the methods and attributes of their base class.</br>
 The base class AParcerResult methods that can be accessed through derived classes are:</br>
-        - getCommand();</br>
-        - bool isValidChanName(string chanName)</br>
-        -    and its helper, bool isValidChanNameChar(int i);</br>
+        - getCommand();
+        - bool isValidChanName(string chanName)
+        -    and its helper, bool isValidChanNameChar(int i);
 There are 2 pure virtual functions:</br>
-        - virtual void printResult() const = 0;</br>
-        - virtual void setParams(std::vector<std::string> commandMessage) = 0;</br>
+        - virtual void printResult() const = 0;
+        - virtual void setParams(std::vector<std::string> commandMessage) = 0;
 Pure virtual functions are not defined in AParcerResult,</br>
 I had to define them in every derived class, because depending on the attributes of the derived class,</br>
 these 2 methods can vary.</br>
