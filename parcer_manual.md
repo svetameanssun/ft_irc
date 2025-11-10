@@ -14,6 +14,7 @@ The base class AParcerResult methods that can be accessed through derived classe
 - getCommand();
 - bool isValidChanName(string chanName)
 -    and its helper, bool isValidChanNameChar(int i);
+</br>
 There are 2 pure virtual functions:</br>
 - virtual void printResult() const = 0;
 - virtual void setParams(std::vector<std::string> commandMessage) = 0;
