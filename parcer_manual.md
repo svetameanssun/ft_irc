@@ -41,9 +41,9 @@ so that the elements of the command were kept in this vector.
        **PASS 1234** --> _passParamsVec = {"1234"}
         
 **-------------PASS------------** </br>
-        |- - - - - - - - -|
-        | PASS `<password>` |
-        |- - - - - - - - -| 
+        |- - - - - - - - -|</br>
+        | PASS `<password>` |</br>
+        |- - - - - - - - -|</br>
 Every user registration starts with the PASS command.
 As mentioned before, PASS command has no other parameters than <password>.
 
@@ -64,9 +64,9 @@ and access its first element.
 
 
 **-------------NICK------------** </br>
-        |- - - - - - - - -|
-        | NICK `<nickname>' |
-        |- - - - - - - - -|
+        |- - - - - - - - -|</br>
+        | NICK `<nickname>` |</br>
+        |- - - - - - - - -|</br>
 After password verification, the user will have to introduce the command NICK
 to set the nickname that they will use for this network.
 There is set of restrictions for setting a nickname. We check them in the method
@@ -75,8 +75,6 @@ isvalidNickname().
 <pre> ``` Important notes: isValidNickName() used! ``` </pre>
 **isValidNickName() used!**
 
-
-**-------------NICK------------** </br>
 **-------------KICK------------** </br>
 I pass a map<int, vector<string>> to the command pointer.</br>
 The int — to make it easier to handle — and the vector (of 2 elements)</br>
