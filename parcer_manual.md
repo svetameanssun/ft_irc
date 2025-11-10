@@ -8,5 +8,18 @@ and processes differently.
 So here I leave a short description for each class and its attributes,
 with examples.
 
+**----------- KICK -----------**
+I pass a map<int, vector<string>> to the command pointer. The int — to make it easier to handle — and the vector (of 2 elements) stores which channel I perform the KICK to and which I kick.
 
+**EXAMPLE**
+From this command: 
+KICK #channel person1,person2, person3
+
+We get this map:
+{
+    0: ["#channel", "person1"],
+    1: ["#channel", "person2"],
+    2: ["#channel", "person3"]
+}
+**-----------------------------**
 
