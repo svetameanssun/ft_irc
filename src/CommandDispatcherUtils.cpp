@@ -74,8 +74,6 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
     return(0);
 }
 
-
-
 int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
     //USER <username> <realname>
@@ -146,8 +144,7 @@ int CommandDispatcher::dispatchInvite(std::vector <std::string> &messageVec){
     this->_parcerResult = resultInvite;
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
-    //return (RPL_WELCOME);
-    return(0);
+    return(0); // in the end, server sends RPL_INVITING to the user
 }
 
 int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
