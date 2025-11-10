@@ -1,17 +1,18 @@
 TODO:
-1) Maybe move isValidNick to AParcerResult?
-2) check printResult for every class
-3) check and remove all the ':' from the ParcerResult.. parameters
-4) CHECK KICK (I am not sure IF the checkKickParams is ACTUALLY corrrect :D)
+1) INVITE - instroduce commands, that are need from Channel and Client classes
+2) Maybe move isValidNick to AParcerResult?
+3) check printResult for every class
+4) check and remove all the ':' from the ParcerResult.. parameters
+5) CHECK KICK (I am not sure IF the checkKickParams is ACTUALLY corrrect :D)
 
-5) TOPIC command - TOPIC #mychan
+6) TOPIC command - TOPIC #mychan
    in this example, topic message is sent to the client.
    Check how it is handled, because I can assign/check it in ParcerResultTopic,
    but I cannot be sure how the topic is assigned to the channel
 
-6) Make MODE command execute not all the flags at once, but each flag one by one.
+7) Make MODE command execute not all the flags at once, but each flag one by one.
 
-7) vprintf - NO EXISTE EN c++98 !!!!!
+8) vprintf - NO EXISTE EN c++98 !!!!!
 
 
 DONE:
