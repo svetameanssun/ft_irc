@@ -71,10 +71,10 @@ After password verification, the user will have to introduce the command NICK
 to set the nickname that they will use for this network.
 There is set of restrictions for setting a nickname. We check them in the method
 isvalidNickname().
-<div style="background-color: lightred; padding: 10px;">
+<div style="background-color: red;">
     Important notes:
 </div>
-<div style="background-color: pink; padding: 10px;">
+<div style="background-color: pink;">
 isValidNickName() used.
 </div>
 
