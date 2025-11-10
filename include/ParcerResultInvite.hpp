@@ -16,7 +16,7 @@ class ParcerResultInvite : public AParcerResult {
     ~ParcerResultInvite();
     //TODO
     //bool isAllowedChar(char usernameChar);
-    //int checkInviteParams(std::vector<std::string> messageVec);
+    int checkInviteParams(std::vector<std::string> messageVec);
     
     void setParams(std::vector<std::string> inviteCommand);
     const std::vector<std::string> getInviteParams(void) const;
