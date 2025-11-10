@@ -58,7 +58,7 @@ users registration hasn't been finished yet.
 The _parcerResult pointer will keep and address of the PassParcerResult object,
 with a vector containing password.
 
-I tried to avoid  getter "getPassword" because of the security considirations.
+I tried to avoid  getter "getPassword" because of the security considerations.
 To get the password for verification, you will have to get the vector through getPassParams,
 and access its first element.
 
@@ -71,14 +71,15 @@ After password verification, the user will have to introduce the command NICK
 to set the nickname that they will use for this network.
 There is set of restrictions for setting a nickname. We check them in the method
 isvalidNickname().
+If the nickname is invalid, the 
 <div style="background-color: red;">
     Important notes:
 </div>
 <div style="background-color: pink;">
-isValidNickName() used.
+isValidNickName() used!
 </div>
 
-
+**-------------NICK------------** </br>
 **-------------KICK------------** </br>
 I pass a map<int, vector<string>> to the command pointer.</br>
 The int — to make it easier to handle — and the vector (of 2 elements)</br>
