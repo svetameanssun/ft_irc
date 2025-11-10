@@ -8,7 +8,7 @@ and processes differently.
 So here I leave a short description for each class and its attributes,
 with examples.
 
-**----------- KICK -----------**
+**----------- KICK -----------** </br>
 I pass a map<int, vector<string>> to the command pointer. The int — to make it easier to handle — and the vector (of 2 elements) stores which channel I perform the KICK to and which I kick.
 
 **EXAMPLE**
@@ -21,5 +21,6 @@ We get this map:
     1: ["#channel", "person2"],
     2: ["#channel", "person3"]
 }
+</br>
 **-----------------------------**
 
