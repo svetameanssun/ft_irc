@@ -31,7 +31,7 @@ It comntains the name of the command, the  result of which is being kept in the 
 
 Every subclass, in its turn, has a vector of parameters,
 which is named always using the same "logic": vector<string> _commandParamsVec,
-so that the elements of the command were kept in this vector.
+so that the elements of the command were kept in this vector.</br>
    Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());
     Example:
         **INVITE NickName #channelName** --> _inviteParamsVec = {"NickName", "#channelName"}
