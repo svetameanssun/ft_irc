@@ -44,11 +44,17 @@ Note that, if the command contains only 1 element, the class will still have it 
 
     Example:
         PASS 1234 --> _passParamsVec = {"1234"}
-        
+
+**===============================** </br>
+
+**-------------------------------** </br>
 **------------- PASS ------------** </br>
+**-------------------------------** </br>
+
         |--------------------|</br>
         |PASS `<password>`|</br>
         |--------------------|</br>
+
 Every user registration starts with the PASS command.
 As mentioned before, PASS command has no other parameters than <password>.
 
@@ -66,14 +72,22 @@ with a vector containing password.
 I tried to avoid  getter "getPassword()" because of the security considerations.
 To get the password for verification, you will have to get the vector through *getPassParams()*,
 and access its first element.
+
+NB! for Ruben ==>
+    I have NO IDEA how you will process this =D
+
 **===============================** </br>
 
 **-------------------------------** </br>
 **------------- NICK ------------** </br>
 **-------------------------------** </br>
-        |--------------------|</br>
-        |NICK `<nickname>`|</br>
-        |--------------------|</br>
+
+        |--------------------|
+        |NICK `<nickname>`|
+        |--------------------|
+        nickname = ( letter / special ) *8( letter / digit / special / "-" )
+        special = %x5B-60 / %x7B-7D; "[", "]", "\", "‘", "_", "^", "{", "|", "}"
+
 After password verification, the user will have to introduce the command NICK
 to set the nickname that they will use for this network.
 There is set of restrictions for a nickname.  In the method *isValidNickName()*,
@@ -83,7 +97,7 @@ we verify if the nickname introduced by the user is valid. </br>
 
 The number of paramters is checked in the dispatchNick method.
 If there are no parameters given, the dispatchPass returns ERR_NONICKNAMEGIVEN,
-if the command has more than 1 parameter, it returns a CUSTOM error -> ERR_NEEDLESSPARAMS
+if the command has more than 1 parameter, it returns a CUSTOM error -> ERR_NEEDLESSPARAMS (custom error)
 If the parcing went well, dispatchPass returns 0;
 
 The server doesn't have to send any reply after this command to the client, because
@@ -97,7 +111,45 @@ I just used just a string which will contain the nickname -> _nickname,
 and its getter -> *getNickname()*.
 
 
-<pre>  NB! ==> isValidNickName() used!  </pre>
+NB! for Ruben ==>
+
+    "NICK command is used to give user a nickname or change the existing one."
+    So, if the client sending this command is a new user -> you have to create a new client.
+    If this command is sent by already existing client -> you have to change the client's _nickname
+    
+
+<pre>  NB! for Sveta ==> isValidNickName() used!  </pre>
+**===============================** </br>
+
+**-------------------------------** </br>
+**------------- USER ------------** </br>
+**-------------------------------** </br>
+
+        |------------------------------|
+        |USER `<nickname>` `<realname>`|
+        |------------------------------|
+
+After PASS and NICK steps, we finally can register our user.
+The method dispatchUser checks the parameters with checkUserParams().
+If the user's realname complies with the requirements defined in the RFC,
+dispatchUser returns 0, else -> ERR_WRONGINPUT (custom error).
+
+The _parcerResult pointer will keep an address of the UserParcerResult object,
+with a vector containing 3 elements:
+- a string with a nickname.
+- a string with a realname.
+- a rudimantary attribute _userParamsVec (if we have theprevious 2, we do not need this one).
+
+NB! for Ruben ==>
+
+    You will have to check, whether the _nickname of the ParcerResultUser class coincides with other users on the server,
+    and if it happens to be like that, send the error ERR_ALREADYREGISTRED.
+
+NB! for Sveta ==>
+
+    USER stitovsk42 :Svetlana Leonidovna Titovskaia <- fullname accepted  
+    USER stitovsk42 Svetlana Leonidovna Titovskaia <- only firstname 'Svetlana' is accepted
+
 **===============================** </br>
 
 **-------------------------------** </br>
