@@ -10,6 +10,8 @@ ParcerResultUser::ParcerResultUser(): AParcerResult() {
 ParcerResultUser::ParcerResultUser(const ParcerResultUser &other): AParcerResult(){
 	this->_userParamsVec = other._userParamsVec;
 	this->_command = other._command;
+	this->_realname = other._realname;
+	this->_nickname = other._nickname;
 }
 
 ParcerResultUser& ParcerResultUser::operator=(const ParcerResultUser& other){
@@ -17,6 +19,8 @@ ParcerResultUser& ParcerResultUser::operator=(const ParcerResultUser& other){
 	if (this != &other){
 		this->_userParamsVec = other._userParamsVec;
 		this->_command = other._command;
+		this->_realname = other._realname;
+		this->_nickname = other._nickname;
 	}
 	return (*this);
 }
@@ -34,10 +38,18 @@ void ParcerResultUser::setParams(std::vector<std::string> userCommand){
   	}
   	this->_userParamsVec = userCommand;
 
-	_userName.push_back('\0');
-	for (size_t i = 1; i < userCommand.size(); i++)
-	{
-		_userName += userCommand.at(i);
+	//_realname.push_back('\0'); not sure if it is needed.
+	this->_nickname += userCommand.at(0); 
+	if (userCommand.at(2)[0]!= ':'){
+		_realname+=userCommand.at(2);
+	}
+	else{
+		for (size_t i = 1; i < userCommand.size(); i++){
+			_realname += userCommand.at(i);
+		}
+	}
+	if(_realname.at(0) == ':'){
+		_realname.erase(0, 1);
 	}
 }
 
@@ -45,26 +57,27 @@ const std::vector<std::string> ParcerResultUser::getUserParams(void) const{
 	return (this->_userParamsVec);
 }
 
+const std::string ParcerResultUser::getRealname(void) const{
+	return (this->_realname);
+}
+
+const std::string ParcerResultUser::getNickname(void) const{
+	return (this->_nickname);
+}
+
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                      CHECK COMMAND                       */
 /*----------------------------------------------------------*/
 
-
-
-
 bool ParcerResultUser::isAllowedChar(char c){
-
-
-    std::string allowedChars;
-	//BAD NAMING OR BAD CODE
-	allowedChars.push_back('\0');
-	allowedChars += "@\n\r ";
-    if(allowedChars.find(c) == std::string::npos) {
-		//if we HAVN't found c in allowedChars  retrun true
+    std::string prohibitedChars;
+	//prohibitedChars.push_back('\0');
+	prohibitedChars += "@\n\r ";
+    if(prohibitedChars.find(c) == std::string::npos) {
+		//if we HAVEN'T find c in prohibitedChars ->retrun true
         return (true);
     }
-	std::cout << "THIS " << c;
     return (false);
 }
 
@@ -74,19 +87,10 @@ int ParcerResultUser::checkUserParams(std::vector<std::string> messageVec){
 		return (ERR_NEEDLESSPARAMS);
 	if (messageVec.size() < 3)
 		return (ERR_NEEDMOREPARAMS);
-	std::cout << messageVec.at(1) << "\n";
-	for (size_t i = 0; i < (messageVec.at(1)).length(); i++){
-		bool res = isAllowedChar(messageVec.at(1)[i]);
-		if (res == 0){
-			return (ERR_WRONGINPUT);
-		}
-	}
-	if (messageVec.at(2)[0] != ':')
-		return (ERR_WRONGINPUT);
-	//NUL, CR, LF
+	//NUL, CR, LF, space
 	for (size_t i = 2; i < messageVec.size(); i++){
 		for (size_t j = 0; j  < messageVec.at(i).length(); j++){
-			if (messageVec.at(i)[j]  == '\0' || messageVec.at(i)[j]  == '\r' || messageVec.at(i)[j]  == '\n')
+			if (!isAllowedChar(messageVec.at(i)[j]))
 				return (ERR_WRONGINPUT);
 		}
 	}
@@ -98,11 +102,6 @@ int ParcerResultUser::checkUserParams(std::vector<std::string> messageVec){
 /*----------------------------------------------------------*/
 
 void ParcerResultUser::printResult() const{
-	std::cout << "VECTOR:\n";
-    for (std::vector<std::string>::const_iterator itVec = this->_userParamsVec.begin();
-        itVec != this->_userParamsVec.end(); ++itVec) {
-        std::cout << *itVec << "\n";
-    }
-	std::cout << "FULL NAME\n";
-//	std::cout << this->_userName << "\n";
+	std::cout << this->_nickname << "'s real name is" << std::endl;
+    std::cout << this->_realname << std::endl;
 }
