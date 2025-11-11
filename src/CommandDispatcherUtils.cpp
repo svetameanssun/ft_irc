@@ -29,7 +29,7 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
 int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
         ParcerResultNick *resultNick = new ParcerResultNick();
 
-    if (messageVec.size() <= 1){
+    if (messageVec.size() == 1){
         delete(resultNick);
         return ERR_NONICKNAMEGIVEN;
     }
