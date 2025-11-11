@@ -33,7 +33,7 @@ void ParcerResultNick::setParams(std::vector<std::string> nickCommand) {
     this->_nickname = nickCommand;
 }
 
-const std::vector<std::string> ParcerResultNick::getNickname(void)const {
+const std::string ParcerResultNick::getNickname(void)const {
     return (this->_nickname);
 }
 
