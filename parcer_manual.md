@@ -30,21 +30,25 @@ There is only 1 attrubute of the base class -> string _command, which can be acc
 It comntains the name of the command, the  result of which is being kept in the AParcerResult * _parcerResult;</br>
 
 Every subclass, in its turn, has a vector of parameters,
-which is named always using the same "logic": vector<string> _commandParamsVec,
+which is named ALMOST always using the same "logic": vector<string> _*command*ParamsVec,
 so that the elements of the command were kept in this vector.</br>
+The getter of the parameters is also almost always is called "get*Command*Params". </br>
+</tab>**EXCEPTION: getNikcname in ParcerResultNick** </br>
 
-    Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());
-    Example:
-        **INVITE NickName #channelName** --> _inviteParamsVec = {"NickName", "#channelName"}
+Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());</br>
 
-    Note that, if the command contains only 1 element, the class will still have it as an array, containing only 1 element.
     Example:
-       **PASS 1234** --> _passParamsVec = {"1234"}
+        INVITE NickName #channelName --> _inviteParamsVec = {"NickName", "#channelName"}
+
+Note that, if the command contains only 1 element, the class will still have it as an array, containing only 1 element.</br>
+
+    Example:
+        PASS 1234 --> _passParamsVec = {"1234"}
         
-**-------------PASS------------** </br>
-        |-------------------|</br>
-        | PASS `<password>` |</br>
-        |-------------------|</br>
+**------------- PASS ------------** </br>
+        |--------------------|</br>
+        |PASS `<password>`|</br>
+        |--------------------|</br>
 Every user registration starts with the PASS command.
 As mentioned before, PASS command has no other parameters than <password>.
 
@@ -56,27 +60,49 @@ If the parcing went well, dispatchPass return 0;
 The server doesn't have to send any reply after this command to the client, because
 users registration hasn't been finished yet.
 
-The _parcerResult pointer will keep and address of the PassParcerResult object,
+The _parcerResult pointer will keep an address of the PassParcerResult object,
 with a vector containing password.
 
-I tried to avoid  getter "getPassword" because of the security considerations.
-To get the password for verification, you will have to get the vector through getPassParams,
+I tried to avoid  getter "getPassword()" because of the security considerations.
+To get the password for verification, you will have to get the vector through *getPassParams()*,
 and access its first element.
+**===============================** </br>
 
-
-**-------------NICK------------** </br>
-        |-------------------|</br>
-        | NICK `<nickname>` |</br>
-        |-------------------|</br>
+**-------------------------------** </br>
+**------------- NICK ------------** </br>
+**-------------------------------** </br>
+        |--------------------|</br>
+        |NICK `<nickname>`|</br>
+        |--------------------|</br>
 After password verification, the user will have to introduce the command NICK
 to set the nickname that they will use for this network.
-There is set of restrictions for setting a nickname. We check them in the method
-isvalidNickname().
+There is set of restrictions for a nickname.  In the method *isValidNickName()*,
+we verify if the nickname introduced by the user is valid. </br>
 
-<pre> ``` Important notes: isValidNickName() used! ``` </pre>
-**isValidNickName() used!**
+    nickname = ( letter / special ) *8( letter / digit / special / "-" )
 
-**-------------KICK------------** </br>
+The number of paramters is checked in the dispatchNick method.
+If there are no parameters given, the dispatchPass returns ERR_NONICKNAMEGIVEN,
+if the command has more than 1 parameter, it returns a CUSTOM error -> ERR_NEEDLESSPARAMS
+If the parcing went well, dispatchPass returns 0;
+
+The server doesn't have to send any reply after this command to the client, because
+users registration hasn't been finished yet.
+
+The _parcerResult pointer will keep an address of the NickParcerResult object,
+with a vector containing only one element -> a string with a nickname.
+
+YES! I tried to improvide and instead of the common vector _nickParamsVec,
+I just used just a string which will contain the nickname -> _nickname,
+and its getter -> *getNickname()*.
+
+
+<pre>  NB! ==> isValidNickName() used!  </pre>
+**===============================** </br>
+
+**-------------------------------** </br>
+**------------- KICK ------------** </br>
+**-------------------------------** </br>
 I pass a map<int, vector<string>> to the command pointer.</br>
 The int — to make it easier to handle — and the vector (of 2 elements)</br>
 stores which channel I perform the KICK to and which I kick.</br>
