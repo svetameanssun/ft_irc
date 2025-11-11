@@ -24,6 +24,7 @@ class ParcerResultNick : public AParcerResult {
     
   private:
     std::vector <std::string> _nickParamsVec;
+    std::string _nickname;
 };
 
 #endif
