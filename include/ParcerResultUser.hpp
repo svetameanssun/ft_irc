@@ -18,12 +18,13 @@ class ParcerResultUser : public AParcerResult {
     //void setUserParams(std::vector<std::string> userCommand);
     void setParams(std::vector<std::string> userCommand);
     const std::vector<std::string> getUserParams(void) const;
+    const std::string getUsername(void) const;
     void printResult() const;
     bool isAllowedChar(char usernameChar);
     int checkUserParams(std::vector<std::string> messageVec);
   private:
     std::vector <std::string> _userParamsVec;
-    std::string _userName;
+    std::string _username;
 };
 
 #endif
