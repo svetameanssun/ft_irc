@@ -6,7 +6,7 @@ of the object of a class derived from AParcerResult.</br>
 
 Every derived class has similar content, but as far as all commands are different,</br>
 the attributes and methods of classes also differ, and should be implemented</br>
-and processes differently.</br>
+and processed differently.</br>
 
 So here I leave a short description for each class and its attributes,</br>
 with examples.</br>
@@ -51,9 +51,9 @@ Note that, if the command contains only 1 element, the class will still have it 
 **------------- PASS ------------** </br>
 **-------------------------------** </br>
 
-        |--------------------|</br>
-        |PASS `<password>`|</br>
-        |--------------------|</br>
+        |--------------------|
+        |  PASS `<password>` |
+        |--------------------|
 
 Every user registration starts with the PASS command.
 As mentioned before, PASS command has no other parameters than <password>.
@@ -83,7 +83,7 @@ NB! for Ruben ==>
 **-------------------------------** </br>
 
         |--------------------|
-        |NICK `<nickname>`|
+        |  NICK `<nickname>` |
         |--------------------|
         nickname = ( letter / special ) *8( letter / digit / special / "-" )
         special = %x5B-60 / %x7B-7D; "[", "]", "\", "‘", "_", "^", "{", "|", "}"
