@@ -23,7 +23,7 @@ class ParcerResultNick : public AParcerResult {
     bool isValidNick(std::vector<std::string> nickCommand);
     
   private:
-    std::vector <std::string> _nickParamsVec;
+    std::vector <std::string> _nickParamsVec; // we acatually do not need this attribute
     std::string _nickname;
 };
 
