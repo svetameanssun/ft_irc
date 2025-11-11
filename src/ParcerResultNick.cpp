@@ -11,14 +11,14 @@ ParcerResultNick::ParcerResultNick()
 
 ParcerResultNick::ParcerResultNick(const ParcerResultNick& other): AParcerResult() {
     this->_command = other._command;
-    this->_nickParamsVec = other._nickParamsVec;
+    this->_nickname = other._nickname;
 }
 
 
 ParcerResultNick& ParcerResultNick::operator=(const ParcerResultNick& other) {
     if(this != &other) {
-        this->_nickParamsVec = other._nickParamsVec;
         this->_command = other._command;
+        this->_nickname = this->_nickname;
     }
     return (*this);
 }
@@ -30,14 +30,11 @@ ParcerResultNick::~ParcerResultNick() {}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 void ParcerResultNick::setParams(std::vector<std::string> nickCommand) {
-    if(!nickCommand.empty()) {
-        nickCommand.erase(nickCommand.begin());  // drop the first element, wich is the NICK command
-    }
-    this->_nickParamsVec = nickCommand;
+    this->_nickname = nickCommand;
 }
 
-const std::vector<std::string> ParcerResultNick::getNickParams(void)const {
-    return (this->_nickParamsVec);
+const std::vector<std::string> ParcerResultNick::getNickname(void)const {
+    return (this->_nickname);
 }
 
 /*==========================================================*/
@@ -87,11 +84,8 @@ bool ParcerResultNick::isValidNick(std::vector<std::string> nickCommand) {
 
 void ParcerResultNick::printResult()const {
 
-    std::cout << "VECTOR:\n";
-    for(std::vector<std::string>::const_iterator itVec = this->_nickParamsVec.begin();
-            itVec != this->_nickParamsVec.end(); ++itVec) {
-        std::cout << *itVec << "\n";
-    }
+    std::cout << "This user's nickname is:\n";
+    std::cout << this->_nickname << std::endl;
 
 }
 /*==========================================================*/
