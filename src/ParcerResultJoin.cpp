@@ -62,32 +62,44 @@ const std::vector <std::string> ParcerResultJoin::getJoinParamsVec(void) const {
 /*                       IS_VALID_JOIN                      */
 /*----------------------------------------------------------*/
 
-bool ParcerResultJoin::isValidJoin(std::vector <std::string> messageVector) {
+int ParcerResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
 
     std::map<std::string, std::string> joinParamsMap;
     std::vector <std::string> joinParamsVec;
 
+    if (messageVec.size() < 2){
+        delete(resultJoin);
+        return ERR_NEEDMOREPARAMS;
+    }
+    if (messageVec.size() > 3){
+        delete(resultJoin);
+        return ERR_NEEDLESSPARAMS;
+    }
+    if (messageVector.size == 2 && messageVector.at(1) == "0"){
+        this->leaveAllChansOn = true;
+        return (0);
+    }
     if(messageVector.size() == 2) {
         joinParamsVec = stringToVec(messageVector[1], ',');
         for(size_t i = 0; i < joinParamsVec.size(); i++) {
             if(!isValidChanName(joinParamsVec.at(i))) {
-                return (false);
+                return (ERR_NOSUCHCHANNEL);
             }
         }
     } else if(messageVector.size() == 3) {
         std::vector<std::string> joinChannels = stringToVec(messageVector[1], ',');
         std::vector<std::string> joinPasswords = stringToVec(messageVector[2], ',');
         if(joinChannels.size() < joinPasswords.size()) {
-            return (false);
+            return (ERR_WRONGINPUT);
         }
         joinParamsMap = stringsToMap(messageVector[1], messageVector[2]);
         for(std::map<std::string, std::string>::iterator it = joinParamsMap.begin(); it != joinParamsMap.end(); ++it) {
             if(!isValidChanName(it->first))
-                return (false);
+                return (ERR_NOSUCHCHANNEL);
         }
     } else
-        return (false);
-    return (true);
+        return (ERR_NEEDLESSPARAMS);
+    return (0);
 }
 /*==========================================================*/
 
