@@ -164,38 +164,41 @@ NB! for Sveta ==>
     | Parameters: ( <channel> *( "," <channel> ) [ <key> *( "," <key> ) ] ) / "0" |
     |-----------------------------------------------------------------------------| 
     
-    Now we have a user, and they can finally join some channels.
-    This command is quite tricky to handle, because it may have various parameter combinations.
+Now we have a user, and they can finally join some channels.
+This command is quite tricky to handle, because it may have various parameter combinations.
     
-    First, we check the number of command parameters in the dispatchJoin itself.
+First, we check the number of command parameters in the dispatchJoin itself.
     
-    The method dispatchJoin uses checkJoinParams() to (guesss what???) check if the parameters of join are correct!
-    If everything is OK -> the dispatchJoin returns 0, else -> it returns the kind of error that has been detected: ERR_NOSUCHCHANNEL,ERR_NEEDLESSPARAMS(custom error) or ERR_WRONGINPUT(custom error).
+The method dispatchJoin uses checkJoinParams() to (guesss what???) check if the parameters of join are correct!
+If everything is OK -> the dispatchJoin returns 0, else -> it returns the kind of error that has been detected: ERR_NOSUCHCHANNEL,ERR_NEEDLESSPARAMS(custom error) or ERR_WRONGINPUT(custom error).
     
-    The _parcerResult pointer will keep an address of the JoinParcerResult object.
-    It will contain 4 attributes:
+The _parcerResult pointer will keep an address of the JoinParcerResult object.
+It will contain 4 attributes:
     - bool leaveAllChansOn, which is TRUE if the user wants to leave all channels;
     - vector <string> _joinParamsVec, which will contain raw join parameters (only channel(s) or channel(s) with password(s);
     - vector <string> _joinChannelsVec, which will contain an array of channel names.
     - vector <string> _joinPasswordsVec, which will contain an array of passwords to the channels.
     
-    First I wanted to make a channel-password map, but I abandoned this idea,
-    because it doesn´t take the repeated channels into consideration.
+First I wanted to make a channel-password map, but I abandoned this idea,
+because it doesn´t take the repeated channels into consideration. We will just have to access _joinChannelsVec[i],
+and check, if _joinPasswordsVec[i] exists, or the password is not right.
 
-    NB! for Ruben ==>
-        If the flag leaveAllChans is activated (== true), the given client has to leave all the channels he/she belongs to.
-        If this flag is not activated, then the client wants INDEED join the channel(s).
-        What can become an obstacle on their way of joining a channel?
-        - It may be an invite only channel! We will have to send back ERR_INVITEONLYCHAN error;
-        - The channel might be full! Oh, no! We will have to notify the client by sending them ERR_CHANNELISFULL error;
-        - The user might be on too many channels! (greedy bastard)! We have to politely put our limits to their outragious behaviour, sending the ERR_TOOMANYCHANNELS error;
-        If you cannot find the channel in the existing channels -> you have to create a new channel with the given name, and make the user its operator.
+NB! for Ruben ==>
+    If the flag leaveAllChans is activated (== true), the given client has to leave all the channels he/she belongs to.
+    If this flag is not activated, then the client wants INDEED join the channel(s).
+    What can become an obstacle on their way of joining a channel?
+    - It may be an invite only channel! We will have to send back ERR_INVITEONLYCHAN error;
+    - The channel might be full! Oh, no! We will have to notify the client by sending them ERR_CHANNELISFULL error;
+    - The user might be on too many channels! (greedy bastard)! We have to politely put our limits to their outragious behaviour, sending the ERR_TOOMANYCHANNELS error;
+    - The user uses a wrong password, then... (I have not find anywhere what happens then!)
+If you cannot find the channel in the existing channels -> you have to create a new channel with the given name, and make the user its operator.
      
     NB! for Ruben and Sveta ==>
     Some questions, left with no answer:
         if there is a list of channels given, should the user be able to join other channels on the list?
         Or the joining process stops, if there is a problem only with one channel?
-    
+
+        What is the error returned to the client, if the password does not match???
 
         "If a JOIN is successful, the user receives a JOIN message as
          confirmation and is then sent the channel’s topic (using RPL_TOPIC) and
