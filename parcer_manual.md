@@ -118,7 +118,8 @@ NB! for Ruben ==>
     If this command is sent by already existing client -> you have to change the client's _nickname
     
 
-<pre>  NB! for Sveta ==> isValidNickName() used!  </pre>
+NB! for Sveta ==>
+    <pre> isValidNickName() used!  </pre>
 **===============================** </br>
 
 **----------------------------------------------------** </br>
@@ -183,14 +184,14 @@ First I wanted to make a channel-password map, but I abandoned this idea,
 because it doesn´t take the repeated channels into consideration. We will just have to access _joinChannelsVec[i],
 and check, if _joinPasswordsVec[i] exists, or the password is not right.
 
-NB! for Ruben ==>
-    If the flag leaveAllChans is activated (== true), the given client has to leave all the channels he/she belongs to.
-    If this flag is not activated, then the client wants INDEED join the channel(s).
-    What can become an obstacle on their way of joining a channel?
-    - It may be an invite only channel! We will have to send back ERR_INVITEONLYCHAN error;
-    - The channel might be full! Oh, no! We will have to notify the client by sending them ERR_CHANNELISFULL error;
-    - The user might be on too many channels! (greedy bastard)! We have to politely put our limits to their outragious behaviour, sending the ERR_TOOMANYCHANNELS error;
-    - The user uses a wrong password, then... (I have not find anywhere what happens then!)
+NB! for Ruben ==></br>
+</tab>If the flag leaveAllChans is activated (== true), the given client has to leave all the channels he/she belongs to.</br>
+</tab>If this flag is not activated, then the client wants INDEED join the channel(s).</br>
+What can become an obstacle on their way of joining a channel?</br>
+- It may be an invite only channel! We will have to send back ERR_INVITEONLYCHAN error;
+- The channel might be full! Oh, no! We will have to notify the client by sending them ERR_CHANNELISFULL error;
+- The user might be on too many channels! (greedy bastard)! We have to politely put our limits to their outragious behaviour, sending the ERR_TOOMANYCHANNELS error;
+- The user uses a wrong password, then... (I have not find anywhere what happens then!)
 If you cannot find the channel in the existing channels -> you have to create a new channel with the given name, and make the user its operator.
      
     NB! for Ruben and Sveta ==>
