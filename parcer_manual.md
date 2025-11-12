@@ -78,9 +78,9 @@ NB! for Ruben ==>
 
 **===============================** </br>
 
-**-------------------------------** </br>
-**------------- NICK ------------** </br>
-**-------------------------------** </br>
+**-----------------------------------------------** </br>
+**----------------------- NICK ------------------** </br>
+**-----------------------------------------------** </br>
 
         |--------------------|
         |  NICK `<nickname>` |
@@ -106,7 +106,7 @@ users registration hasn't been finished yet.
 The _parcerResult pointer will keep an address of the NickParcerResult object,
 with a vector containing only one element -> a string with a nickname.
 
-YES! I tried to improvide and instead of the common vector _nickParamsVec,
+YES! I tried to improvise and instead of the common vector _nickParamsVec,
 I just used just a string which will contain the nickname -> _nickname,
 and its getter -> *getNickname()*.
 
@@ -121,9 +121,9 @@ NB! for Ruben ==>
 <pre>  NB! for Sveta ==> isValidNickName() used!  </pre>
 **===============================** </br>
 
-**-------------------------------** </br>
-**------------- USER ------------** </br>
-**-------------------------------** </br>
+**-----------------------------------------------** </br>
+**-------------------- USER ---------------------** </br>
+**-----------------------------------------------** </br>
 
         |------------------------------|
         |USER `<nickname>` `<realname>`|
@@ -133,6 +133,8 @@ After PASS and NICK steps, we finally can register our user.
 The method dispatchUser checks the parameters with checkUserParams().
 If the user's realname complies with the requirements defined in the RFC,
 dispatchUser returns 0, else -> ERR_WRONGINPUT (custom error).
+
+The server finally sends a RPL_WELOCME to the client, if the registration was successful!
 
 The _parcerResult pointer will keep an address of the UserParcerResult object,
 with a vector containing 3 elements:
@@ -152,9 +154,44 @@ NB! for Sveta ==>
 
 **===============================** </br>
 
-**-------------------------------** </br>
-**------------- KICK ------------** </br>
-**-------------------------------** </br>
+
+**-----------------------------------------------** </br>
+**-------------------- JOIN ---------------------** </br>
+**-----------------------------------------------** </br>
+
+    |-----------------------------------------------------------------------------| 
+    |  JOIN                                                                       |
+    | Parameters: ( <channel> *( "," <channel> ) [ <key> *( "," <key> ) ] ) / "0" |
+    |-----------------------------------------------------------------------------| 
+    
+    Now we have a user, and they can finally join some channels.
+    This command is quite tricky to handle, because it may have various parameter combinations.
+    
+    First, we check the number of command parameters in the dispatchJoin itself.
+    
+    The method dispatchJoin uses checkJoinParams() to (guesss what???) check if the parameters of join are correct!
+    If everything is OK -> the dispatchJoin returns 0, else -> it returns the kind of error that has been detected: ERR_NOSUCHCHANNEL,ERR_NEEDLESSPARAMS(custom error) or ERR_WRONGINPUT(custom error).
+    
+    The _parcerResult pointer will keep an address of the JoinParcerResult object.
+    It will contain 3 attributes:
+    - bool leaveAllChansOn, which will infrom if the user wants to leave all channels.
+    - std::vector <std::string> _joinParamsVec, which just hase a vector with the JOIN parameters
+    - std::map<std::string, std::string> _joinParamsMap, which has a map with channel(key) - password(value) pair.
+
+
+NB! for Sveta ==>
+    HOW DO YOU CONTROL THE REPEATED CHANNELNAMES???? YOU DO NOT!!!!
+    
+**===============================** </br>
+
+
+
+
+
+
+**-----------------------------------------------** </br>
+**--------------------- KICK --------------------** </br>
+**-----------------------------------------------** </br>
 I pass a map<int, vector<string>> to the command pointer.</br>
 The int — to make it easier to handle — and the vector (of 2 elements)</br>
 stores which channel I perform the KICK to and which I kick.</br>
@@ -170,5 +207,5 @@ We get this map:</br>
     2: ["#channel", "person3"]</br>
 }</br>
 </br>
-**-----------------------------**
+**===============================** </br>
 
