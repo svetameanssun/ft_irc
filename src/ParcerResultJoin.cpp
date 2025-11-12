@@ -12,14 +12,16 @@ ParcerResultJoin::ParcerResultJoin()
 ParcerResultJoin::ParcerResultJoin(const ParcerResultJoin &other): AParcerResult() {
     this->_command = other._command;
     this->_joinParamsVec = other._joinParamsVec;
-    this->_joinParamsMap = other._joinParamsMap;
+    this->_joinChannelsVec = other._joinChannelsVec;
+    this->_joinPasswordsVec = other._joinPasswordsVec;
 }
 
 ParcerResultJoin& ParcerResultJoin::operator=(const ParcerResultJoin& other) {
     if(this != &other) {
-        this->_joinParamsVec = other._joinParamsVec;
-        this->_joinParamsMap = other._joinParamsMap;
         this->_command = other._command;
+        this->_joinParamsVec = other._joinParamsVec;
+        this->_joinChannelsVec = other._joinChannelsVec;
+        this->_joinPasswordsVec = other._joinPasswordsVec;
     }
     return (*this);
 }
@@ -33,29 +35,32 @@ ParcerResultJoin::~ParcerResultJoin() {
 /*----------------------------------------------------------*/
 
 void ParcerResultJoin::setParams(std::vector<std::string> joinCommand) {
-    if(joinCommand.size() == 2) {
-        if (!joinCommand.empty()) {
-            joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
-        }
-        this->_joinParamsVec = joinCommand;
-    } else if(joinCommand.size() == 3) {
-        if (!joinCommand.empty()) {
-            joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
-        }
-        this->_joinParamsVec = joinCommand;
-        this->_joinParamsMap = stringsToMap(joinCommand.at(1), joinCommand.at(2));
-    } else {
-        (void)joinCommand;
+    if (!joinCommand.empty()) {
+        joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
     }
-}
-
-const std::map<std::string, std::string> ParcerResultJoin::getJoinParamsMap(void) const {
-    return (_joinParamsMap);
+    this->_joinParamsVec = joinCommand;
+    this->_joinChannelsVec = stringToVec(this->_joinParamsVec[0]);
+    if (joinCommand.size() == 2){
+        this->_joinPasswordsVec = stringToVec(this->_joinParamsVec[1]);
+    }
 }
 
 const std::vector <std::string> ParcerResultJoin::getJoinParamsVec(void) const {
     return (_joinParamsVec);
 }
+
+const std::vector <std::string> ParcerResultJoin::getJoinChannelsVec(void) const {
+    return (_joinChannelsVec);
+}
+
+const std::vector <std::string> ParcerResultJoin::getJoinPasswordsVec(void) const {
+    return (_joinPasswordsVec);
+}
+
+const bool ParcerResultJoin::getLeaveAllChansFlag(void) const{
+    return (_leaveAllChans);
+}
+
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
@@ -64,8 +69,7 @@ const std::vector <std::string> ParcerResultJoin::getJoinParamsVec(void) const {
 
 int ParcerResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
 
-    std::map<std::string, std::string> joinParamsMap;
-    std::vector <std::string> joinParamsVec;
+    std::vector <std::string> joinChannelsVec;
 
     if (messageVec.size() < 2){
         delete(resultJoin);
@@ -76,29 +80,16 @@ int ParcerResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
         return ERR_NEEDLESSPARAMS;
     }
     if (messageVector.size == 2 && messageVector.at(1) == "0"){
-        this->leaveAllChansOn = true;
+        this->leaveAllChans = true;
         return (0);
     }
-    if(messageVector.size() == 2) {
-        joinParamsVec = stringToVec(messageVector[1], ',');
-        for(size_t i = 0; i < joinParamsVec.size(); i++) {
-            if(!isValidChanName(joinParamsVec.at(i))) {
-                return (ERR_NOSUCHCHANNEL);
-            }
+    this->leaveAllChans = false;
+    joinChannelsVec = stringToVec(messageVector[1], ',');
+    for(size_t i = 0; i < joinParamsVec.size(); i++) {
+        if(!isValidChanName(joinParamsVec.at(i))) {
+            return (ERR_NOSUCHCHANNEL);
         }
-    } else if(messageVector.size() == 3) {
-        std::vector<std::string> joinChannels = stringToVec(messageVector[1], ',');
-        std::vector<std::string> joinPasswords = stringToVec(messageVector[2], ',');
-        if(joinChannels.size() < joinPasswords.size()) {
-            return (ERR_WRONGINPUT);
-        }
-        joinParamsMap = stringsToMap(messageVector[1], messageVector[2]);
-        for(std::map<std::string, std::string>::iterator it = joinParamsMap.begin(); it != joinParamsMap.end(); ++it) {
-            if(!isValidChanName(it->first))
-                return (ERR_NOSUCHCHANNEL);
-        }
-    } else
-        return (ERR_NEEDLESSPARAMS);
+    }
     return (0);
 }
 /*==========================================================*/
@@ -118,16 +109,17 @@ const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, ch
 }
 
 
-const std::map<std::string, std::string> ParcerResultJoin::stringsToMap(std::string keyString, std::string valueString) {
+/*const std::map<std::string, std::string> ParcerResultJoin::stringsToMap(std::string keyString, std::string valueString) {
     std::vector<std::string> keyVec = stringToVec(keyString, ','); // vector of keys, channel names
     std::vector<std::string> valueVec = stringToVec(valueString, ','); // vector of channel passwords
     std::map<std::string, std::string> resMap;
 
     std::vector<std::string>::iterator itKey = keyVec.begin();
     std::vector<std::string>::iterator itVal = valueVec.begin();
-
+    
+ 
+    std::string value;
     for(; itKey != keyVec.end(); ++itKey) {
-        std::string value;
         if(itVal != valueVec.end() && !itVal->empty())
             value = *itVal;
         else
@@ -137,25 +129,22 @@ const std::map<std::string, std::string> ParcerResultJoin::stringsToMap(std::str
             ++itVal;
     }
     return resMap;
-}
+}*/
+
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 void ParcerResultJoin::printResult() const {
-    if(!this->_joinParamsMap.empty()) {
-        std::cout << "[KEY] = VALUE\n";
-        for(std::map<std::string, std::string>::const_iterator itMap = this->_joinParamsMap.begin();
-                itMap  != this->_joinParamsMap.end(); ++itMap) {
-            std::cout << "[" << itMap ->first << "] = " << itMap->second << "\n";
+    for(size_t i = 0; i < _joinChannelsVec.size(); ++i){
+        std::cout << "CHANNEL NAME: " << _joinChannelsVec.at(i);
+        if (i < _joinPasswordsVec.size()){
+            std::cout << "PASSWORD: " << _joinPasswordsVec.at(i) << std::endl;
+        }
+        else {
+            std::cout << std::endl; 
         }
     }
-    std::cout << "VECTOR:\n";
-    for(std::vector<std::string>::const_iterator itVec = this->_joinParamsVec.begin();
-            itVec != this->_joinParamsVec.end(); ++itVec) {
-        std::cout << *itVec << "\n";
-    }
-
 }
 /*==========================================================*/
