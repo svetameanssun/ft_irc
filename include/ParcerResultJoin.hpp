@@ -15,22 +15,24 @@ class ParcerResultJoin : public AParcerResult {
     ParcerResultJoin(const ParcerResultJoin &other);
     ParcerResultJoin& operator=(const ParcerResultJoin& other);
     ~ParcerResultJoin();
-    /*void setChannelNamePassMap(std::map<std::string, std::string> joinResMap);
-    void setChannelNameVec(std::vector <std::string> joinResVec);*/
   
     const std::vector<std::string> stringToVec(std::string string, char devisor);
-    const std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
+    //const std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
     
     int checkJoinParamas(std::vector <std::string> messageVector);
     void setParams(std::vector<std::string> joinCommand);
 
-    const std::map<std::string, std::string> getJoinParamsMap(void) const;
     const std::vector <std::string> getJoinParamsVec(void) const;
+    const std::vector <std::string> getJoinChannelsVec(void) const;
+    const std::vector <std::string> getJoinPasswordsVec(void) const;
+    const bool getLeaveAllChansFlag(void) const;
     void printResult() const;
   private:
-    std::map<std::string, std::string> _joinParamsMap;
     std::vector <std::string> _joinParamsVec;
-    bool leaveAllChansOn; // if the flag is ON -> the server has to remove the client from ALL the channels!
+    //std::map<std::string, std::string> _channelPasswordMap;
+    std::vector <std::string> _joinChannelsVec;
+    std::vector <std::string> _joinPasswordsVec;
+    bool leaveAllChans; // if the flag is TRUE -> the server has to remove the client from ALL the channels!
 };
 
 #endif
