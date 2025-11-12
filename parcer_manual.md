@@ -195,7 +195,8 @@ What can become an obstacle on their way of joining a channel?</br>
 If you cannot find the channel in the existing channels -> you have to create a new channel with the given name, and make the user its operator.
      
     NB! for Ruben and Sveta ==>
-    Some questions, left with no answer:
+
+      Some questions, left with no answer:
         if there is a list of channels given, should the user be able to join other channels on the list?
         Or the joining process stops, if there is a problem only with one channel?
 
