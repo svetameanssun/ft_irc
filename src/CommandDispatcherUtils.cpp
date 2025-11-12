@@ -49,31 +49,6 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
     return(0);
 }
 
-
-int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
-    ParcerResultJoin *resultJoin = new ParcerResultJoin();
-    if (messageVec.size() < 2){
-        delete(resultJoin);
-        return ERR_NEEDMOREPARAMS;
-    }
-    if (messageVec.size() > 3){
-        delete(resultJoin);
-        return ERR_NEEDLESSPARAMS;
-    }
-    if (!resultJoin->isValidJoin(messageVec)){
-        delete(resultJoin);
-        return ERR_UNKNOWNCOMMAND;
-    }
-
-    resultJoin->setParams(messageVec);
-
-    // Transfer ownership to _parcerResult
-    this->_parcerResult = resultJoin;
-    this->_parcerResult->printResult();
-    //return RPL_WELCOME;
-    return(0);
-}
-
 int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
     //USER <username> <realname>
@@ -93,6 +68,22 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //return (RPL_WELCOME);
     return(0);
 }
+
+int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
+    ParcerResultJoin *resultJoin = new ParcerResultJoin();
+    int res = resultJoin->checkJoinParams(messageVec);
+    if (res > 0){
+        delete(resultJoin);
+        return res;
+    }
+    resultJoin->setParams(messageVec);
+    // Transfer ownership to _parcerResult
+    this->_parcerResult = resultJoin;
+    this->_parcerResult->printResult();
+    //return RPL_WELCOME;
+    return(0);
+}
+
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
     ParcerResultMode * resultMode = new ParcerResultMode();
