@@ -21,9 +21,7 @@ class ParcerResultJoin : public AParcerResult {
     const std::vector<std::string> stringToVec(std::string string, char devisor);
     const std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
     
-    bool isValidJoin(std::vector <std::string> messageVector);
-    //bool isValidChanName(std::string channelName);
-    //bool isValidChanNameChar(int c);
+    int checkJoinParamas(std::vector <std::string> messageVector);
     void setParams(std::vector<std::string> joinCommand);
 
     const std::map<std::string, std::string> getJoinParamsMap(void) const;
@@ -32,6 +30,7 @@ class ParcerResultJoin : public AParcerResult {
   private:
     std::map<std::string, std::string> _joinParamsMap;
     std::vector <std::string> _joinParamsVec;
+    bool leaveAllChansOn; // if the flag is ON -> the server has to remove the client from ALL the channels!
 };
 
 #endif
