@@ -40,6 +40,14 @@ const std::vector<std::string> ParcerResultKick::getKickParams(void) const{
 	return (_kickParamsVec);
 }
 
+const std::vector<std::string> getKickChannelsVec(void) const{
+	return(this->_kickChannelsVec);
+}
+
+const std::vector<std::string> getKickUsersVec(void) const{
+	return(this->_kickUsersVec);
+}
+
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                     IS_VALID_NICKNAME                    */
@@ -116,34 +124,34 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 }
 
 int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
-	std::vector <std::string> channels;
-	std:vector <std::string> users;
+	//std::vector <std::string> channels;
+	//std::vector <std::string> users;
 	if (messageVector[1].find(',') != std::string::npos){
-		channels = stringToVec(messageVector[1], ',');
+		_kickChannelsVec = stringToVec(messageVector[1], ',');
 	}
 	else{
-		channels.push_back(messageVector[1]);
+		_kickChannelsVec.push_back(messageVector[1]);
 	}
 	if (messageVector[2].find(',') != std::string::npos){
-		users = stringToVec(messageVector[2], ',');
+		_kickUsersVec = stringToVec(messageVector[2], ',');
 	}
 	else{
-		users.push_back(messageVector[2]);
+		_kickUsersVec.push_back(messageVector[2]);
 	}
-	if (channels.size() != 1 && channels.size() != users.size()){
+	if (_kickChannelsVec.size() != 1 && _kickChannelsVec.size() != _kickUsersVec.size()){
 		return (ERR_NEEDLESSPARAMS);
 	}
-	for (size_t i = 0; i < users.size(); i++){
-		if (!isValidNick(users[i])){
+	for (size_t i = 0; i < _kickUsersVec.size(); i++){
+		if (!isValidNick(_kickUsersVec[i])){
 			return (ERR_UNKNOWNCOMMAND);
 		}
-		if (i < channels.size()){
-			if (!isValidChanName(channels[i])){
+		if (i < _kickChannelsVec.size()){
+			if (!isValidChanName(_kickChannelsVec[i])){
 				return (ERR_UNKNOWNCOMMAND);
 			}
 		}
 	}
-	this->_kickParamsMap = vectorsToMap(channels, users);
+	this->_kickParamsMap = vectorsToMap(_kickChannelsVec, _kickUsersVec);
 	//if everything is OK returns 0;
 	return (0);
 }
