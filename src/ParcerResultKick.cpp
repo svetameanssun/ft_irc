@@ -124,8 +124,7 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 }
 
 int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
-	//std::vector <std::string> channels;
-	//std::vector <std::string> users;
+	
 	if (messageVector[1].find(',') != std::string::npos){
 		_kickChannelsVec = stringToVec(messageVector[1], ',');
 	}
@@ -147,7 +146,7 @@ int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
 		}
 		if (i < _kickChannelsVec.size()){
 			if (!isValidChanName(_kickChannelsVec[i])){
-				return (ERR_UNKNOWNCOMMAND);
+				return (ERR_NOSUCHCHANNEL);
 			}
 		}
 	}
@@ -211,12 +210,15 @@ std::map<int, std::vector<std::string>> ParcerResultKick::vectorsToMap(std::vect
 /*----------------------------------------------------------*/
 
 void ParcerResultKick::printResult()const {
-
-    std::cout << "VECTOR:\n";
-    for(std::vector<std::string>::const_iterator itVec = this->_kickParamsVec.begin();
-            itVec != this->_kickParamsVec.end(); ++itVec) {
-        std::cout << *itVec << "\n";
-    }
+   
+    for (std::map<std::string, std::vector<std::string> >::const_iterator it = _kickParamsMap.begin();
+     it != _kickParamsMap.end();
+     ++it)
+	{
+    std::cout << "CHANNEL: " << it->second.at(0) << std::endl;   
+    std::cout << "USER: "    << it->second.at(1) << std::endl;
+    std::cout << std::endl;
+	}
 
 }
 /*==========================================================*/
