@@ -35,7 +35,8 @@ so that the elements of the command were kept in this vector.</br>
 The getter of the parameters is also almost always is called "get*Command*Params". </br>
 </tab>**EXCEPTION: getNikcname in ParcerResultNick** </br>
 
-Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info about the command type in the base class (_command, getCommand());</br>
+Note that,  "INVITE" is not included in the _inviteParamsVec, because we already have the info
+about the command type in the base class (_command, getCommand());</br>
 
     Example:
         INVITE NickName #channelName --> _inviteParamsVec = {"NickName", "#channelName"}
@@ -207,34 +208,71 @@ If you cannot find the channel in the existing channels -> you have to create a 
          the list of users who are on the channel (using RPL_NAMREPLY)"
          It is an excerpt from the rfc, I do not quite understand, how it should be handled.
     
-
-NB! for Sveta ==>
-    HOW DO YOU CONTROL THE REPEATED CHANNELNAMES???? YOU DO NOT!!!!
-    
 **===============================** </br>
-
-
-
-
-
 
 **-----------------------------------------------** </br>
 **--------------------- KICK --------------------** </br>
 **-----------------------------------------------** </br>
-I pass a map<int, vector<string>> to the command pointer.</br>
-The int — to make it easier to handle — and the vector (of 2 elements)</br>
-stores which channel I perform the KICK to and which I kick.</br>
+    |-----------------------------------------------------------------------------| 
+    |  KICK                                                                       |
+    | Parameters: <channel> *( "," <channel> ) <user> *( "," <user> ) [<comment>] |
+    |-----------------------------------------------------------------------------| 
 
-**EXAMPLE**</br>
-From this command:</br> 
-KICK #channel person1,person2, person3</br>
+If a user can join, and be invited to a channel,
+we have to be able to KICK THEM OUT of the channel !!!
+This command, as well as join, can have different parameter combinaions.
 
+We check the number of parameters with checkKickParams within dicpatchKick.
+We also check whether the channel name(s) and the user name(s) is/are valid (needlessly, indeed).
+If everything is OK -> the dispatchKick returns 0, else -> it returns the kind of error that has been detected:
+- ERR_NOSUCHCHANNEL -> when the channel name is not valid,
+- ERR_NEEDLESSPARAMS(custom error),
+- ERR_NEEDMOREPARAMS,
+- (ERR_UNKNOWNCOMMAND) -> when the nickname is not valid.
+
+The _parcerResult pointer will keep an address of the KickParcerResult object.
+It will contain 5 attributes:
+    - vector <string> _kickParamsVec, a raw kick parameters 
+    - vector <string> _kickChannelsVec, an array of channel names,
+    - vector <string> kickUsersVec, an array of users names,
+    - map<int, vector<string>> _kickParamsMap,  with this structure → [index] = {channel, user},
+    - string _kickComment;  -> optional trailing comment.
+
+From this command:
+    KICK channel name1,name2,name3
 We get this map:</br>
 {</br>
-    0: ["#channel", "person1"],</br>
-    1: ["#channel", "person2"],</br>
-    2: ["#channel", "person3"]</br>
+    0: ["#channel", "name1"],</br>
+    1: ["#channel", "name2"],</br>
+    2: ["#channel", "name3"]</br>
 }</br>
+And from this command:
+    KICK channel,channel2,channel3 name1,name2,name3
+We get this map:</br>
+{</br>
+    0: ["#channel", "name1"],</br>
+    1: ["#channe2", "name2"],</br>
+    2: ["#channe3", "name3"]</br>
+}</br>
+Thus, the most IMPORTANT attributes are _kickParamsMap and _kickComment,
+the latter being a string that needs to be printed in the message.
+
+    NB! for Ruben ==>
+    You will have to check:
+        - if the channel actually exists, if not -> ERR_NOSUCHCHANNEL
+        - if the user, who is being kicked out (target), is on the channel. If not -> ERR_USERNOTINCHANNEL
+        - if the user, who is kicking out, is on channel. If not -> ERR_NOTONCHANNEL.
+        - if the user, who is kicking out, is the OPER of the channel, if not -> ERR_CHANOPRIVSNEEDED
+        
+                                
+NB! for Sveta and Ruben ==>
+    If the command if successful, these 2 types of messages should be sent:
+         "Command to kick name1 from channel1 using "a very compelling reason" as the reason (comment).",
+             if the comment is given.
+         "Command to kick name1 from channel1.",
+             if no comment is given
+        
+             
 </br>
 **===============================** </br>
 
