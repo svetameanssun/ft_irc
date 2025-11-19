@@ -87,20 +87,29 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 		if (messageVector[i].find(':') != std::string::npos)
 			break;
 	}
-	if (i == messageVector.size()){
+	if (i == messageVector.size() && i == 3){
 		this->_kickComment = "default";
+	}
+	else if (i == messageVector.size() && i > 3){
+		this->_kickComment = messageVector[3];
 	}
 	else{
 		int save_i = i;
-		//this->_kickComment.push_back('\0'); chatgpt said it was not necessary, because it is not C-string
 		for (; i < messageVector.size(); i++){
 			this->_kickComment += messageVector[i];
 		}
+		//here we cut off the comment that we already saved in _kickComment
 		messageVector.resize(save_i + 1);
 	}
 	//I am not quite sure about this condition.
 	if (_kickComment.find('\r') != std::string::npos || _kickComment.find('\n') != std::string::npos){
 		return (ERR_UNKNOWNCOMMAND);
+	}
+	
+	//here we erase the ':' from the begining of the message
+	//we send to the kicked out user.
+	if(_kickComment.at(0) == ':'){
+				_kickComment.erase(0, 1);
 	}
 	//if everything is OK returns 0;
 	return (0);
