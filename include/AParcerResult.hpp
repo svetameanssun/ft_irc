@@ -25,9 +25,13 @@ class AParcerResult {
     virtual void printResult() const = 0;
     virtual void setParams(std::vector<std::string> commandMessage) = 0;
 
-    // Functions to validate channel name
+    // Methods to validate channel name
     bool isValidChanNameChar(int c);
     bool isValidChanName(std::string channelName);
+
+    // Methods to validade nickname
+    bool isSpecialChar(int c);
+    bool isValidNick(std::string nickname);
 
   protected:
     std::string _command;
