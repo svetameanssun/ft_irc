@@ -54,9 +54,13 @@ int ParcerResultInvite::checkInviteParams(std::vector<std::string> messageVec){
 	if (!isValidNick(messageVec[1]){
 		return (ERR_NOSUCHNICK);
 	}
-	if (!isValidChannelName(messageVec[2]){
+
+	//I left it on purpose, for me not to add it again!
+	// in RFC2812: "There is no requirement that the channel, the target user is being invited to,
+	//               must exist or be a valid channel."
+	/*if (!isValidChannelName(messageVec[2]){
 		return (ERR_NOSUCHCHANNEL);
-	}
+	}*/
 	return (0);
 }
 
