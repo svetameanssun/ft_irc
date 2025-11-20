@@ -17,6 +17,8 @@ The base class AParcerResult methods that can be accessed through derived classe
 - getCommand();
 - bool isValidChanName(string chanName)
 -    and its helper, bool isValidChanNameChar(int i);
+- bool isValidNick(string chanName)
+-    and its helper, bool isSpecialChar(int i);
     
    There are   are 2 pure virtual functions:</br>
 - virtual void printResult() const = 0;
@@ -119,8 +121,6 @@ NB! for Ruben ==>
     If this command is sent by already existing client -> you have to change the client's _nickname
     
 
-NB! for Sveta ==>
-    <pre> isValidNickName() used!  </pre>
 **===============================** </br>
 
 **----------------------------------------------------** </br>
