@@ -75,3 +75,40 @@ bool AParcerResult::isValidChanName(std::string channelName) {
     return (true);
 }
 /*==========================================================*/
+
+/*----------------------------------------------------------*/
+/*                     IS_VALID_NICKNAME                    */
+/*----------------------------------------------------------*/
+
+bool AParcerResult::isSpecialChar(int c) {
+    std::string specialChars = "[]\\`^{}";
+    if(specialChars.find(c) == std::string::npos) {
+        return (false);
+    }
+    return (true);
+}
+
+bool AParcerResult::isValidNick(std::string nickname) {
+    std::cout << nickname << "\n";
+    if(nickname.empty()) {
+        return (false);
+    }
+    if(nickname.at(0) == '-' || isdigit(nickname.at(0))) {
+        return (false);
+    }
+    if(!isalpha(nickname.at(0)) && !isSpecialChar(nickname.at(0))) {
+        return (false);
+    }
+    if(nickname.length() > 9) {
+        return (false);
+    }
+    for(long unsigned int i = 1; i < nickname.length(); ++i) {
+        if(!isdigit(nickname.at(i)) && !isalpha(nickname.at(i)) &&
+                !isSpecialChar(nickname.at(i)) && nickname.at(i) != '-') {
+            return (false);
+        }
+    }
+    return (true);
+}
+
+/*==========================================================*/
