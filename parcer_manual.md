@@ -210,13 +210,45 @@ If you cannot find the channel in the existing channels -> you have to create a 
     
 **===============================** </br>
 
+
+**----------------------------------------------------** </br>
+**------------------- INVITE -------------------------** </br>
+**----------------------------------------------------** </br>
+
+        |----------------------------------|
+        |  INVITE `<nickname>` `<channel>` |
+        |----------------------------------|
+
+Our users not only can join the channels by themsleves, but also can be invited!
+The checkInviteParams() method within dispatchInvite() is quite simple:
+I can only check the number of parameters, and whether the nickname and channel parameters are in the right order. 
+Thus, dispatchInvite returns 0 if everything ok, and ERR_NEEDMOREPARAMS, ERR_NEEDLESSPARAMS, ERR_NOSUCHNICK, ERR_NOSUCHCHANNEL
+	if (!userOnChannel(myName, channelName)){ // bool userOnChannel(std::stirng myName, std::string channelName) (not sure about parameters)
+		return(ERR_NOTONCHANNEL);
+	}
+	if (inviteFlagOn() && !iAmOperator()){ //  bool inviteFlagOn(); bool iAmOperator();
+			return (ERR_CHANOPRIVSNEEDED);
+	}	
+	if (!userExists(messageVec[1])){  // bool userExists(std::string userName).
+		return (ERR_NOSUCHNICK);
+	}
+	if (userOnChannel(messageVec[1], channelName) // same as the ast one{
+		return (ERR_USERONCHANNEL);
+	}
+
+
+**===============================** </br>
+
 **-----------------------------------------------** </br>
 **--------------------- KICK --------------------** </br>
 **-----------------------------------------------** </br>
+
+
     |-----------------------------------------------------------------------------| 
     |  KICK                                                                       |
     | Parameters: <channel> *( "," <channel> ) <user> *( "," <user> ) [<comment>] |
     |-----------------------------------------------------------------------------| 
+ 
 
 If a user can join, and be invited to a channel,
 we have to be able to KICK THEM OUT of the channel !!!
