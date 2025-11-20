@@ -17,7 +17,7 @@ The base class AParcerResult methods that can be accessed through derived classe
 - getCommand();
 - bool isValidChanName(string chanName)
 -    and its helper, bool isValidChanNameChar(int i);
-- bool isValidNick(string chanName)
+- bool isValidNick(string nickname)
 -    and its helper, bool isSpecialChar(int i);
     
    There are   are 2 pure virtual functions:</br>
