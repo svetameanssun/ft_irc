@@ -56,44 +56,7 @@ const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, ch
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
-/*                      IS_VALID_NICK                       */
-/*----------------------------------------------------------*/
-bool ParcerResultNick::isSpecialChar(int c) {
-    std::string specialChars = "[]\\`^{}";
-    if(specialChars.find(c) == std::string::npos) {
-        std::cout << "char: " << c << "\n";
-        return (0);
-    }
-    return (1);
-}
-
-bool ParcerResultNick::isValidNick(std::vector<std::string> nickCommand) {
-    std::string nickname = nickCommand.at(1);
-    std::cout << nickname << "\n";
-    if(nickname.empty()) {
-        return (0);
-    }
-    if(nickname.at(0) == '-' || isdigit(nickname.at(0))) {
-        return (0);
-    }
-    if(!isalpha(nickname.at(0)) && !isSpecialChar(nickname.at(0))) {
-        return (0);
-    }
-    if(nickname.length() > 9) {
-        return (0);
-    }
-    for(long unsigned int i = 1; i < nickname.length(); ++i) {
-        if(!isdigit(nickname.at(i)) && !isalpha(nickname.at(i)) &&
-                !isSpecialChar(nickname.at(i)) && nickname.at(i) != '-') {
-            return (0);
-        }
-    }
-    return (1);
-}
-
-/*==========================================================*/
-/*----------------------------------------------------------*/
-/*                       IS_VALID_PARA                      */
+/*                       S_VALID_PARAM                      */
 /*----------------------------------------------------------*/
 int ParcerResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
     std::vector <string> targetVec;
