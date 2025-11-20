@@ -50,42 +50,6 @@ const std::vector<std::string> getKickUsersVec(void) const{
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
-/*                     IS_VALID_NICKNAME                    */
-/*----------------------------------------------------------*/
-
-bool ParcerResultKick::isSpecialChar(int c) {
-    std::string specialChars = "[]\\`^{}";
-    if(specialChars.find(c) == std::string::npos) {
-        return (false);
-    }
-    return (true);
-}
-
-bool ParcerResultKick::isValidNick(std::string nickname) {
-    std::cout << nickname << "\n";
-    if(nickname.empty()) {
-        return (0);
-    }
-    if(nickname.at(0) == '-' || isdigit(nickname.at(0))) {
-        return (0);
-    }
-    if(!isalpha(nickname.at(0)) && !isSpecialChar(nickname.at(0))) {
-        return (0);
-    }
-    if(nickname.length() > 9) {
-        return (0);
-    }
-    for(long unsigned int i = 1; i < nickname.length(); ++i) {
-        if(!isdigit(nickname.at(i)) && !isalpha(nickname.at(i)) &&
-                !isSpecialChar(nickname.at(i)) && nickname.at(i) != '-') {
-            return (0);
-        }
-    }
-    return (1);
-}
-
-/*==========================================================*/
-/*----------------------------------------------------------*/
 /*                     IS_VALID_COMMAND                    */
 /*----------------------------------------------------------*/
 //It is important to use a reference here, 
