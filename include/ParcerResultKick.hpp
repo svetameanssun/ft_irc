@@ -26,8 +26,8 @@ public:
     //bool isValidChanNameChar(int c);
     //bool isValidChanName(std::string channelName);
 
-    bool isSpecialChar(int c);
-    bool isValidNick(std::string nickname);
+    //bool isSpecialChar(int c);
+    //bool isValidNick(std::string nickname);
 
     /*================= COMMAND CHECKING ================*/
     int checkKickComment(std::vector<std::string> &messageVector);
