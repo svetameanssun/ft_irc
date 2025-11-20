@@ -221,8 +221,32 @@ If you cannot find the channel in the existing channels -> you have to create a 
 
 Our users not only can join the channels by themsleves, but also can be invited!
 The checkInviteParams() method within dispatchInvite() is quite simple:
-I can only check the number of parameters, and whether the nickname and channel parameters are in the right order. 
-Thus, dispatchInvite returns 0 if everything ok, and ERR_NEEDMOREPARAMS, ERR_NEEDLESSPARAMS, ERR_NOSUCHNICK, ERR_NOSUCHCHANNEL
+I can only check the number of parameters, and whether the nickname is on its place. 
+Thus, dispatchInvite returns 0 if everything is OK,
+or ERR_NEEDMOREPARAMS, ERR_NEEDLESSPARAMS, ERR_NOSUCHNICK.
+
+Because of this line in RFC2812, I do not check channel parameter ->
+	"There is no requirement that the channel,
+	the target user is being invited to,
+	must exist or be a valid channel."
+
+The _parcerResult pointer will keep an address of the InviteParcerResult object.
+It will contatin only one private attribute: **vector <string> _inviteParamsVec**
+
+	NB! for Ruben ==></br>
+	The main work in this command is left for you!
+	You have to check that:
+		- The inviting party belongs to the channel, the target is being invited to,
+		- If the channel has the invite-only flag set, only a channel OPER can invite new users to the channel.
+	
+
+I have drafted some code that might serve (or might be not!) as a prototype for your code:</br>
+	Given that</br>
+	vector <string> messageVec = INVITE `<nickname>` `<channel>`,</br>
+	and</br>
+	string myName equals the name of the sender of the command,</br>
+	then:</br>
+	
 	if (!userOnChannel(myName, channelName)){ // bool userOnChannel(std::stirng myName, std::string channelName) (not sure about parameters)
 		return(ERR_NOTONCHANNEL);
 	}
@@ -232,10 +256,12 @@ Thus, dispatchInvite returns 0 if everything ok, and ERR_NEEDMOREPARAMS, ERR_NEE
 	if (!userExists(messageVec[1])){  // bool userExists(std::string userName).
 		return (ERR_NOSUCHNICK);
 	}
-	if (userOnChannel(messageVec[1], channelName) // same as the ast one{
+	if (userOnChannel(messageVec[1], channelName)) // same as the ast one{
 		return (ERR_USERONCHANNEL);
 	}
 
+NB! for Sveta and Ruben ==></br>
+RFC2812 -> "Only the user inviting and the user being invited will receive notification of the invitation."
 
 **===============================** </br>
 
