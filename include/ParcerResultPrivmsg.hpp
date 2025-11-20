@@ -19,8 +19,8 @@ class ParcerResultPrivmsg : public AParcerResult {
     const std::vector<std::string> getPrivmsgParams(void) const;
     void printResult() const;
     const std::vector<std::string> stringToVec(std::string str, char delim);
-    bool isSpecialChar(int c);
-    bool isValidNick(std::vector<std::string> nickCommand);
+    //bool isSpecialChar(int c);
+    //bool isValidNick(std::vector<std::string> nickCommand);
     int checkPrivmsgTarget(std::string privmsgTarget);
     int checkPrivmsgParams(std::vector <std::string> messageVector);
   private:
