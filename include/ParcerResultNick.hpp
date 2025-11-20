@@ -19,8 +19,8 @@ class ParcerResultNick : public AParcerResult {
     const std::string getNickname(void) const;
     void printResult() const;
 
-    bool isSpecialChar(int c);
-    bool isValidNick(std::vector<std::string> nickCommand);
+    //bool isSpecialChar(int c);
+    //bool isValidNick(std::vector<std::string> nickCommand);
     
   private:
     //std::vector <std::string> _nickParamsVec; // we acatually do not need this attribute
