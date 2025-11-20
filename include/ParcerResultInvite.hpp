@@ -10,16 +10,20 @@
 
 class ParcerResultInvite : public AParcerResult {
   public:
+  /*================= CANONICAL FORM =================*/
     ParcerResultInvite();
     ParcerResultInvite(const ParcerResultInvite &other);
     ParcerResultInvite& operator=(const ParcerResultInvite& other);
     ~ParcerResultInvite();
-    //TODO
-    //bool isAllowedChar(char usernameChar);
-    int checkInviteParams(std::vector<std::string> messageVec);
-    
+    /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> inviteCommand);
     const std::vector<std::string> getInviteParams(void) const;
+    /*================= VALIDATION ======================*/
+
+    //bool isAllowedChar(char usernameChar);
+    int checkInviteParams(std::vector<std::string> messageVec);
+
+    /*================== PRINTING =======================*/
     void printResult() const;
   private:
     std::vector <std::string> _inviteParamsVec;
