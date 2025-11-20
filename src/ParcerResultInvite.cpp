@@ -51,13 +51,12 @@ int ParcerResultInvite::checkInviteParams(std::vector<std::string> messageVec){
 	if (message.size() > 3){
 		return (ERR_NEEDLESSPARAMS);
 	}
-	if (!isValidName(messageVec[1]){
+	if (!isValidNick(messageVec[1]){
 		return (ERR_NOSUCHNICK);
 	}
-	if (!isValidChannel(messageVec[2]){
+	if (!isValidChannelName(messageVec[2]){
 		return (ERR_NOSUCHCHANNEL);
 	}
-
 	return (0);
 }
 
