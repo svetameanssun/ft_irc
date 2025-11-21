@@ -43,7 +43,7 @@ const std::vector<std::string> ParcerResultPrivmsg::getPrivmsgParams(void) const
 /*----------------------------------------------------------*/
 /*                        SPLIT                             */
 /*----------------------------------------------------------*/
-const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, char delim) {
+const std::vector<std::string> ParcerResultPrivmsg::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(str);
     std::string item;
@@ -72,7 +72,7 @@ int ParcerResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
     return (0);
 }
 
-int ParcerResultTopic::checkPrivmsgParams(std::vector <std::string> messageVector){
+int ParcerResultPrivmsg::checkPrivmsgParams(std::vector <std::string> messageVector){
     if (messageVector.size() == 1 ){
         return (ERR_NORECIPIENT);
     }
