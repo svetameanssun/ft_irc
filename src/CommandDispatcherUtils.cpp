@@ -84,6 +84,25 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
     return(0);
 }
 
+int CommandDispatcher::dispatchPart(std::vector <std::string> &messageVec){
+    //trailing params
+    
+    ParcerResultPart * resultPart = new ParcerResultPart();
+    int res = resultPart->checkPartParams(messageVec);
+    //if checkPartParams returns anything other than 0 - the command input is wrong
+    if (res > 0)
+    {
+        delete resultPart;
+        return (res);
+    }
+    resultPart->setParams(messageVec);
+    this->_parcerResult = resultPart;
+    this->_parcerResult->printResult();
+    std::cout << messageVec.at(0)<< std::endl;
+    //return (RPL_WELCOME);
+    return(0);
+}
+
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
     ParcerResultMode * resultMode = new ParcerResultMode();
@@ -171,6 +190,22 @@ int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
     this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
     //return (RPL_WELCOME);
+    return(0);
+}
+
+int CommandDispatcher::dispatchNotice(std::vector <std::string> &messageVec){
+    //trailing params
+    
+    ParcerResultNotice * resultNotice = new ParcerResultNotice();
+    if (!resultNotice->checkNoticeParams(messageVec))
+    {
+        delete resultNotice;
+        return ERR_UNKNOWNCOMMAND;
+    }
+    resultNotice->setParams(messageVec);
+    this->_parcerResult = resultNotice;
+    this->_parcerResult->printResult();
+    std::cout << messageVec.at(0)<< std::endl;
     return(0);
 }
 
