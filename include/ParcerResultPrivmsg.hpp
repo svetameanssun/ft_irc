@@ -10,19 +10,29 @@
 
 class ParcerResultPrivmsg : public AParcerResult {
   public:
+    /*================= CANONICAL FORM =================*/
     ParcerResultPrivmsg();
     ParcerResultPrivmsg(const ParcerResultPrivmsg &other);
     ParcerResultPrivmsg& operator=(const ParcerResultPrivmsg& other);
     ~ParcerResultPrivmsg();
-    
+
+    /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> privmsgCommand);
     const std::vector<std::string> getPrivmsgParams(void) const;
-    void printResult() const;
-    const std::vector<std::string> stringToVec(std::string str, char delim);
+
+    /*================= VALIDATION ======================*/
     //bool isSpecialChar(int c);
-    //bool isValidNick(std::vector<std::string> nickCommand);
+    //bool isValidNick(std::string nickname);
+
+    /*================= COMMAND CHECKING ================*/
     int checkPrivmsgTarget(std::string privmsgTarget);
     int checkPrivmsgParams(std::vector <std::string> messageVector);
+
+    /*================= HELPERS =========================*/
+    const std::vector<std::string> stringToVec(std::string str, char delim);
+
+    /*================= DEBUG / OUTPUT ==================*/
+    void printResult() const;
   private:
     std::vector <std::string> _targetVec;
     std::vector <std::string> _privmsgParamsVec;
