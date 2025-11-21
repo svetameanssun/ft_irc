@@ -269,13 +269,11 @@ RFC2812 -> "Only the user inviting and the user being invited will receive notif
 **--------------------- KICK --------------------** </br>
 **-----------------------------------------------** </br>
 
-
     |-----------------------------------------------------------------------------| 
     |  KICK                                                                       |
     | Parameters: <channel> *( "," <channel> ) <user> *( "," <user> ) [<comment>] |
     |-----------------------------------------------------------------------------| 
  
-
 If a user can join, and be invited to a channel,
 we have to be able to KICK THEM OUT of the channel !!!
 This command, as well as join, can have different parameter combinaions.
@@ -333,4 +331,45 @@ NB! for Sveta and Ruben ==>
              
 </br>
 **===============================** </br>
+
+**-----------------------------------------------** </br>
+**-------------------- PRIVMSG ------------------** </br>
+**-----------------------------------------------** </br>
+
+    |------------------------------------------| 
+    |  PRIVMSG  <msgtarget> <text to be sent>  |
+    |------------------------------------------|
+		-->msgtarget = msgto *( "," msgto )<--
+
+It is time to send messages! With PRIVMSG you can send a message
+to another users, as well as to the channels.
+
+	Examples:
+		PRIVMSG userA :hello, userA!
+		PRIVMSG userA,userB,channelC,serverD :Hello everybody!
+		
+We check the PRIVMSG parameters with checkPrivmsgParams within dicpatchPrivmsg.
+We check the first parameter of the command PRIVMSG.
+If everything is OK -> the dispatchPrivmsg returns 0, else -> it returns the kind of error that has been detected:
+- ERR_NORECIPIENT -> if there are no parameters,
+- ERR_NOTEXTTOSEND -> if there is no message to send,
+- ERR_WRONGINPUT(custom command) -> if the recpient is not a channel, nor a user.
+
+The _parcerResult pointer will keep an address of the PrivmsgParcerResult object.
+It will contain 3 attributes:
+    - vector <string> _privmsgParamsVec -> a raw privmsg parameter vector,
+    - vector <string> _targetVec-> a vector with all the targets we need to send a message,
+    - string _privmsgMessage -> the message to be sent to the target/targets.
+
+	NB! for Ruben ==>
+		The only thing left to do (as if it were not much!) is to actually send the message the target or targets.
+		
+ ERR_CANNOTSENDTOCHAN ERR_NOTOPLEVEL
+ ERR_WILDTOPLEVEL ERR_TOOMANYTARGETS
+ ERR_NOSUCHNICK
+ RPL_AWAY
+
+
+
+
 
