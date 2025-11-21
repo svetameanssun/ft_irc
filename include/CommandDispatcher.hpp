@@ -2,7 +2,7 @@
 #ifndef COMMANDDISPATCHER_HPP
 #define COMMANDDISPATCHER_HPP
 #include <iostream>
- #include <sstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <map>
@@ -18,6 +18,7 @@
 #include "ParcerResultTopic.hpp"
 #include "ParcerResultKick.hpp"
 #include "ParcerResultInvite.hpp"
+#include "ParcerResultPart.hpp"
 
 
 class CommandDispatcher{
@@ -43,6 +44,7 @@ class CommandDispatcher{
 		int dispatchInvite(std::vector <std::string> &messageVec);
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
+		int dispatchPart(std::vector <std::string> &messageVec);
 };
 
 
