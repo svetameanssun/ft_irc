@@ -41,13 +41,12 @@ class CommandDispatcher{
 		int dispatchUser(std::vector <std::string> &messageVec);
 		int dispatchQuit(std::vector <std::string> &messageVec);
 		int dispatchJoin(std::vector <std::string> &messageVec);
+		int dispatchPart(std::vector <std::string> &messageVec);
 		int dispatchMode(std::vector <std::string> &messageVec);
 		int dispatchTopic(std::vector <std::string> &messageVec);
 		int dispatchInvite(std::vector <std::string> &messageVec);
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
-		int dispatchPart(std::vector <std::string> &messageVec);
-		int dispatchQuit(std::vector <std::string> &messageVec);
 		int dispatchNotice(std::vector <std::string> &messageVec);
 };
 
