@@ -19,6 +19,8 @@
 #include "ParcerResultKick.hpp"
 #include "ParcerResultInvite.hpp"
 #include "ParcerResultPart.hpp"
+#include "ParcerResultQuit.hpp"
+#include "ParcerResultNotice.hpp"
 
 
 class CommandDispatcher{
@@ -45,6 +47,8 @@ class CommandDispatcher{
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
 		int dispatchPart(std::vector <std::string> &messageVec);
+		int dispatchQuit(std::vector <std::string> &messageVec);
+		int dispatchNotice(std::vector <std::string> &messageVec);
 };
 
 
