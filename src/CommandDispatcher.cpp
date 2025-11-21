@@ -1,6 +1,5 @@
 #include "CommandDispatcher.hpp"
 
-
 CommandDispatcher::CommandDispatcher() {
     dispatcherMap["PASS"] = &CommandDispatcher::dispatchPass;
     dispatcherMap["NICK"] = &CommandDispatcher::dispatchNick;
@@ -12,6 +11,9 @@ CommandDispatcher::CommandDispatcher() {
 	dispatcherMap["INVITE"] = &CommandDispatcher::dispatchInvite;
 	dispatcherMap["KICK"] = &CommandDispatcher::dispatchKick;
 	dispatcherMap["PRIVMSG"] = &CommandDispatcher::dispatchPrivmsg;
+	dispatcherMap["PART"] = &CommandDispatcher::dispatchPart;
+	dispatcherMap["QUIT"] = &CommandDispatcher::dispatchQuit;
+	dispatcherMap["NOTICE"] = &CommandDispatcher::dispatchNotice;
 }
 
 
