@@ -34,8 +34,9 @@ class ParcerResultPrivmsg : public AParcerResult {
     /*================= DEBUG / OUTPUT ==================*/
     void printResult() const;
   private:
-    std::vector <std::string> _targetVec;
     std::vector <std::string> _privmsgParamsVec;
+    std::vector <std::string> _targetVec;
+    std::string _targetType;
     std::string _privmsgMessage;
 };
 
