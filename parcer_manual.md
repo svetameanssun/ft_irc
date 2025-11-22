@@ -15,12 +15,12 @@ with examples.</br>
 Obvously, all the subclasses will share the methods and attributes of their base class.</br>
 The base class AParcerResult methods that can be accessed through derived classes are:</br>
 - getCommand();
-- bool isValidChanName(string chanName)
--    and its helper, bool isValidChanNameChar(int i);
-- bool isValidNick(string nickname)
--    and its helper, bool isSpecialChar(int i);
+- bool isValidChanName(string chanName)</br>
+     </tab>and its helper, bool isValidChanNameChar(int i);
+- bool isValidNick(string nickname)</br>
+     </tab>and its helper, bool isSpecialChar(int i);
     
-   There are   are 2 pure virtual functions:</br>
+There are 2 pure virtual functions:</br>
 - virtual void printResult() const = 0;
 - virtual void setParams(std::vector<std::string> commandMessage) = 0;
 
@@ -353,7 +353,7 @@ We check the first parameter of the command PRIVMSG.
 If everything is OK -> the dispatchPrivmsg returns 0, else -> it returns the kind of error that has been detected:
 - ERR_NORECIPIENT -> if there are no parameters,
 - ERR_NOTEXTTOSEND -> if there is no message to send,
-- ERR_WRONGINPUT(custom command) -> if the recpient is not a channel, nor a user.
+- ERR_WRONGINPUT(custom command) -> if the targetname is not a channel, nor a user.
 
 The _parcerResult pointer will keep an address of the PrivmsgParcerResult object.
 It will contain 3 attributes:
@@ -363,13 +363,48 @@ It will contain 3 attributes:
 
 	NB! for Ruben ==>
 		The only thing left to do (as if it were not much!) is to actually send the message the target or targets.
+		What can go wrong??
+		- ERR_NOSUCHNICK -> 
+					If a nick from _targetVec do not exist in the network 
+		- ERR_CANNOTSENDTOCHAN -> 
+					If the sender is not on a channel.
+		- ERR_TOOMANYTARGETS ->
+					I do not know how many targets are too many targets!
+						I check the maximum length of the message (512 letters), and maximum number of parameters(15).
+						But here we are talking about the 1st parameter of the command PRIVMSG.
+						I have not found anywhere what is allowed number of targets.
 		
- ERR_CANNOTSENDTOCHAN ERR_NOTOPLEVEL
- ERR_WILDTOPLEVEL ERR_TOOMANYTARGETS
- ERR_NOSUCHNICK
- RPL_AWAY
+</br>
+**===============================** </br>
 
+**-----------------------------------------------** </br>
+**--------------------- NOTICE ------------------** </br>
+**-----------------------------------------------** </br>
 
+Quote from RFC2812:
 
+	"The NOTICE command is used similarly to PRIVMSG. The difference
+ 	between NOTICE and PRIVMSG is that automatic replies MUST NEVER be
+ 	sent in response to a NOTICE message. This rule applies to servers
+	too - they MUST NOT send any error reply back to the client on
+ 	receipt of a notice. The object of this rule is to avoid loops
+ 	between clients automatically sending something in response to
+ 	something it received.
+ 	This command is available to services as well as users.
+ 	This is typically used by services, and automatons (clients with
+ 	either an AI or other interactive program controlling their actions).
+ 	See PRIVMSG for more details on replies and examples."
 
+For me, it meant that I just had to copy/paste all the parcing logic.</br>
+For you (Ruben), it means(I think) that we do not send anything(nor error, nor reply) to the user,</br>
+even if the command was wrong.
+
+The _parcerResult pointer will keep an address of the NoticeParcerResult object.
+It will contain 3 attributes:
+    - vector <string> _noticeParamsVec -> a raw notice parameter vector,
+    - vector <string> _targetVec-> a vector with all the targets we need to send a message,
+    - string _noticeMessage -> the message to be sent to the target/targets.
+
+</br>
+**===============================** </br>
 
