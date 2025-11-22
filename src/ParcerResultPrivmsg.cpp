@@ -56,7 +56,7 @@ const std::vector<std::string> ParcerResultPrivmsg::stringToVec(std::string str,
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
-/*                       S_VALID_PARAM                      */
+/*                       IS_VALID_PARAM                      */
 /*----------------------------------------------------------*/
 int ParcerResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
     std::vector <string> targetVec;
