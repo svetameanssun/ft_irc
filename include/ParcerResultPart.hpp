@@ -44,3 +44,4 @@ private:
     std::string _partMessage;                  // Optional trailing part message
 };
 
+#endif
