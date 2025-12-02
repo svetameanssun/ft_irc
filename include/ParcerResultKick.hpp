@@ -51,4 +51,4 @@ private:
     std::string _kickComment;                  // Optional trailing comment
 };
 
-#endif // PARCERRESULTKICK_HPP
+#endif
