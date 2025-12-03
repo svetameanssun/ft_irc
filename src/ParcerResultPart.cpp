@@ -71,11 +71,11 @@ void ParcerResultPart::setParams(std::vector<std::string> partCommand) {
 }
 
 const std::vector<std::string> ParcerResultPart::getPartParams(void) const{
-	return (_partParamsVec);
+	return (this->_partParamsVec);
 }
 
-const std::vector<std::string> getKickChannelsVec(void) const{
-	return(this->_kickChannelsVec);
+const std::vector<std::string> getPartChannelsVec(void) const{
+	return(this->_partChannelsVec);
 }
 
 /*==========================================================*/
@@ -84,13 +84,13 @@ const std::vector<std::string> getKickChannelsVec(void) const{
 /*----------------------------------------------------------*/
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
-int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector){
+int  ParcerResultPart::checkPartMessage (std::vector<std::string> &messageVector){
 	for(int i = 0; i < messageVector.size(); i++){
 		if (messageVector[i].find(':') != std::string::npos)
 			break;
 	}
 	if (i == messageVector.size() && i == 3){
-		this->_kickComment = "default";
+		this->_partMessage = "default";
 	}
 	else if (i == messageVector.size() && i > 3){
 		this->_kickComment = messageVector[3];
@@ -149,12 +149,13 @@ int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
 	return (0);
 }
 
-int ParcerResultKick::checkKickParams(std::vector <std::string> messageVector){
+int ParcerResultKick::checkPartParams(std::vector <std::string> messageVector){
+	//PART <channel> *( "," <channel> ) [<Part Message>]
 	if (messageVector.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
 	}
-	int res = checkKickComment(messageVector);
-	if (res > 0); // if :trailing param exists, we will set it as _kickComment, if not, it will be default
+	int res = checkPartMessage(messageVector);
+	if (res > 0); // if :trailing param exists, we will set it as _partMessageComment, if not, it will be default
 	// setKickComment also checks if the trailing comment is valid{
 		return res;
 	}
