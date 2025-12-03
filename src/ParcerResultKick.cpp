@@ -55,6 +55,8 @@ const std::vector<std::string> getKickUsersVec(void) const{
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
 int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector){
+	//I do not understand why HERE I previously was checking all the
+	// words of the command, when the _kickComment can only start from
 	for(int i = 0; i < messageVector.size(); i++){
 		if (messageVector[i].find(':') != std::string::npos)
 			break;
