@@ -21,6 +21,9 @@ public:
     const std::vector<std::string> getKickParams(void) const;
     const std::vector<std::string> getKickChannelsVec(void) const;
     const std::vector<std::string> getKickUsersVec(void) const;
+    const std::string getKickComment(void) const;
+    const std::map<int, std::vector<std::string> > getKickParamsMap(void) const;
+    
     
     /*================= VALIDATION ======================*/
     //bool isValidChanNameChar(int c);
