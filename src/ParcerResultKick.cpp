@@ -63,8 +63,8 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 	else if (messageVector.size() > 3){
 		if (messageVector[3][0] == ':'){
 			for (int i = 3; i < messageVector.size(); i++){
-				this->_kickComment += " ";
 				this->_kickComment += messageVector[i];
+				this->_kickComment += " ";
 			}
 		}
 		else{
@@ -83,6 +83,7 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 	if(_kickComment.at(0) == ':'){
 				_kickComment.erase(0, 1);
 	}
+	_kickComment.erase(_kickComment.length() - 1 , 1);
 	//if everything is OK returns 0;
 	return (0);
 }
