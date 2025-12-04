@@ -211,7 +211,10 @@ int CommandDispatcher::dispatchNotice(std::vector <std::string> &messageVec){
 
 int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     //trailing params
-    
+    ParcerResultQuit * resultQuit = new ParcerResultQuit();
+    resultQuit->collectQuitMessage(messageVec);
+    resultQuit->setParams(messageVec);
+    this->_parcerResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
     //return (RPL_WELCOME);
     return(0);
