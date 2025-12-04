@@ -11,6 +11,9 @@ ParcerResultKick::ParcerResultKick()
 ParcerResultKick::ParcerResultKick(const ParcerResultKick& other): AParcerResult() {
     this->_command = other._command;
     this->_kickParamsVec = other._kickParamsVec;
+	this->_kickChannelsVec = other._kickChannelsVec;
+    this->_kickUsersVec = other._kickUsersVec;
+	this->_kickParamsMap = other._kickParamsMap;
 }
 
 
@@ -18,6 +21,9 @@ ParcerResultKick& ParcerResultKick::operator=(const ParcerResultKick& other) {
     if(this != &other) {
         this->_kickParamsVec = other._kickParamsVec;
         this->_command = other._command;
+		this->_kickChannelsVec = other._kickChannelsVec;
+		this->_kickUsersVec = other._kickUsersVec;
+		this->_kickParamsMap = other._kickParamsMap;
     }
     return (*this);
 }
@@ -31,23 +37,30 @@ ParcerResultKick::~ParcerResultKick() {}
 
 void ParcerResultKick::setParams(std::vector<std::string> kickCommand) {
     if(!kickCommand.empty()) {
-        kickCommand.erase(kickCommand.begin());  // drop the first element, wich is the kick command
+        kickCommand.erase(kickCommand.begin());  // drop the first element, which is the kick command
     }
     this->_kickParamsVec = kickCommand;
 }
 
 const std::vector<std::string> ParcerResultKick::getKickParams(void) const{
-	return (_kickParamsVec);
+	return (this->_kickParamsVec);
 }
 
-const std::vector<std::string> getKickChannelsVec(void) const{
+const std::vector<std::string> ParcerResultKick::getKickChannelsVec(void) const{
 	return(this->_kickChannelsVec);
 }
 
-const std::vector<std::string> getKickUsersVec(void) const{
+const std::vector<std::string> ParcerResultKick::getKickUsersVec(void) const{
 	return(this->_kickUsersVec);
 }
 
+const std::string ParcerResultKick::getKickComment(void) const{
+	return(this->_kickComment);
+}
+
+const std::map<int, std::vector<std::string> > ParcerResultKick::getKickParamsMap(void) const{
+	return (this->_kickParamsMap);
+}
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                     IS_VALID_COMMAND                    */
