@@ -279,7 +279,7 @@ we have to be able to KICK THEM OUT of the channel !!!
 This command, as well as join, can have different parameter combinaions.
 
 We check the number of parameters with checkKickParams within dicpatchKick.
-We also check whether the channel name(s) and the user name(s) is/are valid (needlessly, indeed).
+We also check whether the channel name(s) and the user name(s) is/are valid.
 If everything is OK -> the dispatchKick returns 0, else -> it returns the kind of error that has been detected:
 - ERR_NOSUCHCHANNEL -> when the channel name is not valid,
 - ERR_NEEDLESSPARAMS(custom error),
@@ -420,8 +420,35 @@ It will contain 3 attributes:
 A user should be able to leave any channel whenever they please, right?
 Mash Alah (thanks God), there is a special command for this! -> PART
 
+We check the number of parameters with checkPartParams within dicpatchPart.
+We also check whether the channel name(s) is/are valid.
+If everything is OK -> the dispatchPart returns 0, else -> it returns the kind of error that has been detected:
+- ERR_NOSUCHCHANNEL -> when the channel name is not valid,
+- ERR_NEEDLESSPARAMS(custom error),
+- ERR_NEEDMOREPARAMS
 
+The _parcerResult pointer will keep an address of the PartParcerResult object.
+It will contain 5 attributes:
+    - vector <string> _partParamsVec, a raw part parameters (without the part message)
+    - vector <string> _partChannelsVec, an array of channel names,
+    - string _partMessage;  -> optional trailing comment.
 
+The most IMPORTANT attributes are _partChannelsVec and _partMessage,
+the latter being a string that needs to be printed in the chat.
+
+	NB! for Sveta and Ruben ==>
+	We have to check whether the cleant in on the channel(s), they want to part from.
+	If not -> ERR_NOTONCHANNEL
+
+**===============================** </br>
+
+**-----------------------------------------------** </br>
+**---------------------- QUIT -------------------** </br>
+**-----------------------------------------------** </br>
+
+    |------------------------------| 
+    |    QUIT [<Quit Message>]     |
+    |------------------------------| 
 
 
 
