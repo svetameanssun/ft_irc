@@ -4,7 +4,7 @@
 /*----------------------------------------------------------*/
 ParcerResultTopic::ParcerResultTopic()
     : AParcerResult(){
-        _command = "Topic";
+        _command = "TOPIC";
 }
 
 ParcerResultTopic::ParcerResultTopic(const ParcerResultTopic &other){
