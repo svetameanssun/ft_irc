@@ -4,7 +4,7 @@
 /*----------------------------------------------------------*/
 ParcerResultMode::ParcerResultMode()
     : AParcerResult(){
-        _command = "JOIN";
+        _command = "MODE";
 }
 
 ParcerResultMode::ParcerResultMode(const ParcerResultMode &other){
@@ -243,3 +243,4 @@ void ParcerResultMode::printResult() const{
 
 /* MODE #channel
             the server will return the current modes of that channel: */
+
