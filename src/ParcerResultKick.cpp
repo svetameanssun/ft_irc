@@ -55,22 +55,20 @@ const std::vector<std::string> getKickUsersVec(void) const{
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
 int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector){
-	//I do not understand why HERE I previously was checking all the
-	// words of the command, when the _kickComment can only start from
-	for(int i = 0; i < messageVector.size(); i++){
-		if (messageVector[i].find(':') != std::string::npos)
-			break;
-	}
-	if (i == messageVector.size() && i == 3){
+	//  0      1        2        3
+	// KICK <channel> <user> [<comment>]
+	if (messageVector.size() == 3){
 		this->_kickComment = "default";
 	}
-	else if (i == messageVector.size() && i > 3){
-		this->_kickComment = messageVector[3];
-	}
-	else{
-		int save_i = i;
-		for (; i < messageVector.size(); i++){
-			this->_kickComment += messageVector[i];
+	else if (messageVector.size() > 3){
+		if (messageVector[3][0] == ':'){
+			for (int i = 3; i < messageVector.size(); i++){
+				this->_kickComment += " ";
+				this->_kickComment += messageVector[i];
+			}
+		}
+		else{
+			this->_kickComment = messageVector[3];
 		}
 		//here we cut off the comment that we already saved in _kickComment
 		messageVector.resize(save_i + 1);
