@@ -80,7 +80,9 @@ int  ParcerResultPart::checkPartComment (std::vector<std::string> &messageVector
 				_partComment.erase(0, 1);
 	}
 	//erase the last space
-	_partComment.erase(_partComment.length() - 1 , 1);
+	if(_partComment[_partComment.length() - 1] == ' '){
+		_partComment.erase(_partComment.length() - 1 , 1);
+	}
 	//if everything is OK returns 0;
 	return (0);
 }
