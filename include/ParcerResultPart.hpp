@@ -20,6 +20,7 @@ public:
     void setParams(std::vector<std::string> partCommand);
     const std::vector<std::string> getPartParams(void) const;
     const std::vector<std::string> getPartChannelsVec(void) const;
+    const std::string getPartMessage(void) const;
     
     /*================= VALIDATION ======================*/
     //bool isValidChanNameChar(int c);
