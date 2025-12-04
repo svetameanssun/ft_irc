@@ -83,7 +83,9 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 	if(_kickComment.at(0) == ':'){
 				_kickComment.erase(0, 1);
 	}
-	_kickComment.erase(_kickComment.length() - 1 , 1);
+	if(_kickComment[_kickComment.length() - 1] == ' '){
+		_kickComment.erase(_kickComment.length() - 1 , 1);
+	}
 	//if everything is OK returns 0;
 	return (0);
 }
