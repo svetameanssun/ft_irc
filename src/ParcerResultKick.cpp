@@ -62,7 +62,7 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 	}
 	else if (messageVector.size() > 3){
 		if (messageVector[3][0] == ':'){
-			for (int i = 3; i < messageVector.size(); i++){
+			for (size_t i = 3; i < messageVector.size(); i++){
 				this->_kickComment += messageVector[i];
 				this->_kickComment += " ";
 			}
@@ -71,7 +71,7 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 			this->_kickComment = messageVector[3];
 		}
 		//here we cut off the comment that we already saved in _kickComment
-		messageVector.resize(save_i + 1);
+		messageVector.resize(3);
 	}
 	//I am not quite sure about this condition.
 	if (_kickComment.find('\r') != std::string::npos || _kickComment.find('\n') != std::string::npos){
@@ -125,7 +125,7 @@ int ParcerResultKick::checkKickParams(std::vector <std::string> messageVector){
 		return (ERR_NEEDMOREPARAMS);
 	}
 	int res = checkKickComment(messageVector);
-	if (res > 0); // if :trailing param exists, we will set it as _kickComment, if not, it will be default
+	if (res > 0) // if :trailing param exists, we will set it as _kickComment, if not, it will be default
 	// setKickComment also checks if the trailing comment is valid{
 		return res;
 	}
