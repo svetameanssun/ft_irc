@@ -19,19 +19,19 @@ CommandDispatcher::CommandDispatcher() {
 
 CommandDispatcher::CommandDispatcher(const CommandDispatcher &other){
 	this->dispatcherMap = other.dispatcherMap;
-	this->_parcerResult = other._parcerResult;
+	this->_parserResult = other._parserResult;
 }
 
 CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
 	if (this != &other){
 		this->dispatcherMap = other.dispatcherMap;
-		this->_parcerResult = other._parcerResult;
+		this->_parserResult = other._parserResult;
 	}
 	return (*this);
 }
 
 CommandDispatcher::~CommandDispatcher(){
-	delete (_parcerResult);
+	delete (_parserResult);
 }
 
 const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& CommandDispatcher::getDispatcherMap() const {
@@ -49,4 +49,4 @@ int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 	}
 }
 
-AParcerResult *CommandDispatcher::getParcerResult() const { return this->_parcerResult; }
+AParserResult *CommandDispatcher::getParserResult() const { return this->_parserResult; }
