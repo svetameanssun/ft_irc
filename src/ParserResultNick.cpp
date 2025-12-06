@@ -1,21 +1,21 @@
-#include "ParcerResultNick.hpp"
+#include "ParserResultNick.hpp"
 
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
-ParcerResultNick::ParcerResultNick()
-    : AParcerResult() {
+ParserResultNick::ParserResultNick()
+    : AParserResult() {
     _command = "NICK";
 }
 
-ParcerResultNick::ParcerResultNick(const ParcerResultNick& other): AParcerResult() {
+ParserResultNick::ParserResultNick(const ParserResultNick& other): AParserResult() {
     this->_command = other._command;
     this->_nickname = other._nickname;
 }
 
 
-ParcerResultNick& ParcerResultNick::operator=(const ParcerResultNick& other) {
+ParserResultNick& ParserResultNick::operator=(const ParserResultNick& other) {
     if(this != &other) {
         this->_command = other._command;
         this->_nickname = this->_nickname;
@@ -23,17 +23,17 @@ ParcerResultNick& ParcerResultNick::operator=(const ParcerResultNick& other) {
     return (*this);
 }
 
-ParcerResultNick::~ParcerResultNick() {}
+ParserResultNick::~ParserResultNick() {}
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
-void ParcerResultNick::setParams(std::vector<std::string> nickCommand) {
+void ParserResultNick::setParams(std::vector<std::string> nickCommand) {
     this->_nickname = nickCommand;
 }
 
-const std::string ParcerResultNick::getNickname(void)const {
+const std::string ParserResultNick::getNickname(void)const {
     return (this->_nickname);
 }
 /*==========================================================*/
@@ -42,7 +42,7 @@ const std::string ParcerResultNick::getNickname(void)const {
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultNick::printResult()const {
+void ParserResultNick::printResult()const {
 
     std::cout << "This user's nickname is:\n";
     std::cout << this->_nickname << std::endl;
