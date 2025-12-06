@@ -1,14 +1,14 @@
-#include "ParcerResultKick.hpp"
+#include "ParserResultKick.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
-ParcerResultKick::ParcerResultKick()
-    : AParcerResult() {
+ParserResultKick::ParserResultKick()
+    : AParserResult() {
     _command = "KICK";
 }
 
-ParcerResultKick::ParcerResultKick(const ParcerResultKick& other): AParcerResult() {
+ParserResultKick::ParserResultKick(const ParserResultKick& other): AParserResult() {
     this->_command = other._command;
     this->_kickParamsVec = other._kickParamsVec;
 	this->_kickChannelsVec = other._kickChannelsVec;
@@ -17,7 +17,7 @@ ParcerResultKick::ParcerResultKick(const ParcerResultKick& other): AParcerResult
 }
 
 
-ParcerResultKick& ParcerResultKick::operator=(const ParcerResultKick& other) {
+ParserResultKick& ParserResultKick::operator=(const ParserResultKick& other) {
     if(this != &other) {
         this->_kickParamsVec = other._kickParamsVec;
         this->_command = other._command;
@@ -28,37 +28,37 @@ ParcerResultKick& ParcerResultKick::operator=(const ParcerResultKick& other) {
     return (*this);
 }
 
-ParcerResultKick::~ParcerResultKick() {}
+ParserResultKick::~ParserResultKick() {}
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultKick::setParams(std::vector<std::string> kickCommand) {
+void ParserResultKick::setParams(std::vector<std::string> kickCommand) {
     if(!kickCommand.empty()) {
         kickCommand.erase(kickCommand.begin());  // drop the first element, which is the kick command
     }
     this->_kickParamsVec = kickCommand;
 }
 
-const std::vector<std::string> ParcerResultKick::getKickParams(void) const{
+const std::vector<std::string> ParserResultKick::getKickParams(void) const{
 	return (this->_kickParamsVec);
 }
 
-const std::vector<std::string> ParcerResultKick::getKickChannelsVec(void) const{
+const std::vector<std::string> ParserResultKick::getKickChannelsVec(void) const{
 	return(this->_kickChannelsVec);
 }
 
-const std::vector<std::string> ParcerResultKick::getKickUsersVec(void) const{
+const std::vector<std::string> ParserResultKick::getKickUsersVec(void) const{
 	return(this->_kickUsersVec);
 }
 
-const std::string ParcerResultKick::getKickComment(void) const{
+const std::string ParserResultKick::getKickComment(void) const{
 	return(this->_kickComment);
 }
 
-const std::map<int, std::vector<std::string> > ParcerResultKick::getKickParamsMap(void) const{
+const std::map<int, std::vector<std::string> > ParserResultKick::getKickParamsMap(void) const{
 	return (this->_kickParamsMap);
 }
 /*==========================================================*/
@@ -67,7 +67,7 @@ const std::map<int, std::vector<std::string> > ParcerResultKick::getKickParamsMa
 /*----------------------------------------------------------*/
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
-int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector){
+int ParserResultKick::checkKickComment (std::vector<std::string> &messageVector){
 	//  0      1        2        3
 	// KICK <channel> <user> [<comment>]
 	if (messageVector.size() == 3){
@@ -103,7 +103,7 @@ int  ParcerResultKick::checkKickComment (std::vector<std::string> &messageVector
 	return (0);
 }
 
-int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
+int ParserResultKick::fillKickParams(std::vector<std::string> messageVector){
 	
 	if (messageVector[1].find(',') != std::string::npos){
 		_kickChannelsVec = stringToVec(messageVector[1], ',');
@@ -135,7 +135,7 @@ int  ParcerResultKick::fillKickParams(std::vector<std::string> messageVector){
 	return (0);
 }
 
-int ParcerResultKick::checkKickParams(std::vector <std::string> messageVector){
+int ParserResultKick::checkKickParams(std::vector <std::string> messageVector){
 	if (messageVector.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
 	}
@@ -153,7 +153,7 @@ int ParcerResultKick::checkKickParams(std::vector <std::string> messageVector){
 /*----------------------------------------------------------*/
 /*                   SPLIT_AND_UNITE                        */
 /*----------------------------------------------------------*/
-const std::vector<std::string> ParcerResultKick::stringToVec(std::string str, char delim) {
+const std::vector<std::string> ParserResultKick::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(str);
     std::string item;
@@ -164,7 +164,7 @@ const std::vector<std::string> ParcerResultKick::stringToVec(std::string str, ch
     return result;
 }
 
-std::map<int, std::vector<std::string>> ParcerResultKick::vectorsToMap(std::vector<std::string> channels, std::vector<std::string>users){
+std::map<int, std::vector<std::string>> ParserResultKick::vectorsToMap(std::vector<std::string> channels, std::vector<std::string>users){
 	std::map <int, std::vector<std::string>> map;
 	if (channels.size() == 1 && users.size() == 1){
 		map[0].push_back(channels[0]);
@@ -189,7 +189,7 @@ std::map<int, std::vector<std::string>> ParcerResultKick::vectorsToMap(std::vect
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultKick::printResult()const {
+void ParserResultKick::printResult()const {
    
     for (std::map<std::string, std::vector<std::string> >::const_iterator it = _kickParamsMap.begin();
      it != _kickParamsMap.end();
