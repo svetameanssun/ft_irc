@@ -39,6 +39,15 @@ void ParcerResultNotice::setParams(std::vector<std::string> noticeCommand) {
 
 const std::vector<std::string> ParcerResultNotice::getNoticeParams(void) const {
   return (this->_noticeParamsVec);
+}
+
+const std::vector<std::string> ParcerResultNotice::getTargetVec(void) const {
+  return (this->_targetVec);
+}
+
+const std::string ParcerResultNotice::getNoticeMessage(void) const {
+  return (this->_noticeMessage);
+}
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
