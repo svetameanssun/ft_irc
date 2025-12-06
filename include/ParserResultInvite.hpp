@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTINVITE_HPP
-#define PARCERRESULTINVITE_HPP
+#ifndef PARSERRESULTINVITE_HPP
+#define PARSERRESULTINVITE_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultInvite : public AParcerResult {
+class ParserResultInvite : public AParserResult {
   public:
   /*================= CANONICAL FORM =================*/
-    ParcerResultInvite();
-    ParcerResultInvite(const ParcerResultInvite &other);
-    ParcerResultInvite& operator=(const ParcerResultInvite& other);
-    ~ParcerResultInvite();
+    ParserResultInvite();
+    ParserResultInvite(const ParserResultInvite &other);
+    ParserResultInvite& operator=(const ParserResultInvite& other);
+    ~ParserrResultInvite();
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> inviteCommand);
     const std::vector<std::string> getInviteParams(void) const;
