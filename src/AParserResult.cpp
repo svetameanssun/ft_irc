@@ -1,19 +1,19 @@
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
-AParcerResult::AParcerResult(){}
+AParserResult::APascerResult(){}
 
-AParcerResult::AParcerResult(std::string command){
+AParserResult::AParserResult(std::string command){
     this->_command = command;
 }
 
-AParcerResult::AParcerResult(const AParcerResult &other){
+AParserResult::AParserResult(const AParserResult &other){
     this->_command = other._command;
 }
 
-AParcerResult& AParcerResult::operator=(const AParcerResult& other){
+AParserResult& AParserResult::operator=(const AParserResult& other){
     if (this != &other)
     {
         this->_command = other._command;
@@ -21,16 +21,16 @@ AParcerResult& AParcerResult::operator=(const AParcerResult& other){
     return (*this);
 }
 
-std::string AParcerResult::getCommand()const{
+std::string AParserResult::getCommand()const{
     return (_command);
 }
 
-AParcerResult::~ AParcerResult() {} // "required if not using Microsoft extension" taken from https://learn.microsoft.com/en-us/cpp/cpp/abstract-classes-cpp?view=msvc-170
+AParserResult::~ AParserResult() {} // "required if not using Microsoft extension" taken from https://learn.microsoft.com/en-us/cpp/cpp/abstract-classes-cpp?view=msvc-170
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                   IS_VALID_CHANNEL_NAME                  */
 /*----------------------------------------------------------*/
-bool AParcerResult::isValidChanNameChar(int c) {
+bool AParserResult::isValidChanNameChar(int c) {
     if(c == '\0')
         return (false);
     else if(c == '\a')
@@ -53,7 +53,7 @@ bool AParcerResult::isValidChanNameChar(int c) {
 //checks the channel name requirements
 // and checks whether this excact channelName complies with these requirements
 // returns false if the name is not valid.
-bool AParcerResult::isValidChanName(std::string channelName) {
+bool AParserResult::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -80,7 +80,7 @@ bool AParcerResult::isValidChanName(std::string channelName) {
 /*                     IS_VALID_NICKNAME                    */
 /*----------------------------------------------------------*/
 
-bool AParcerResult::isSpecialChar(int c) {
+bool AParserResult::isSpecialChar(int c) {
     std::string specialChars = "[]\\`^{}";
     if(specialChars.find(c) == std::string::npos) {
         return (false);
@@ -88,7 +88,7 @@ bool AParcerResult::isSpecialChar(int c) {
     return (true);
 }
 
-bool AParcerResult::isValidNick(std::string nickname) {
+bool AParserResult::isValidNick(std::string nickname) {
     std::cout << nickname << "\n";
     if(nickname.empty()) {
         return (false);
