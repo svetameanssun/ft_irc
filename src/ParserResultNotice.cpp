@@ -1,20 +1,20 @@
-#include "ParcerResultNotice.hpp"
+#include "ParserResultNotice.hpp"
 
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParcerResultNotice::ParcerResultNotice()
-    : AParcerResult(){
+ParserResultNotice::ParserResultNotice()
+    : AParserResult(){
         _command = "NOTICE";
 }
 
-ParcerResultNotice::ParcerResultNotice(const ParcerResultNotice &other){
+ParserResultNotice::ParserResultNotice(const ParserResultNotice &other){
     this->_command = other._command;
     this->_noticeParamsVec = other._noticeParamsVec;
     this->_targetVec = other._targetVec;
 }
 
-ParcerResultNotice& ParcerResultNotice::operator=(const ParcerResultNotice& other){
+ParserResultNotice& ParserResultNotice::operator=(const ParserResultNotice& other){
     if(this != &other) {
         this->_noticeParamsVec = other._noticeParamsVec;
         this->_targetVec = other._targetVec;
@@ -23,29 +23,29 @@ ParcerResultNotice& ParcerResultNotice::operator=(const ParcerResultNotice& othe
     return (*this);
 }
 
-ParcerResultNotice::~ParcerResultNotice(){}
+ParserResultNotice::~ParserResultNotice(){}
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultNotice::setParams(std::vector<std::string> noticeCommand) {
+void ParserResultNotice::setParams(std::vector<std::string> noticeCommand) {
   if (!noticeCommand.empty()) {
     noticeCommand.erase(noticeCommand.begin());  // drop the first element, which is the command
   }
   this->_noticeParamsVec = noticeCommand;
 }
 
-const std::vector<std::string> ParcerResultNotice::getNoticeParams(void) const {
+const std::vector<std::string> ParserResultNotice::getNoticeParams(void) const {
   return (this->_noticeParamsVec);
 }
 
-const std::vector<std::string> ParcerResultNotice::getTargetVec(void) const {
+const std::vector<std::string> ParserResultNotice::getTargetVec(void) const {
   return (this->_targetVec);
 }
 
-const std::string ParcerResultNotice::getNoticeMessage(void) const {
+const std::string ParserResultNotice::getNoticeMessage(void) const {
   return (this->_noticeMessage);
 }
 
@@ -53,7 +53,7 @@ const std::string ParcerResultNotice::getNoticeMessage(void) const {
 /*----------------------------------------------------------*/
 /*                        SPLIT                             */
 /*----------------------------------------------------------*/
-const std::vector<std::string> ParcerResultNotice::stringToVec(std::string str, char delim) {
+const std::vector<std::string> ParserResultNotice::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(str);
     std::string item;
@@ -68,7 +68,7 @@ const std::vector<std::string> ParcerResultNotice::stringToVec(std::string str, 
 /*----------------------------------------------------------*/
 /*                       IS_VALID_PARAM                      */
 /*----------------------------------------------------------*/
-int ParcerResultNotice::checkNoticeTarget(std::string noticeTarget){
+int ParserResultNotice::checkNoticeTarget(std::string noticeTarget){
     std::vector <string> targetVec;
     targetVec = stringToVec(privmsgTarget, ',');
     for (string elem : targetVec){
@@ -82,7 +82,7 @@ int ParcerResultNotice::checkNoticeTarget(std::string noticeTarget){
     return (0);
 }
 
-int ParcerResultNotice::checkNoticeParams(std::vector <std::string> messageVector){
+int ParserResultNotice::checkNoticeParams(std::vector <std::string> messageVector){
     if (messageVector.size() == 1 ){
         return (ERR_NORECIPIENT);
     }
