@@ -1,5 +1,5 @@
-#ifndef APARCERRESULT_HPP
-#define APARCERRESULT_HPP
+#ifndef APARSERRESULT_HPP
+#define APARSERRESULT_HPP
 
 #include <iostream>
 #include <sstream>
@@ -8,15 +8,15 @@
 #include <string>
 #include "Replies.hpp"
 
-class AParcerResult {
+class AParserResult {
   public:
-    AParcerResult();
-    AParcerResult(std::string command);
-    AParcerResult(const AParcerResult &other);
-    AParcerResult& operator=(const AParcerResult& other);
+    AParserResult();
+    AParserResult(std::string command);
+    AParserResult(const AParserResult &other);
+    AParserResult& operator=(const AParserResult& other);
 
     // Polymorphic base class → pure virtual destructor
-    virtual ~AParcerResult() = 0;
+    virtual ~AParserResult() = 0;
 
     // Common getter
     std::string getCommand() const;
