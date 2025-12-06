@@ -1,18 +1,18 @@
-#include "ParcerResultPass.hpp"
+#include "ParserResultPass.hpp"
 
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParcerResultPass::ParcerResultPass() : AParcerResult() {
+ParserResultPass::ParserResultPass() : AParserResult() {
   _command = "PASS";
 }
 
-ParcerResultPass::ParcerResultPass(const ParcerResultPass& other):AParcerResult(){
+ParserResultPass::ParserResultPass(const ParserResultPass& other):AParserResult(){
   this->_command = other._command;
   this->_passParamsVec = other._passParamsVec;
 }
 
-ParcerResultPass& ParcerResultPass::operator=(const ParcerResultPass& other) {
+ParserResultPass& ParserResultPass::operator=(const ParserResultPass& other) {
   if (this != &other) {
     this->_passParamsVec = other._passParamsVec;
     this->_command = other._command;
@@ -20,7 +20,7 @@ ParcerResultPass& ParcerResultPass::operator=(const ParcerResultPass& other) {
   return (*this);
 }
 
-ParcerResultPass::~ParcerResultPass() {}
+ParserResultPass::~ParserResultPass() {}
 
 /*==========================================================*/
 
@@ -28,14 +28,14 @@ ParcerResultPass::~ParcerResultPass() {}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultPass::setParams(std::vector<std::string> passCommand) {
+void ParserResultPass::setParams(std::vector<std::string> passCommand) {
   if (!passCommand.empty()) {
     passCommand.erase(passCommand.begin());  // drop the first element, which is the command
   }
   this->_passParamsVec = passCommand;
 }
 
-const std::vector<std::string> ParcerResultPass::getPassParams(void) const {
+const std::vector<std::string> ParserResultPass::getPassParams(void) const {
   return (this->_passParamsVec);
 }
 
@@ -43,7 +43,7 @@ const std::vector<std::string> ParcerResultPass::getPassParams(void) const {
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultPass::printResult() const{
+void ParserResultPass::printResult() const{
 
     std::cout << "VECTOR:\n";
     for (std::vector<std::string>::const_iterator itVec = this->_passParamsVec.begin();
