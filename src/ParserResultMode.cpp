@@ -1,18 +1,18 @@
-#include "ParcerResultMode.hpp"
+#include "ParserResultMode.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParcerResultMode::ParcerResultMode()
-    : AParcerResult(){
+ParserResultMode::ParserResultMode()
+    : AParserResult(){
         _command = "MODE";
 }
 
-ParcerResultMode::ParcerResultMode(const ParcerResultMode &other){
+ParserResultMode::ParserResultMode(const ParserResultMode &other){
     this->_command = other._command;
     this->_modeParamsVec = other._modeParamsVec;
 }
 
-ParcerResultMode& ParcerResultMode::operator=(const ParcerResultMode& other){
+ParserResultMode& ParserResultMode::operator=(const ParserResultMode& other){
     if(this != &other) {
         this->_modeParamsVec = other._modeParamsVec;
         this->_command = other._command;
@@ -20,20 +20,20 @@ ParcerResultMode& ParcerResultMode::operator=(const ParcerResultMode& other){
     return (*this);
 }
 
-ParcerResultMode::~ParcerResultMode(){}
+ParserResultMode::~ParserResultMode(){}
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
-void ParcerResultMode::setParams(std::vector<std::string> modeCommand){
+void ParserResultMode::setParams(std::vector<std::string> modeCommand){
     if (!modeCommand.empty()) {
         modeCommand.erase(modeCommand.begin());  // drop the first element, which is the command itself
     }
     this->_modeParamsVec = modeCommand;
 }
 
-const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
+const std::vector<std::string> ParserResultMode::getModeParams(void) const{
     return (this->_modeParamsVec);
 }
 /*==========================================================*/
@@ -42,7 +42,7 @@ const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
 
-/*bool ParcerResultMode::isValidChanNameChar(int c) {
+/*bool ParserResultMode::isValidChanNameChar(int c) {
     if(c == '\0')
         return (false);
     else if(c == '\a')
@@ -62,7 +62,7 @@ const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
     }
 }*/
 
-/*bool ParcerResultMode::isValidChanName(std::string channelName) {
+/*bool ParserResultMode::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -84,7 +84,7 @@ const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
     return (true);
 }*/
 
-/*bool checkFlagCombin(int c, std::vector <std::string> messageVec){
+/*bool ParserResultMode::checkFlagCombin(int c, std::vector <std::string> messageVec){
 
     std::string noParamsFlags = "it\0";
     std::string withParamsFlags = "kol\0";
@@ -100,7 +100,7 @@ const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
     }
 }
 
-bool ParcerResultMode::isValidChanFlag(std::string channelFlag){
+bool ParserResultMode::isValidChanFlag(std::string channelFlag){
     if (channelFlag.at(0) != '-' && '+')
         return(false);
     std::string allowedFlags = "itkol\0";
@@ -207,7 +207,7 @@ bool ParcerResultMode::isValidChanFlag(std::string channelFlag){
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
-void ParcerResultMode::printResult() const{
+void ParserResultMode::printResult() const{
     std::cout << "VECTOR:\n";
     for(std::vector<std::string>::const_iterator itVec = this->_modeParamsVec.begin();
             itVec != this->_modeParamsVec.end(); ++itVec) {
@@ -243,4 +243,5 @@ void ParcerResultMode::printResult() const{
 
 /* MODE #channel
             the server will return the current modes of that channel: */
+
 
