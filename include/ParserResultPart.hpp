@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTPART_HPP
-#define PARCERRESULTPART_HPP
+#ifndef PARSERRESULTPART_HPP
+#define PARSERRESULTPART_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultPart : public AParcerResult {
+class ParserResultPart : public AParserResult {
 public:
     /*================= CANONICAL FORM =================*/
-    ParcerResultPart();
-    ParcerResultPart(const ParcerResultPart &other);
-    ParcerResultPart &operator=(const ParcerResultPart &other);
-    virtual ~ParcerResultPart();
+    ParserResultPart();
+    ParserResultPart(const ParserResultPart &other);
+    ParserResultPart &operator=(const ParserResultPart &other);
+    virtual ~ParserResultPart();
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> partCommand);
