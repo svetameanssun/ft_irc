@@ -1,21 +1,21 @@
-#ifndef PARCERRESULTPASS_HPP
-#define PARCERRESULTPASS_HPP
+#ifndef PARSERRESULTPASS_HPP
+#define PARSERRESULTPASS_HPP
 
 #include <iostream>
 #include <sstream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultPass : public AParcerResult {
+class ParserResultPass : public AParserResult {
   public:
     /*================= CANONICAL FORM =================*/
-    ParcerResultPass();
-    ParcerResultPass(const ParcerResultPass &other);
-    ParcerResultPass& operator=(const ParcerResultPass& other);
-    ~ParcerResultPass();
+    ParserResultPass();
+    ParserResultPass(const ParserResultPass &other);
+    ParserResultPass& operator=(const ParserResultPass& other);
+    ~ParserResultPass();
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> passCommand);
