@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTTOPIC_HPP
-#define PARCERRESULTTOPIC_HPP
+#ifndef PARSERRESULTTOPIC_HPP
+#define PARSERRESULTTOPIC_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultTopic : public AParcerResult {
+class ParserResultTopic : public AParserResult {
   public:
   /*================= CANONICAL FORM =================*/
-    ParcerResultTopic();
-    ParcerResultTopic(const ParcerResultTopic &other);
-    ParcerResultTopic& operator=(const ParcerResultTopic& other);
-    ~ParcerResultTopic();
+    ParserResultTopic();
+    ParserResultTopic(const ParserResultTopic &other);
+    ParserResultTopic& operator=(const ParserResultTopic& other);
+    ~ParserResultTopic();
     
   /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> topicCommand);
