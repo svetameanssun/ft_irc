@@ -1,22 +1,22 @@
-#include "ParcerResultJoin.hpp"
+#include "ParserResultJoin.hpp"
 
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
-ParcerResultJoin::ParcerResultJoin()
-    : AParcerResult() {
+ParserResultJoin::ParserResultJoin()
+    : AParserResult() {
     _command = "JOIN";
 }
 
-ParcerResultJoin::ParcerResultJoin(const ParcerResultJoin &other): AParcerResult() {
+ParserResultJoin::ParserResultJoin(const ParserResultJoin &other): AParserResult() {
     this->_command = other._command;
     this->_joinParamsVec = other._joinParamsVec;
     this->_joinChannelsVec = other._joinChannelsVec;
     this->_joinPasswordsVec = other._joinPasswordsVec;
 }
 
-ParcerResultJoin& ParcerResultJoin::operator=(const ParcerResultJoin& other) {
+ParserResultJoin& ParserResultJoin::operator=(const ParserResultJoin& other) {
     if(this != &other) {
         this->_command = other._command;
         this->_joinParamsVec = other._joinParamsVec;
@@ -26,7 +26,7 @@ ParcerResultJoin& ParcerResultJoin::operator=(const ParcerResultJoin& other) {
     return (*this);
 }
 
-ParcerResultJoin::~ParcerResultJoin() {
+ParserResultJoin::~ParserResultJoin() {
 }
 /*==========================================================*/
 
@@ -34,7 +34,7 @@ ParcerResultJoin::~ParcerResultJoin() {
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultJoin::setParams(std::vector<std::string> joinCommand) {
+void ParserResultJoin::setParams(std::vector<std::string> joinCommand) {
     if (!joinCommand.empty()) {
         joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
     }
@@ -45,19 +45,19 @@ void ParcerResultJoin::setParams(std::vector<std::string> joinCommand) {
     }
 }
 
-const std::vector <std::string> ParcerResultJoin::getJoinParamsVec(void) const {
+const std::vector <std::string> ParserResultJoin::getJoinParamsVec(void) const {
     return (_joinParamsVec);
 }
 
-const std::vector <std::string> ParcerResultJoin::getJoinChannelsVec(void) const {
+const std::vector <std::string> ParserResultJoin::getJoinChannelsVec(void) const {
     return (_joinChannelsVec);
 }
 
-const std::vector <std::string> ParcerResultJoin::getJoinPasswordsVec(void) const {
+const std::vector <std::string> ParserResultJoin::getJoinPasswordsVec(void) const {
     return (_joinPasswordsVec);
 }
 
-const bool ParcerResultJoin::getLeaveAllChansFlag(void) const{
+const bool ParserResultJoin::getLeaveAllChansFlag(void) const{
     return (_leaveAllChans);
 }
 
@@ -67,7 +67,7 @@ const bool ParcerResultJoin::getLeaveAllChansFlag(void) const{
 /*                       IS_VALID_JOIN                      */
 /*----------------------------------------------------------*/
 
-int ParcerResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
+int ParserResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
 
     std::vector <std::string> joinChannelsVec;
 
@@ -97,7 +97,7 @@ int ParcerResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
 /*----------------------------------------------------------*/
 /*                   SPLIT AND UNITE                        */
 /*----------------------------------------------------------*/
-const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, char delim) {
+const std::vector<std::string> ParserResultJoin::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(str);
     std::string item;
@@ -109,7 +109,7 @@ const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, ch
 }
 
 
-/*const std::map<std::string, std::string> ParcerResultJoin::stringsToMap(std::string keyString, std::string valueString) {
+/*const std::map<std::string, std::string> ParserResultJoin::stringsToMap(std::string keyString, std::string valueString) {
     std::vector<std::string> keyVec = stringToVec(keyString, ','); // vector of keys, channel names
     std::vector<std::string> valueVec = stringToVec(valueString, ','); // vector of channel passwords
     std::map<std::string, std::string> resMap;
@@ -136,7 +136,7 @@ const std::vector<std::string> ParcerResultJoin::stringToVec(std::string str, ch
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
-void ParcerResultJoin::printResult() const {
+void ParserResultJoin::printResult() const {
     for(size_t i = 0; i < _joinChannelsVec.size(); ++i){
         std::cout << "CHANNEL NAME: " << _joinChannelsVec.at(i);
         if (i < _joinPasswordsVec.size()){
