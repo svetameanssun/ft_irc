@@ -12,7 +12,6 @@ ParcerResultPass::ParcerResultPass(const ParcerResultPass& other):AParcerResult(
   this->_passParamsVec = other._passParamsVec;
 }
 
-
 ParcerResultPass& ParcerResultPass::operator=(const ParcerResultPass& other) {
   if (this != &other) {
     this->_passParamsVec = other._passParamsVec;
@@ -40,8 +39,6 @@ const std::vector<std::string> ParcerResultPass::getPassParams(void) const {
   return (this->_passParamsVec);
 }
 
-
-
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
@@ -53,6 +50,5 @@ void ParcerResultPass::printResult() const{
          itVec != this->_passParamsVec.end(); ++itVec) {
         std::cout << *itVec << "\n";
     }
-
 }
 /*==========================================================*/
