@@ -37,7 +37,7 @@ const std::vector<std::string> ParcerResultQuit::getQuitParams(void) const{
 	return (this->_quitParamsVec);
 }
 
-const std::vector<std::string> getQuitMessage(void) const{
+const std::vector<std::string> ParcerResultQuit::getQuitMessage(void) const{
 	return(this->_quitMessage);
 }
 
@@ -48,7 +48,6 @@ const std::vector<std::string> getQuitMessage(void) const{
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
 void  ParcerResultQuit::collectQuitMessage (std::vector<std::string> &messageVector){
-  
 	if (messageVector.size() == 1){
     this->_quitMessage = "default";
   }
@@ -76,7 +75,7 @@ void  ParcerResultQuit::collectQuitMessage (std::vector<std::string> &messageVec
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultPart::printResult()const {
+void ParcerResultQuit::printResult()const {
     std::cout << "Quit Message:\n"
     std::cout << this->_quitMessage << std::endl;   
 }
