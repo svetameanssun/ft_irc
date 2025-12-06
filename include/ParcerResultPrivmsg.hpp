@@ -19,6 +19,8 @@ class ParcerResultPrivmsg : public AParcerResult {
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> privmsgCommand);
     const std::vector<std::string> getPrivmsgParams(void) const;
+    const std::vector<std::string> getTargetVec(void) const;
+    const std::string getPrivmsgMessage(void) const;
 
     /*================= VALIDATION ======================*/
     //bool isSpecialChar(int c);
