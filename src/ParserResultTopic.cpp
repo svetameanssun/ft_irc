@@ -1,18 +1,18 @@
-#include "ParcerResultTopic.hpp"
+#include "ParserResultTopic.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParcerResultTopic::ParcerResultTopic()
+ParserResultTopic::ParserResultTopic()
     : AParcerResult(){
         _command = "TOPIC";
 }
 
-ParcerResultTopic::ParcerResultTopic(const ParcerResultTopic &other){
+ParserResultTopic::ParserResultTopic(const ParserResultTopic &other){
     this->_command = other._command;
     this->_topicParamsVec = other._topicParamsVec;
 }
 
-ParcerResultTopic& ParcerResultTopic::operator=(const ParcerResultTopic& other){
+ParserResultTopic& ParserResultTopic::operator=(const ParserResultTopic& other){
     if(this != &other) {
         this->_topicParamsVec = other._topicParamsVec;
         this->_command = other._command;
@@ -20,7 +20,7 @@ ParcerResultTopic& ParcerResultTopic::operator=(const ParcerResultTopic& other){
     return (*this);
 }
 
-ParcerResultTopic::~ParcerResultTopic(){}
+ParserResultTopic::~ParserResultTopic(){}
 
 /*==========================================================*/
 
@@ -28,7 +28,7 @@ ParcerResultTopic::~ParcerResultTopic(){}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultTopic::setParams(std::vector<std::string> topicCommand) {
+void ParserResultTopic::setParams(std::vector<std::string> topicCommand) {
   if (!topicCommand.empty()) {
     topicCommand.erase(topicCommand.begin());  // drop the first element, which is the command
   }
@@ -47,7 +47,7 @@ const std::string ParcerResultTopic::getTopicMessage(void) const{
 /*----------------------------------------------------------*/
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
-int ParcerResultTopic::checkTopicParams(std::vector <std::string> messageVector){
+int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector){
     if (messageVector.size() == 1){
         return (ERR_NEEDMOREPARAMS);
     }
@@ -72,7 +72,7 @@ int ParcerResultTopic::checkTopicParams(std::vector <std::string> messageVector)
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultTopic::printResult() const{
+void ParserResultTopic::printResult() const{
 
     std::cout << "VECTOR:\n";
     for (std::vector<std::string>::const_iterator itVec = this->_topicParamsVec.begin();
