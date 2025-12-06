@@ -1,20 +1,20 @@
-#include "ParcerResultQuit.hpp"
+#include "ParserResultQuit.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
-ParcerResultQuit::ParcerResultQuit()
-    : AParcerResult() {
+ParserResultQuit::ParserResultQuit()
+    : AParserResult() {
     _command = "QUIT";
 }
 
-ParcerResultQuit::ParcerResultQuit(const ParcerResultQuit& other): AParcerResult() {
+ParserResultQuit::ParserResultQuit(const ParserResultQuit& other): AParserResult() {
     this->_command = other._command;
     this->_quitParamsVec = other._quitParamsVec;
 }
 
 
-ParcerResultQuit& ParcerResultQuit::operator=(const ParcerResultQuit& other) {
+ParserResultQuit& ParserResultQuit::operator=(const ParserResultQuit& other) {
     if(this != &other) {
         this->_quitParamsVec = other._quitParamsVec;
         this->_command = other._command;
@@ -22,22 +22,22 @@ ParcerResultQuit& ParcerResultQuit::operator=(const ParcerResultQuit& other) {
     return (*this);
 }
 
-ParcerResultPart::~ParcerResultPart() {}
+ParserResultPart::~ParserResultPart() {}
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultQuit::setParams(std::vector<std::string> quitCommand) {
+void ParserResultQuit::setParams(std::vector<std::string> quitCommand) {
     this->_quitParamsVec = quitCommand;
 }
 
-const std::vector<std::string> ParcerResultQuit::getQuitParams(void) const{
+const std::vector<std::string> ParserResultQuit::getQuitParams(void) const{
 	return (this->_quitParamsVec);
 }
 
-const std::vector<std::string> ParcerResultQuit::getQuitMessage(void) const{
+const std::vector<std::string> ParserResultQuit::getQuitMessage(void) const{
 	return(this->_quitMessage);
 }
 
@@ -47,7 +47,7 @@ const std::vector<std::string> ParcerResultQuit::getQuitMessage(void) const{
 /*----------------------------------------------------------*/
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
-void  ParcerResultQuit::collectQuitMessage (std::vector<std::string> &messageVector){
+void ParserResultQuit::collectQuitMessage (std::vector<std::string> &messageVector){
 	if (messageVector.size() == 1){
     this->_quitMessage = "default";
   }
@@ -75,7 +75,7 @@ void  ParcerResultQuit::collectQuitMessage (std::vector<std::string> &messageVec
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultQuit::printResult()const {
+void ParserResultQuit::printResult()const {
     std::cout << "Quit Message:\n"
     std::cout << this->_quitMessage << std::endl;   
 }
