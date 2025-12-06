@@ -1,20 +1,20 @@
-#include "ParcerResultUser.hpp"
+#include "ParserResultUser.hpp"
 
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParcerResultUser::ParcerResultUser(): AParcerResult() {
+ParserResultUser::ParserResultUser(): AParserResult() {
 	_command = "USER";
 }
 
-ParcerResultUser::ParcerResultUser(const ParcerResultUser &other): AParcerResult(){
+ParserResultUser::ParserResultUser(const ParserResultUser &other): AParserResult(){
 	this->_userParamsVec = other._userParamsVec;
 	this->_command = other._command;
 	this->_realname = other._realname;
 	this->_nickname = other._nickname;
 }
 
-ParcerResultUser& ParcerResultUser::operator=(const ParcerResultUser& other){
+ParserResultUser& ParserResultUser::operator=(const ParserResultUser& other){
 
 	if (this != &other){
 		this->_userParamsVec = other._userParamsVec;
@@ -24,7 +24,7 @@ ParcerResultUser& ParcerResultUser::operator=(const ParcerResultUser& other){
 	}
 	return (*this);
 }
-ParcerResultUser::~ParcerResultUser(){}
+ParserResultUser::~ParserResultUser(){}
 
 
 /*==========================================================*/
@@ -32,7 +32,7 @@ ParcerResultUser::~ParcerResultUser(){}
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
-void ParcerResultUser::setParams(std::vector<std::string> userCommand){
+void ParserResultUser::setParams(std::vector<std::string> userCommand){
 	if (!userCommand.empty()) {
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
   	}
@@ -53,15 +53,15 @@ void ParcerResultUser::setParams(std::vector<std::string> userCommand){
 	}
 }
 
-const std::vector<std::string> ParcerResultUser::getUserParams(void) const{
+const std::vector<std::string> ParserResultUser::getUserParams(void) const{
 	return (this->_userParamsVec);
 }
 
-const std::string ParcerResultUser::getRealname(void) const{
+const std::string ParserResultUser::getRealname(void) const{
 	return (this->_realname);
 }
 
-const std::string ParcerResultUser::getNickname(void) const{
+const std::string ParserResultUser::getNickname(void) const{
 	return (this->_nickname);
 }
 
@@ -70,7 +70,7 @@ const std::string ParcerResultUser::getNickname(void) const{
 /*                      CHECK COMMAND                       */
 /*----------------------------------------------------------*/
 
-bool ParcerResultUser::isAllowedChar(char c){
+bool ParserResultUser::isAllowedChar(char c){
     std::string prohibitedChars;
 	//prohibitedChars.push_back('\0');
 	prohibitedChars += "@\n\r ";
@@ -81,7 +81,7 @@ bool ParcerResultUser::isAllowedChar(char c){
     return (false);
 }
 
-int ParcerResultUser::checkUserParams(std::vector<std::string> messageVec){
+int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	
 	if (messageVec.size() > 15)
 		return (ERR_NEEDLESSPARAMS);
@@ -101,7 +101,7 @@ int ParcerResultUser::checkUserParams(std::vector<std::string> messageVec){
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultUser::printResult() const{
+void ParserResultUser::printResult() const{
 	std::cout << this->_nickname << "'s real name is" << std::endl;
     std::cout << this->_realname << std::endl;
 }
