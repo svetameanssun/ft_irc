@@ -1,19 +1,19 @@
-#include "ParcerResultPrivmsg.hpp"
+#include "ParserResultPrivmsg.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParcerResultPrivmsg::ParcerResultPrivmsg()
-    : AParcerResult(){
+ParserResultPrivmsg::ParserResultPrivmsg()
+    : AParserResult(){
         _command = "PRIVMSG";
 }
 
-ParcerResultPrivmsg::ParcerResultPrivmsg(const ParcerResultPrivmsg &other){
+ParserResultPrivmsg::ParserResultPrivmsg(const ParserResultPrivmsg &other){
     this->_command = other._command;
     this->_privmsgParamsVec = other._privmsgParamsVec;
     this->_targetVec = other._targetVec;
 }
 
-ParcerResultPrivmsg& ParcerResultPrivmsg::operator=(const ParcerResultPrivmsg& other){
+ParserResultPrivmsg& ParserResultPrivmsg::operator=(const ParserResultPrivmsg& other){
     if(this != &other) {
         this->_privmsgParamsVec = other._privmsgParamsVec;
         this->_targetVec = other._targetVec;
@@ -22,29 +22,29 @@ ParcerResultPrivmsg& ParcerResultPrivmsg::operator=(const ParcerResultPrivmsg& o
     return (*this);
 }
 
-ParcerResultPrivmsg::~ParcerResultPrivmsg(){}
+ParserResultPrivmsg::~ParserResultPrivmsg(){}
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultPrivmsg::setParams(std::vector<std::string> privmsgCommand) {
+void ParserResultPrivmsg::setParams(std::vector<std::string> privmsgCommand) {
   if (!privmsgCommand.empty()) {
     privmsgCommand.erase(privmsgCommand.begin());  // drop the first element, which is the command
   }
   this->_privmsgParamsVec = privmsgCommand;
 }
 
-const std::vector<std::string> ParcerResultPrivmsg::getPrivmsgParams(void) const {
+const std::vector<std::string> ParserResultPrivmsg::getPrivmsgParams(void) const {
   return (this->_privmsgParamsVec);
 }
 
-const std::vector<std::string> ParcerResultPrivmsg::getTargetVec(void) const {
+const std::vector<std::string> ParserResultPrivmsg::getTargetVec(void) const {
   return (this->_targetVec);
 }
 
-const std::string ParcerResultPrivmsg::getPrivmsgMessage(void) const {
+const std::string ParserResultPrivmsg::getPrivmsgMessage(void) const {
   return (this->_privmsgMessage);
 }
 
@@ -52,7 +52,7 @@ const std::string ParcerResultPrivmsg::getPrivmsgMessage(void) const {
 /*----------------------------------------------------------*/
 /*                        SPLIT                             */
 /*----------------------------------------------------------*/
-const std::vector<std::string> ParcerResultPrivmsg::stringToVec(std::string str, char delim) {
+const std::vector<std::string> ParserResultPrivmsg::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(str);
     std::string item;
@@ -67,7 +67,7 @@ const std::vector<std::string> ParcerResultPrivmsg::stringToVec(std::string str,
 /*----------------------------------------------------------*/
 /*                       IS_VALID_PARAM                      */
 /*----------------------------------------------------------*/
-int ParcerResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
+int ParserResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
     std::vector <string> targetVec;
     targetVec = stringToVec(privmsgTarget, ',');
     for (string elem : targetVec){
@@ -81,7 +81,7 @@ int ParcerResultPrivmsg::checkPrivmsgTarget(std::string privmsgTarget){
     return (0);
 }
 
-int ParcerResultPrivmsg::checkPrivmsgParams(std::vector <std::string> messageVector){
+int ParserResultPrivmsg::checkPrivmsgParams(std::vector <std::string> messageVector){
     if (messageVector.size() == 1 ){
         return (ERR_NORECIPIENT);
     }
