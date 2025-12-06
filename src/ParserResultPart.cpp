@@ -1,21 +1,21 @@
-#include "ParcerResultPart.hpp"
+#include "ParserResultPart.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
-ParcerResultPart::ParcerResultPart()
-    : AParcerResult() {
+ParserResultPart::ParserResultPart()
+    : AParserResult() {
     _command = "PART";
 }
 
-ParcerResultPart::ParcerResultPart(const ParcerResultPart& other): AParcerResult() {
+ParserResultPart::ParserResultPart(const ParserResultPart& other): AParserResult() {
     this->_command = other._command;
     this->_partParamsVec = other._partParamsVec;
 	this->_partMessage = other._partMessage;
 }
 
 
-ParcerResultPart& ParcerResultPart::operator=(const ParcerResultPart& other) {
+ParserResultPart& ParserResultPart::operator=(const ParserResultPart& other) {
     if(this != &other) {
         this->_partParamsVec = other._partParamsVec;
         this->_command = other._command;
@@ -24,28 +24,28 @@ ParcerResultPart& ParcerResultPart::operator=(const ParcerResultPart& other) {
     return (*this);
 }
 
-ParcerResultPart::~ParcerResultPart() {}
+ParserResultPart::~ParserResultPart() {}
 
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 
-void ParcerResultPart::setParams(std::vector<std::string> partMessage) {
+void ParserResultPart::setParams(std::vector<std::string> partMessage) {
     if(!partMessage.empty()) {
         partMessage.erase(partMessage.begin());  // drop the first element (word "PART")
     }
     this->_partParamsVec.push_back(partMessage);
 }
 
-const std::vector<std::string> ParcerResultPart::getPartParams(void) const{
+const std::vector<std::string> ParserResultPart::getPartParams(void) const{
 	return (this->_partParamsVec);
 }
 
-const std::vector<std::string> ParcerResultPart::getPartChannelsVec(void) const{
+const std::vector<std::string> ParserResultPart::getPartChannelsVec(void) const{
 	return(this->_partChannelsVec);
 }
-const std::string ParcerResultPart::getPartMessage(void) const{
+const std::string ParserResultPart::getPartMessage(void) const{
 	return(this->_partChannelsVec);
 }
 /*==========================================================*/
@@ -54,7 +54,7 @@ const std::string ParcerResultPart::getPartMessage(void) const{
 /*----------------------------------------------------------*/
 //It is important to use a reference here, 
 // because I will cut-off the trailing ending
-int  ParcerResultPart::checkPartMessage (std::vector<std::string> &messageVector){
+int ParserResultPart::checkPartMessage (std::vector<std::string> &messageVector){
 	//  0      1        	2      
 	// PART <channel>  [<part message>]
 	if (messageVector.size() == 2){
@@ -91,7 +91,7 @@ int  ParcerResultPart::checkPartMessage (std::vector<std::string> &messageVector
 	return (0);
 }
 
-int  ParcerResultPart::fillPartParams(std::vector<std::string> messageVector){
+int ParserResultPart::fillPartParams(std::vector<std::string> messageVector){
 	if (messageVector[1].find(',') != std::string::npos){
 		_partChannelsVec = stringToVec(messageVector[1], ',');
 	}
@@ -107,7 +107,7 @@ int  ParcerResultPart::fillPartParams(std::vector<std::string> messageVector){
 	return (0);
 }
 
-int ParcerResultPart::checkPartParams(std::vector <std::string> messageVector){
+int ParserResultPart::checkPartParams(std::vector <std::string> messageVector){
 	//PART <channel> *( "," <channel> ) [<Part Message>]
 	if (messageVector.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
@@ -126,7 +126,7 @@ int ParcerResultPart::checkPartParams(std::vector <std::string> messageVector){
 /*----------------------------------------------------------*/
 /*                   SPLIT_AND_UNITE                        */
 /*----------------------------------------------------------*/
-const std::vector<std::string> ParcerResultPart::stringToVec(std::string str, char delim) {
+const std::vector<std::string> ParserResultPart::stringToVec(std::string str, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(str);
     std::string item;
@@ -141,7 +141,7 @@ const std::vector<std::string> ParcerResultPart::stringToVec(std::string str, ch
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
 
-void ParcerResultPart::printResult()const {
+void ParserResultPart::printResult()const {
    
     std::cout << "User wants to leave channel(s):\n"
 	for(size_t i = 0; i < _partChannelsVec.size(); i++){
