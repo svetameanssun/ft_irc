@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTNICK_HPP
-#define PARCERRESULTNICK_HPP
+#ifndef PARSERRESULTNICK_HPP
+#define PARSERRESULTNICK_HPP
 
 #include <iostream>
 #include <sstream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultNick : public AParcerResult {
+class ParserResultNick : public AParserResult {
   public:
-    ParcerResultNick();
-    ParcerResultNick(const ParcerResultNick &other);
-    ParcerResultNick& operator=(const ParcerResultNick& other);
-    ~ParcerResultNick();
+    ParserResultNick();
+    ParserResultNick(const ParserResultNick &other);
+    ParserResultNick& operator=(const ParserResultNick& other);
+    ~ParserResultNick();
     void setParams(std::vector<std::string> nickCommand);
     const std::string getNickname(void) const;
     void printResult() const;
