@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTQUIT_HPP
-#define PARCERRESULTQUIT_HPP
+#ifndef PARSERRESULTQUIT_HPP
+#define PARSERRESULTQUIT_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultQuit : public AParcerResult {
+class ParserResultQuit : public AParserResult {
 public:
     /*================= CANONICAL FORM =================*/
-    ParcerResultQuit();
-    ParcerResultQuit(const ParcerResultQuit &other);
-    ParcerResultQuit &operator=(const ParcerResultQuit &other);
-    virtual ~ParcerResultQuit();
+    ParserResultQuit();
+    ParserResultQuit(const ParserResultQuit &other);
+    ParserResultQuit &operator=(const ParserResultQuit &other);
+    virtual ~ParserResultQuit();
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> quitCommand);
