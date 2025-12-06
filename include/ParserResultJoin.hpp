@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTJOIN_HPP
-#define PARCERRESULTJOIN_HPP
+#ifndef PARSERRESULTJOIN_HPP
+#define PARSERRESULTJOIN_HPP
 
 #include <iostream>
 #include <sstream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultJoin : public AParcerResult {
+class ParserResultJoin : public AParserResult {
   public:
-    ParcerResultJoin();
-    ParcerResultJoin(const ParcerResultJoin &other);
-    ParcerResultJoin& operator=(const ParcerResultJoin& other);
-    ~ParcerResultJoin();
+    ParserResultJoin();
+    ParserResultJoin(const ParserResultJoin &other);
+    ParserResultJoin& operator=(const ParserResultJoin& other);
+    ~ParserResultJoin();
   
     const std::vector<std::string> stringToVec(std::string string, char devisor);
     //const std::map<std::string, std::string> stringsToMap(std::string keyString, std::string valueString);
