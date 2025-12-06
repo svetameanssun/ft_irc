@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTPRIVMSG_HPP
-#define PARCERRESULTPRIVMSG_HPP
+#ifndef PARSERRESULTPRIVMSG_HPP
+#define PARSERRESULTPRIVMSG_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultPrivmsg : public AParcerResult {
+class ParserResultPrivmsg : public AParserResult {
   public:
     /*================= CANONICAL FORM =================*/
-    ParcerResultPrivmsg();
-    ParcerResultPrivmsg(const ParcerResultPrivmsg &other);
-    ParcerResultPrivmsg& operator=(const ParcerResultPrivmsg& other);
-    ~ParcerResultPrivmsg();
+    ParserResultPrivmsg();
+    ParserResultPrivmsg(const ParserResultPrivmsg &other);
+    ParserResultPrivmsg& operator=(const ParserResultPrivmsg& other);
+    ~ParserResultPrivmsg();
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> privmsgCommand);
