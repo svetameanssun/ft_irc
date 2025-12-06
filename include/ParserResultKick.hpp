@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTKICK_HPP
-#define PARCERRESULTKICK_HPP
+#ifndef PARSERRESULTKICK_HPP
+#define PARSERRESULTKICK_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultKick : public AParcerResult {
+class ParserResultKick : public AParserResult {
 public:
     /*================= CANONICAL FORM =================*/
-    ParcerResultKick();
-    ParcerResultKick(const ParcerResultKick &other);
-    ParcerResultKick &operator=(const ParcerResultKick &other);
-    virtual ~ParcerResultKick();
+    ParserResultKick();
+    ParserResultKick(const ParserResultKick &other);
+    ParserResultKick &operator=(const ParserResultKick &other);
+    virtual ~ParserResultKick();
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> kickCommand);
