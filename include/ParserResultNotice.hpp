@@ -1,20 +1,20 @@
-#ifndef PARCERRESULTNOTICE_HPP
-#define PARCERRESULTNOTICE_HPP
+#ifndef PARSERRESULTNOTICE_HPP
+#define PARSERRESULTNOTICE_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultNotice : public AParcerResult {
+class ParserResultNotice : public AParserResult {
   public:
     /*================= CANONICAL FORM =================*/
-    ParcerResultNotice();
-    ParcerResultNotice(const ParcerResultNotice &other);
-    ParcerResultNotice& operator=(const ParcerResultNotice& other);
-    ~ParcerResultNotice();
+    ParserResultNotice();
+    ParserResultNotice(const ParserResultNotice &other);
+    ParserResultNotice& operator=(const ParserResultNotice& other);
+    ~ParserResultNotice();
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> noticeCommand);
