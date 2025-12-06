@@ -39,6 +39,15 @@ void ParcerResultPrivmsg::setParams(std::vector<std::string> privmsgCommand) {
 const std::vector<std::string> ParcerResultPrivmsg::getPrivmsgParams(void) const {
   return (this->_privmsgParamsVec);
 }
+
+const std::vector<std::string> ParcerResultPrivmsg::getTargetVec(void) const {
+  return (this->_targetVec);
+}
+
+const std::string ParcerResultPrivmsg::getPrivmsgMessage(void) const {
+  return (this->_privmsgMessage);
+}
+
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                        SPLIT                             */
