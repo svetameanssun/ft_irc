@@ -24,7 +24,6 @@ ParcerResultTopic::~ParcerResultTopic(){}
 
 /*==========================================================*/
 
-
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
@@ -38,6 +37,10 @@ void ParcerResultTopic::setParams(std::vector<std::string> topicCommand) {
 
 const std::vector<std::string> ParcerResultTopic::getTopicParams(void) const {
   return (this->_topicParamsVec);
+}
+
+const std::string ParcerResultTopic::getTopicMessage(void) const{
+    return (this->_topicMessage);
 }
 
 /*==========================================================*/
@@ -76,7 +79,6 @@ void ParcerResultTopic::printResult() const{
          itVec != this->_topicParamsVec.end(); ++itVec) {
         std::cout << *itVec << "\n";
     }
-
 }
 /*==========================================================*/
 
