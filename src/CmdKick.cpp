@@ -15,7 +15,7 @@ void CommandHandler::cmdKick(Client *client, AParcerResult *result)
                                     "KICK :Not enough parameters");
         return;
     }
-
+    
     //TODO: be sure which one is in which position
     const std::string &chanName = params.at(0);
     const std::string &targetNick = params.at(1);
