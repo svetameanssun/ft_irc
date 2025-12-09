@@ -1,11 +1,11 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdInvite(Client *client, AParcerResult *result)
+void CommandHandler::cmdInvite(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
 
-    ParcerResultInvite *result2 = static_cast<ParcerResultInvite*>(result);
+    ParserResultInvite *result2 = static_cast<ParserResultInvite*>(result);
     const std::vector<std::string> params = result2->getInviteParams();
     if (params.size() < 2)
     {

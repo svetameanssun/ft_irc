@@ -1,11 +1,11 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdUser(Client *client, AParcerResult *result)
+void CommandHandler::cmdUser(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
     
-    ParcerResultUser *result2 = static_cast<ParcerResultUser*>(result);
+    ParserResultUser *result2 = static_cast<ParserResultUser*>(result);
     
 
     //It should be done in the parser 

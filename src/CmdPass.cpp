@@ -1,11 +1,11 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdPass(Client *client, AParcerResult *result)
+void CommandHandler::cmdPass(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
     
-    ParcerResultPass *result2 = static_cast<ParcerResultPass*>(result);
+    ParserResultPass *result2 = static_cast<ParserResultPass*>(result);
     
     if (client->isRegistered())
     {

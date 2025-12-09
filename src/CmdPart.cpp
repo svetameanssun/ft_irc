@@ -2,12 +2,12 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdPart(Client *client, AParcerResult *result)
+void CommandHandler::cmdPart(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
 
     //TODO: Change for the good class type
-    AParcerResult *result2 = static_cast<ParcerResultPrivmsg*>(result);
+    AParserResult *result2 = static_cast<ParserResultPrivmsg*>(result);
 
     if (result2->getCommand().c_str()[0] != 'P')
     {

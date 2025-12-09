@@ -1,11 +1,11 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdKick(Client *client, AParcerResult *result)
+void CommandHandler::cmdKick(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
 
-    ParcerResultKick *result2 = static_cast<ParcerResultKick*>(result);
+    ParserResultKick *result2 = static_cast<ParserResultKick*>(result);
 
     const std::vector<std::string> params = result2->getKickParams();
     if (params.size() < 2)

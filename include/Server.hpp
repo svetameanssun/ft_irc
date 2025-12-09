@@ -31,7 +31,7 @@ class Server
         std::string                 _password;      // optional server password
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
         bool                        _running;       // server loop flag
-        AParcerResult              *_parcingResult; // result of the parse
+        AParserResult              *_parcingResult; // result of the parse
 
         CommandHandler              _cmdHandler;    
         ClientManager               _clientManager;

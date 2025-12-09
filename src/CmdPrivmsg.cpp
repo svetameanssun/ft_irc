@@ -1,7 +1,7 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdPrivmsg(Client *client, AParcerResult *result)
+void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
@@ -13,7 +13,7 @@ void CommandHandler::cmdPrivmsg(Client *client, AParcerResult *result)
         return;
     }
 
-    ParcerResultPrivmsg *res = static_cast<ParcerResultPrivmsg*>(result);
+    ParserResultPrivmsg *res = static_cast<ParserResultPrivmsg*>(result);
     std::vector<std::string> params = res->getPrivmsgParams();
 
     if (params.size() < 2)

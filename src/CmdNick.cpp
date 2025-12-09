@@ -1,12 +1,12 @@
 #include "Server.hpp"
 #include "CommandHandler.hpp"
 
-void CommandHandler::cmdNick(Client *client, AParcerResult *result)
+void CommandHandler::cmdNick(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
 
-    ParcerResultNick *result2 = static_cast<ParcerResultNick*>(result);
+    ParserResultNick *result2 = static_cast<ParserResultNick*>(result);
 
     //Done in the parsing 
     //if (args.empty())
@@ -16,7 +16,7 @@ void CommandHandler::cmdNick(Client *client, AParcerResult *result)
     //    return;
     //}
 
-    const std::string newNick = result2->getNickParams().at(0);
+    const std::string newNick = result2->getNickname();
 
     //It should be done in the parser 
     // check nickname validity basic rules (length > 0). We can add further validation later.

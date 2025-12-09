@@ -9,7 +9,7 @@ CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
 
 // Entry point: dispatch commands
-void CommandHandler::execute(Client *client, const std::string &command, AParcerResult *result)
+void CommandHandler::execute(Client *client, const std::string &command, AParserResult *result)
 {
     //TODO:(Optional) Change for switch, or pointers to functions :)
     if (command == "PASS")

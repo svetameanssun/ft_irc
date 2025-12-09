@@ -2,11 +2,11 @@
 #include "Server.hpp"
 
 //TODO: Adapt logic so it is only done by operators of the channel
-void CommandHandler::cmdTopic(Client *client, AParcerResult *result)
+void CommandHandler::cmdTopic(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
 
-    ParcerResultTopic *result2 = static_cast<ParcerResultTopic*>(result);
+    ParserResultTopic *result2 = static_cast<ParserResultTopic*>(result);
     const std::vector<std::string> params = result2->getTopicParams();
     if (params.empty())
     {

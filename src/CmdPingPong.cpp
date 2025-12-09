@@ -1,7 +1,7 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-/*void CommandHandler::cmdPing(Client *client, AParcerResult *result)
+/*void CommandHandler::cmdPing(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
@@ -20,7 +20,7 @@
 }
 }*/
 
-void CommandHandler::cmdPong(Client *client, AParcerResult *result)
+void CommandHandler::cmdPong(Client *client, AParserResult *result)
 {
     (void) result;
 

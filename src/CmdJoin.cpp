@@ -2,7 +2,7 @@
 #include "Server.hpp"
 
 // Implementation: JOIN
-void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
+void CommandHandler::cmdJoin(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
@@ -16,7 +16,7 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
         return;
     }
 
-    ParcerResultJoin *result2 = static_cast<ParcerResultJoin*>(result);
+    ParserResultJoin *result2 = static_cast<ParserResultJoin*>(result);
 
     //Should be done by the parser
     //if (args.empty())
@@ -25,7 +25,7 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
     //    return;
     //}
     //TODO: Can have multiple channels, we need to adapt the logic; right now it is made for just one channel
-    const std::map<std::string, std::string> &joinParams = result2->getJoinParamsMap();
+    const std::vector<std::string> &joinParams = result2->getJoinParamsVec();
     
     //// ✅ Special case: JOIN 0 → leave all channels
     //if (joinParams.size() == 1 && joinParams.begin()->first == "0")
@@ -42,7 +42,7 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
     //    return;
     //}
     // ✅ Iterate over channel,key pairs
-    for (std::map<std::string, std::string>::const_iterator it = joinParams.begin();
+    /*for (std::vector<std::string>::const_iterator it = joinParams.begin();
          it != joinParams.end(); ++it)
     {
         const std::string &key = it->first;
@@ -147,4 +147,6 @@ void CommandHandler::cmdJoin(Client *client, AParcerResult *result)
         // ✅ Remove invite after success
         chan->removeFromInviteList(client->getFd());
     }
+        */
+    log_err("CmdJoin not implemented");
 }

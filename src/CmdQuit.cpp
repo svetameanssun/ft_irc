@@ -1,7 +1,7 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-/*void CommandHandler::cmdQuit(Client *client, AParcerResult *result)
+/*void CommandHandler::cmdQuit(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
 

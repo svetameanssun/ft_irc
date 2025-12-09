@@ -76,9 +76,9 @@ int Server::launchParcing(std::string messageStr)
 	}
 	
 	int result = parcer.commandProccess();//
-	if (!parcer.getCommandDispatcher().getParcerResult())
+	if (!parcer.getCommandDispatcher().getParserResult())
 		return (result);
-	this->_parcingResult = parcer.getCommandDispatcher().getParcerResult();
+	this->_parcingResult = parcer.getCommandDispatcher().getParserResult();
 	return result;
 }
 

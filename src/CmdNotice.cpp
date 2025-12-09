@@ -1,14 +1,14 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdNotice(Client *client, AParcerResult *result)
+void CommandHandler::cmdNotice(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
     if (!client->isRegistered())
         return; // No replies for NOTICE
 
-    ParcerResultPrivmsg *res = static_cast<ParcerResultPrivmsg*>(result);
+    ParserResultPrivmsg *res = static_cast<ParserResultPrivmsg*>(result);
     std::vector<std::string> params = res->getPrivmsgParams();
 
     if (params.size() < 2)

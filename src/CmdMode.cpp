@@ -4,7 +4,7 @@
 
 /*
 //TODO: Very big command, change it into smaller pieces; refactor and adapt the logic 
-void CommandHandler::cmdMode(Client *client, AParcerResult *result)
+void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
     if (!client)
         return;

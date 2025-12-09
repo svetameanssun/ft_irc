@@ -2,22 +2,25 @@
 #ifndef COMMANDDISPATCHER_HPP
 #define COMMANDDISPATCHER_HPP
 #include <iostream>
- #include <sstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <map>
 
 
 #include "Replies.hpp"
-#include "ParcerResultNick.hpp"
-#include "ParcerResultJoin.hpp"
-#include "ParcerResultPass.hpp"
-#include "ParcerResultUser.hpp"
-#include "ParcerResultMode.hpp"
-#include "ParcerResultPrivmsg.hpp"
-#include "ParcerResultTopic.hpp"
-#include "ParcerResultKick.hpp"
-#include "ParcerResultInvite.hpp"
+#include "ParserResultNick.hpp"
+#include "ParserResultJoin.hpp"
+#include "ParserResultPass.hpp"
+#include "ParserResultUser.hpp"
+#include "ParserResultMode.hpp"
+#include "ParserResultPrivmsg.hpp"
+#include "ParserResultTopic.hpp"
+#include "ParserResultKick.hpp"
+#include "ParserResultInvite.hpp"
+#include "ParserResultPart.hpp"
+#include "ParserResultQuit.hpp"
+#include "ParserResultNotice.hpp"
 
 
 class CommandDispatcher{
@@ -27,10 +30,10 @@ class CommandDispatcher{
 		CommandDispatcher&operator=(const CommandDispatcher &other);
 		~CommandDispatcher();
 		int dispatch(std::vector <std::string> &messageVec);
-		AParcerResult * getParcerResult() const;
+		AParserResult * getParserResult() const;
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& getDispatcherMap() const;
 	private:
-		AParcerResult *_parcerResult; // We have to delete it manually after pasing the data!!!
+		AParserResult *_parserResult; // We have to delete it manually after pasing the data!!!
 
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> &messageVec)> dispatcherMap;
 		int dispatchPass(std::vector <std::string> &messageVec);
@@ -38,11 +41,13 @@ class CommandDispatcher{
 		int dispatchUser(std::vector <std::string> &messageVec);
 		int dispatchQuit(std::vector <std::string> &messageVec);
 		int dispatchJoin(std::vector <std::string> &messageVec);
+		int dispatchPart(std::vector <std::string> &messageVec);
 		int dispatchMode(std::vector <std::string> &messageVec);
 		int dispatchTopic(std::vector <std::string> &messageVec);
 		int dispatchInvite(std::vector <std::string> &messageVec);
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
+		int dispatchNotice(std::vector <std::string> &messageVec);
 };
 
 
