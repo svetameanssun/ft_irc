@@ -31,7 +31,7 @@ class Server
         std::string                 _password;      // optional server password
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
         bool                        _running;       // server loop flag
-        AParcerResult              *_parcingResult; // result of the parse
+        AParserResult              *_parcingResult; // result of the parse
 
         CommandHandler              _cmdHandler;    
         ClientManager               _clientManager;
@@ -64,9 +64,10 @@ class Server
         ClientManager &getClientManager() { return _clientManager; }
         ChannelManager &getChannelManager() { return _channelManager; }
 
-        int     launchParcing(std::string messageStr);
         // command handling 
+        int     launchParcing(std::string messageStr);
         void    dispatchCommand(Client *client, const std::string &cmd);
+        void    executeRoutine(Client *client, std::string &rawCommand, const char *cmd);
 
         // aux
         void    deleteParserResult(); 

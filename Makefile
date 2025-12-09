@@ -13,18 +13,21 @@ INC_FILES =		Server.hpp \
 				ChannelManager.hpp \
 				MessageSender.hpp \
 				CommandHandler.hpp \
-				AParcerResult.hpp \
+				AParserResult.hpp \
 				CommandDispatcher.hpp \
 				CommandParcer.hpp \
-				ParcerResultJoin.hpp \
-				ParcerResultNick.hpp \
-				ParcerResultPass.hpp \
-				ParcerResultTopic.hpp \
-				ParcerResultInvite.hpp \
-				ParcerResultMode.hpp \
-				ParcerResultPrivmsg.hpp \
-				ParcerResultUser.hpp \
-				ParcerResultKick.hpp \
+				ParserResultJoin.hpp \
+				ParserResultNick.hpp \
+				ParserResultPass.hpp \
+				ParserResultTopic.hpp \
+				ParserResultInvite.hpp \
+				ParserResultMode.hpp \
+				ParserResultPrivmsg.hpp \
+				ParserResultUser.hpp \
+				ParserResultKick.hpp \
+				ParserResultNotice.hpp \
+				ParserResultPart.hpp \
+				ParserResultQuit.hpp \
 				Replies.hpp \
 				cmdtests.hpp \
 				utils.hpp \
@@ -39,20 +42,35 @@ FILES    = 	main.cpp \
 			ChannelManager.cpp \
 			MessageSender.cpp \
 			CommandHandler.cpp \
-			AParcerResult.cpp \
+			CmdPass.cpp \
+			CmdJoin.cpp \
+			CmdNick.cpp \
+			CmdUser.cpp \
+			CmdPrivmsg.cpp \
+			CmdNotice.cpp \
+			CmdQuit.cpp \
+			CmdPingPong.cpp \
+			CmdMode.cpp \
+			CmdTopic.cpp \
+			CmdKick.cpp \
+			CmdInvite.cpp \
+			AParserResult.cpp \
 			CommandDispatcher.cpp \
 			CommandDispatcherUtils.cpp \
 			CommandParcer.cpp \
 			CommandParcerUtils.cpp \
-			ParcerResultJoin.cpp \
-			ParcerResultNick.cpp \
-			ParcerResultPass.cpp \
-			ParcerResultTopic.cpp \
-			ParcerResultInvite.cpp \
-			ParcerResultMode.cpp \
-			ParcerResultPrivmsg.cpp \
-			ParcerResultUser.cpp \
-			ParcerResultKick.cpp \
+			ParserResultJoin.cpp \
+			ParserResultNick.cpp \
+			ParserResultPass.cpp \
+			ParserResultTopic.cpp \
+			ParserResultInvite.cpp \
+			ParserResultMode.cpp \
+			ParserResultPrivmsg.cpp \
+			ParserResultUser.cpp \
+			ParserResultKick.cpp \
+			ParserResultNotice.cpp \
+			ParserResultPart.cpp \
+			ParserResultQuit.cpp \
 			cmdtests.cpp \
 			utils.cpp
 
@@ -63,20 +81,21 @@ FILES_TEST	=	Server.cpp \
 				ChannelManager.cpp \
 				MessageSender.cpp \
 				CommandHandler.cpp \
-				AParcerResult.cpp \
+				CmdPass.cpp \
+				AParserResult.cpp \
 				CommandDispatcher.cpp \
 				CommandDispatcherUtils.cpp \
 				CommandParcer.cpp \
 				CommandParcerUtils.cpp \
-				ParcerResultJoin.cpp \
-				ParcerResultNick.cpp \
-				ParcerResultPass.cpp \
-				ParcerResultTopic.cpp \
-				ParcerResultInvite.cpp \
-				ParcerResultMode.cpp \
-				ParcerResultPrivmsg.cpp \
-				ParcerResultUser.cpp \
-				ParcerResultKick.cpp \
+				ParserResultJoin.cpp \
+				ParserResultNick.cpp \
+				ParserResultPass.cpp \
+				ParserResultTopic.cpp \
+				ParserResultInvite.cpp \
+				ParserResultMode.cpp \
+				ParserResultPrivmsg.cpp \
+				ParserResultUser.cpp \
+				ParserResultKick.cpp \
 				utils.cpp
 
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))

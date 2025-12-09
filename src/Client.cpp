@@ -3,6 +3,7 @@
 #include <algorithm>
 
 Client::Client() : _fd(-1), _registered(false), _isOperator(false) {}
+Client::Client(int fd) : _fd(fd), _registered(false), _isOperator(false) {}
 Client::Client(int fd, const std::string &hostname)
     : _fd(fd), _hostname(hostname), _registered(false), _isOperator(false) {}
 Client::~Client() {}
@@ -13,8 +14,11 @@ const std::string &Client::getNick() const { return _nickname; }
 const std::string &Client::getUser() const { return _username; }
 const std::string &Client::getRealName() const { return _realname; }
 const std::string &Client::getHost() const { return _hostname; }
+std::string Client::getPrefix() const { return getNick() + "!" + getUser() + "@" + getHost(); }
 bool Client::isRegistered() const { return _registered; }
 bool Client::isOperator() const { return _isOperator; }
+bool Client::getPassAccepted() const { return _passAccepted; }
+
 
 //setters
 void Client::setNick(const std::string &nick) { _nickname = nick; }
@@ -22,6 +26,7 @@ void Client::setUser(const std::string &user) { _username = user; }
 void Client::setRealName(const std::string &realname) { _realname = realname; }
 void Client::setRegistered(bool value) { _registered = value; }
 void Client::setOperator(bool value) { _isOperator = value; }
+void Client::setPassAccepted(bool value) { _passAccepted = value; }
 
 // Buffer handling
 void Client::appendToBuffer(const std::string &data) { _buffer += data; } //TODO: We need to work on this 

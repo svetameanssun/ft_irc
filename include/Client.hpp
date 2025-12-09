@@ -8,6 +8,7 @@ class Client
 {
     private:
         int         _fd;            //for the socket
+        bool        _passAccepted;  //The client provided the good password
         std::string _nickname;      //9 chars max, need to specifiy it 
         std::string _username;      //USER
         std::string _realname;      //Real name (from USER command)  <<---- check if there are this many fields
@@ -23,6 +24,7 @@ class Client
     
     public:
         Client();
+        Client(int fd);
         Client(int fd, const std::string &hostname);
         ~Client();
 
@@ -32,8 +34,10 @@ class Client
         const std::string &getUser() const;
         const std::string &getRealName() const;
         const std::string &getHost() const;
+        std::string getPrefix() const;
         bool isRegistered() const;
         bool isOperator() const;
+        bool getPassAccepted() const;
 
         //setters
         void setNick(const std::string &nick);
@@ -41,6 +45,7 @@ class Client
         void setRealName(const std::string &realname);
         void setRegistered(bool value);
         void setOperator(bool value);
+        void setPassAccepted(bool value);
 
         //buffer handling, do it when we know how to handle data
         void appendToBuffer(const std::string &data);
