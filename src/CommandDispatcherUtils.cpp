@@ -12,7 +12,6 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
         delete(resultPass);
     }
     resultPass->setParams(messageVec);
-
     // Transfer ownership into _parcerResult
     this->_parserResult = resultPass;
     this->_parserResult->printResult();

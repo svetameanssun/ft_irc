@@ -1,6 +1,5 @@
 #include "Server.hpp"
 #include "Client.hpp"
-#include "Channel.hpp"
 #include "CommandHandler.hpp"
 #include "cmdtests.hpp"
 #include <iostream>
@@ -14,53 +13,52 @@ int main()
     Client bob(2, "localhost");
     Client eve(3, "localhost");
 
-    std::cout << "\n========== MIXED WORKFLOW TEST SUITE ==========\n";
+    std::cout << "\n========== USER REGISTRATION TEST SUITE ==========\n";
 
-    // ============================
-    // 1️⃣ Alice registers correctly
-    // ============================
-    std::cout << "\n--- Alice Full Registration Workflow ---\n";
-    runTestPass(server, &alice, "password");          // ✅ PASS accepted
-    runTestNick(server, &alice, "Alice");             // ✅ NICK ok
-    runTestUser(server, &alice, "aliceUser", "Alice"); // ✅ USER ok
-    runTestJoin(server, &alice, "#coolkids", "");     // ✅ join first channel
+    // ======================================================
+    // 1️⃣ Alice registers correctly (ideal workflow)
+    // ======================================================
+    std::cout << "\n--- Alice Correct Registration Sequence ---\n";
+    runTestPass(server, &alice, "password");                 // PASS OK
+    runTestNick(server, &alice, "Alice");                    // NICK OK
+    runTestUser(server, &alice, "aliceUser", "Alice Real");  // USER OK
 
-    // ============================
-    // 2️⃣ Bob tries wrong order / wrong password
-    // ============================
-    std::cout << "\n--- Bob Wrong Sequence and Corrections ---\n";
-    runTestNick(server, &bob, "Bob");                 // ❌ should wait PASS first
-    runTestUser(server, &bob, "bobUser", "Bob");      // ❌ still not allowed
-    runTestPass(server, &bob, "wrongpass");           // ❌ incorrect password
-    runTestPass(server, &bob, "password");            // ✅ PASS accepted
-    runTestNick(server, &bob, "Alice");               // ❌ already in use
-    runTestNick(server, &bob, "Bob");                 // ✅ ok
-    runTestUser(server, &bob, "bobUser", "Bob");      // ✅ registered
-    runTestJoin(server, &bob, "#coolkids", "");       // ✅ joins Alice
+    // ======================================================
+    // 2️⃣ Bob attempts incorrect flows before succeeding
+    // ======================================================
+    std::cout << "\n--- Bob Incorrect Sequence + Fixes ---\n";
 
-    // ============================
-    // 3️⃣ Eve tries dangerous + malformed cmds
-    // ============================
-    std::cout << "\n--- Eve Malformed Input Tests ---\n";
-    runTestJoin(server, &eve, "#hackers", "");        // ❌ no PASS/NICK/USER
-    runTestPass(server, &eve, "password");            // ✅ PASS ok
-    runTestUser(server, &eve, "", "RealEve");         // ❌ missing username
-    runTestNick(server, &eve, "");                    // ❌ missing nick
-    runTestNick(server, &eve, "Bob");                 // ❌ in use
-    runTestNick(server, &eve, "Eve");                 // ✅ ok
-    runTestUser(server, &eve, "eveUser", "Eve");      // ✅ registered
-    runTestJoin(server, &eve, "", "");                // ❌ missing params
-    runTestJoin(server, &eve, "@@@@", "");            // ❌ invalid format (if implemented)
-    runTestJoin(server, &eve, "#coolkids", "");       // ✅ joins channel
+    runTestNick(server, &bob, "Bob");                       // ❌ NICK before PASS
+    runTestUser(server, &bob, "bobUser", "Bob Real");       // ❌ USER before PASS
+    runTestPass(server, &bob, "wrongpass");                 // ❌ Wrong PASS
+    runTestPass(server, &bob, "password");                  // PASS OK
+    runTestNick(server, &bob, "Alice");                     // ❌ Nick already in use
+    runTestNick(server, &bob, "Bob");                       // NICK OK
+    runTestUser(server, &bob, "bobUser", "Bob Real");       // USER OK
 
-    // ============================
-    // 4️⃣ Alice tries a duplicate process
-    // ============================
+    // ======================================================
+    // 3️⃣ Eve tries malformed and edge cases
+    // ======================================================
+    std::cout << "\n--- Eve Malformed Registration Attempts ---\n";
+
+    runTestUser(server, &eve, "eveUser", "Eve Real");       // ❌ USER before PASS
+    runTestNick(server, &eve, "Eve");                       // ❌ NICK before PASS
+    runTestPass(server, &eve, "password");                  // PASS OK
+    runTestUser(server, &eve, "", "Name");                  // ❌ Missing username
+    runTestNick(server, &eve, "");                          // ❌ Missing nick
+    runTestNick(server, &eve, "Bob");                       // ❌ Nick in use
+    runTestNick(server, &eve, "Eve");                       // NICK OK
+    runTestUser(server, &eve, "eveUser", "Eve Real");       // USER OK
+
+    // ======================================================
+    // 4️⃣ Alice attempts re-registration
+    // ======================================================
     std::cout << "\n--- Alice Attempts to Re-register ---\n";
-    runTestPass(server, &alice, "password");          // ❌ ERR_ALREADYREGISTRED
-    runTestNick(server, &alice, "Alice");             // ✅ just renaming (same)
-    runTestUser(server, &alice, "aliceUser", "Alice");// ✅ still ok
 
-    std::cout << "\n============== TEST SUITE END ==============\n";
+    runTestPass(server, &alice, "password");                // ❌ ERR_ALREADYREGISTRED
+    runTestNick(server, &alice, "Alice");                   // OK (simple rename)
+    runTestUser(server, &alice, "aliceUser", "Alice Real"); // OK (already set)
+
+    std::cout << "\n============== REGISTRATION TESTS END ==============\n";
     return 0;
 }

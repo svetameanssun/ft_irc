@@ -67,18 +67,20 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "user newNickname  dddd:dddd"; // wrong input
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
-	
-	CommandParcer parcer(messageStr);
-	if (!parcer.splitMessage())
+	//TODO:I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
+	//TODO: We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
+	CommandParcer *parcer = new CommandParcer(messageStr);
+	if (!parcer->splitMessage())
 	{
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 	
-	int result = parcer.commandProccess();//
-	if (!parcer.getCommandDispatcher().getParserResult())
+	int result = parcer->commandProccess();//
+	if (!parcer->getCommandDispatcher().getParserResult())
 		return (result);
-	this->_parcingResult = parcer.getCommandDispatcher().getParserResult();
+	this->_parcingResult = parcer->getCommandDispatcher().getParserResult();
+
 	return result;
 }
 
@@ -89,11 +91,12 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	int ret = launchParcing(rawCommand);
 
     log_debug("return value is: %d", ret);
+	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
 
     if (isAllowed(ret))
     {
-        dispatchCommand(client, this->_parcingResult->getCommand());
-        deleteParserResult();
+		dispatchCommand(client, this->_parcingResult->getCommand());
+        //deleteParserResult();
     }
     else
 	{
