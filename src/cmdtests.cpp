@@ -4,6 +4,7 @@
 #include "cmdtests.hpp"
 
 // Utility: ensure client exists in the registry
+//TODO: When networking implemented, we need to move this to its proper location
 void ensureClientRegistered(Server &server, Client *client)
 {
     ClientManager &manager = server.getClientManager();
