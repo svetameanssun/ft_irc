@@ -17,8 +17,9 @@ Server::~Server()
         ::close(_listenFd);
 
     //free all clients & channels
-    _clientManager.freeResources();
-    _channelManager.freeResources();
+	//TODO: It seems that there is a problem with a double free here
+    //_clientManager.freeResources();
+    //_channelManager.freeResources();
     log_msg("Hi I am the server, I am done here :)");
 }
 
@@ -101,7 +102,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
     }
     else
 	{
-		log_warning("Error case not yet implemented");
+		log_warning("Wrong command. Error case not yet implemented. Return proper message");
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
 	std::cout << "<<==== Routine executed successfully =====>>" << std::endl;

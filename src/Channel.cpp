@@ -6,7 +6,7 @@ Channel::Channel(const std::string &name)
 
 Channel::~Channel()
 {
-    log_warning("Resources from the channel not freed");
+    log_warning("[Channel] Destructor: Resources from the channel not freed, channel");
 }
 
 //Getters
@@ -42,19 +42,19 @@ bool Channel::addMember(Client *client, bool isOp)
 {
     if (_userLimit > 0 && (int)_members.size() >= _userLimit)
     {
-        log_err("Channel is full, cannot add the member");
+        log_warning("[Channel] Channel is full, cannot add the member");
         return false;
     }
     int fd = client->getFd();
     if (_members.find(fd) != _members.end())
     {
-        log_err("Channel: the user is already a member");
+        log_warning("[Channel] the user is already a member");
         return false; // already member
     }
     _members[fd] = client;
     if (isOp)
     {
-        log_msg("Channel: the user is a operator, added to op list");
+        log_msg("[Channel]: the user is a operator, added to op list");
         _operators.insert(fd);
     }
     return true;
@@ -66,7 +66,7 @@ void Channel::removeMember(Client *client)
     _members.erase(fd);
     _operators.erase(fd);
     _invited.erase(fd);
-    log_msg("Channel: The member has been deleted from the channel");
+    log_msg("[Channel]: The member has been deleted from the channel");
 }
 
 bool Channel::isMember(int fd) const { return _members.find(fd) != _members.end(); }
@@ -77,7 +77,7 @@ void Channel::promoteToOp(int fd)
 {
     if (isMember(fd))
         _operators.insert(fd);
-    log_msg("Channel: The member has been added to operators");
+    log_msg("[Channel]: The member has been added to operators");
 }
 
 void Channel::demoteFromOp(int fd) { _operators.erase(fd); }
@@ -91,12 +91,12 @@ void Channel::removeFromInviteList(int fd)
 {
     if (_invited.find(fd) != _invited.end())
     {
-        log_msg("Channel: client deleted from invited list");
+        log_msg("[Channel] client deleted from invited list");
         _invited.erase(fd);
     }
     else
     {
-        log_warning("Channel: client was not in the invite list");
+        log_warning("[Channel] client was not in the invite list");
     }
 }
 
@@ -104,7 +104,7 @@ void Channel::removeFromInviteList(int fd)
 void Channel::broadcast(const std::string &message) const
 {
     int excludeFd = -1;
-    log_msg("Channel: broadcasting to all users: ");
+    log_msg("[Channel] broadcasting to all users: ");
     for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); ++it)
     {
         int fd = it->first;
