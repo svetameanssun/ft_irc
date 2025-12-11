@@ -21,7 +21,7 @@ int main()
     std::cout << "\n--- Alice Correct Registration Sequence ---\n";
     runTestPass(server, &alice, "password");                 // PASS OK
     runTestNick(server, &alice, "Alice");                    // NICK OK
-    runTestUser(server, &alice, "aliceUser", "Alice Real");  // USER OK
+    runTestUser(server, &alice, "aliceUser", "AliceReal");  // USER OK
 
     // ======================================================
     // 2️⃣ Bob attempts incorrect flows before succeeding

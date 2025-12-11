@@ -10,11 +10,12 @@ ClientManager::~ClientManager()
         delete it->second;
 }
 
-void ClientManager::addClient(int fd) //Add hostname if needed; maybe override, const std::string &hostname)
+void ClientManager::addClient(Client *client)//Add hostname if needed; maybe override, const std::string &hostname)
 {
-    Client *client = new Client(fd);  // TODO: resolve actual hostname with getpeername() maybe??
-    _clients[fd] = client;
-    log_err("addClient: Connection not established yet");
+    // TODO: resolve actual hostname with getpeername() maybe??
+    //TODO: Ensure that the clients are created correctly once we establish the connection
+    _clients[client->getFd()] = client;
+    log_warning("[Client Manager] addClient: Connection not established yet");
 
     //TODO: When connections will be implemented
     // Add to pollfd list
@@ -24,7 +25,7 @@ void ClientManager::addClient(int fd) //Add hostname if needed; maybe override, 
     //pfd.revents = 0;
     //_pollFds.push_back(pfd);
 
-    log_msg("[ClientManager] Added client fd=%d", fd);
+    log_msg("[ClientManager] Added client fd=%d", client->getFd());
 }
 
 void ClientManager::removeClient(int fd)
@@ -37,7 +38,7 @@ void ClientManager::removeClient(int fd)
     }
 
     //TODO: when we will implement the network part
-    log_err("removeClient: connection not established yet");
+    log_warning("[Client Manager] removeClient: connection not established yet");
     // Erase from pollfd list
     //_pollFds.erase(
     //    std::remove_if(_pollFds.begin(), _pollFds.end(),
@@ -53,31 +54,41 @@ bool ClientManager::clientExists(int fd) { return _clients.find(fd) != _clients.
 
 Client *ClientManager::findByFd(int fd)
 {
-    log_warning("findByFd: check me plz");
-    return _clients.count(fd) ? _clients[fd] : NULL;            //TODO: Check if this is ok
+    log_warning("[Client Manager] findByFd: check me plz");
+    //TODO: Check if this is ok
+    return _clients.count(fd) ? _clients[fd] : NULL;           
 }
 
 Client *ClientManager::findByNick(const std::string &nick)
 {
-    log_msg("Finding by name from ClientManager: ");
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+    log_msg("[Client Manager]: Finding by name: ");
+    if (nick.empty())
     {
+        log_warning("[Client Manager]: Nick is empty, returning...");
+        return NULL;
+    }
+    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+    {
+        log_debug("[Client Manager] Listing clients... First: %i and Second: %s", it->first, it->second->getNick().c_str());
         if (it->second->getNick() == nick)
         {
-            log_msg("Found: %s", it->second->getNick().c_str());
+            std::cout << nick << std::endl;
+            log_msg("[Client Manager]: Nickname as param: %s", nick.c_str());
+            log_msg("[Client Manager]: Found nickname: %s", it->second->getNick().c_str());
             return it->second;
         }
     }
-    log_msg("User not found by ClientManager");
+    log_msg("[Client Manager]: User not found");
     return NULL;
 }
 
 void ClientManager::broadcast(const std::string &msg, int excludeFd)
 {
-    log_msg("Broadcasting to all the clients: ");
+    log_msg("[Client Mamanger]: Broadcasting to all the clients: ");
     for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
     {
         if (it->first == excludeFd) continue;
+        //TODO: change this when connection established
         // sendToClient(it->second, msg); // later use MessageSender
         std::cout << "[Broadcast] " << msg << std::endl;
     }
@@ -95,5 +106,5 @@ void ClientManager::freeResources()
     for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
         delete it->second;
     _clients.clear();
-    log_debug("Bye bye from the ClientManager, it has been a pleasure :D");
+    log_msg("[Client Manager]: resources freed");
 }

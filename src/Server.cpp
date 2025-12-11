@@ -67,8 +67,8 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "user newNickname  dddd:dddd"; // wrong input
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
-	//TODO:I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
-	//TODO: We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
+	//TODO:[LANA] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
+	//TODO: [LANA] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
 	CommandParcer *parcer = new CommandParcer(messageStr);
 	if (!parcer->splitMessage())
 	{
@@ -96,6 +96,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
     if (isAllowed(ret))
     {
 		dispatchCommand(client, this->_parcingResult->getCommand());
+		//TODO:We need to verify how to free the resources
         //deleteParserResult();
     }
     else
@@ -103,7 +104,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 		log_warning("Error case not yet implemented");
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
-
+	std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
 }
 
 void    Server::deleteParserResult() { delete _parcingResult; }

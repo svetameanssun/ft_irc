@@ -25,7 +25,7 @@ void CommandHandler::cmdPass(Client *client, AParserResult *result)
         //TODO: the RFC does not specify this, but to me it is pretty logic to implement it
         // 464 ERR_PASSWDMISMATCH
         client->setPassAccepted(false);
-        log_debug("Password not correct, user cannot register");
+        log_warning("Password is not correct, user cannot register");
 
         MessageSender::sendNumeric(_server.getServerName(),
                                     client, ERR_PASSWDMISMATCH,
