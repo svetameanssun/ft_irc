@@ -91,6 +91,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	(void) cmd;
 	int ret = launchParcing(rawCommand);
 
+	//TODO: [LANA]: When receiving a channel name with no "#" (JOIN command), I get a valid result (0), which should not be the case
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
 
@@ -105,6 +106,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 		log_warning("Wrong command. Error case not yet implemented. Return proper message");
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
+	//TODO: Remove this at the end of the project
 	std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
 }
 

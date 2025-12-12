@@ -64,15 +64,17 @@ int main()
 
     // 4️⃣ JOIN with key (channel already has a key)
     // Let's manually set channel #locked to have key "1234"
-    Channel *locked = server.getChannelManager().addChannel("#locked");
-    locked->setKey("1234");
+    server.getChannelManager().addChannel("#locked");
+    server.getChannelManager().findChannel("#locked")->setKey("1234");
+    server.getChannelManager().findChannel("#locked")->setKMode(true);
+
 
     runTestJoin(server, &alice, "#locked", "");        // ERR_BADCHANNELKEY
     runTestJoin(server, &alice, "#locked", "1234");    // OK
 
     // 5️⃣ Invite-only channel test
     Channel *vip = server.getChannelManager().addChannel("#vip");
-    vip->setInviteOnly(true);
+    server.getChannelManager().findChannel("#vip")->setInviteOnly(true);
 
     runTestJoin(server, &bob, "#vip", "");             // ERR_INVITEONLYCHAN
     vip->invite(eve.getFd());

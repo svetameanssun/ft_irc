@@ -71,11 +71,11 @@ void runTestJoin(Server &server, Client *client,
 {
     ensureClientRegistered(server, client);
 
-    std::cout << "\n=== TEST: " << client->getNick() << " JOIN " << channel << " ===\n";
+    std::cout << "\n=== TEST: " << client->getNick() << " JOIN " << channel;
+    if (!key.empty()) std::cout << " " << key;
+    std::cout << " ===\n";
 
     std::string rawCommand = "JOIN " + channel;
-
-    // If key provided, append it correctly
     if (!key.empty())
         rawCommand += " " + key;
 
@@ -83,3 +83,4 @@ void runTestJoin(Server &server, Client *client,
 
     std::cout << "===========================================\n";
 }
+

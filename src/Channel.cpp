@@ -42,7 +42,7 @@ bool Channel::addMember(Client *client, bool isOp)
 {
     if (_userLimit > 0 && (int)_members.size() >= _userLimit)
     {
-        log_warning("[Channel] Channel is full, cannot add the member");
+        log_warning("[Channel] Channel is full, cannot add the member");
         return false;
     }
     int fd = client->getFd();
@@ -96,7 +96,7 @@ void Channel::removeFromInviteList(int fd)
     }
     else
     {
-        log_warning("[Channel] client was not in the invite list");
+        log_warning("[Channel] removeFromInviteList: client was not in the invite list");
     }
 }
 
