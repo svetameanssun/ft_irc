@@ -1,15 +1,8 @@
 SERVER:
-
-    - Check if we can refine the log messages
     - Implement checking for password and port, and decide where
-    - Function "findChannel"
     - (At the end) Implement signals 
-
     - For the end: start looking at how to handle connections
 
 CLIENT:
     - Check how to handle the buffer of the messages received
-    - Check the functions to interact with the server and with the channel
 
-CHANNEL:
-    - Check if functions design is ok 

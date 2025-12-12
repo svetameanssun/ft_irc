@@ -1,4 +1,6 @@
 
+#pragma once
+
 void runTestPass(Server &server, Client *client, const std::string &password);
 
 void runTestJoin(Server &server, Client *client,
@@ -9,6 +11,8 @@ void runTestUser(Server &server, Client *client,
                  const std::string &username, const std::string &realname);
 void runTestPrivmsg(Server &server, Client *client,
                     const std::string &target, const std::string &msg);
+void runTestNotice(Server &server, Client *sender,
+                   const std::string &target, const std::string &message);
 void runTestPart(Server &server, Client *client, const std::string &channel);
 void runTestQuit(Server &server, Client *client, const std::string &msg = "Leaving");
 void runTestPing(Server &server, Client *client, const std::string &token);

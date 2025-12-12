@@ -20,10 +20,10 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
         cmdUser(client, result);
     else if (command == "JOIN")
         cmdJoin(client, result);
-    //else if (command == "PRIVMSG")
-    //    cmdPrivmsg(client, result);
-    //else if (command == "NOTICE")
-    //    cmdNotice(client, result);
+    else if (command == "PRIVMSG")
+        cmdPrivmsg(client, result);
+    else if (command == "NOTICE")
+        cmdNotice(client, result);
     //else if (command == "PART")
     //    cmdPart(client, result);
     //else if (command == "QUIT")

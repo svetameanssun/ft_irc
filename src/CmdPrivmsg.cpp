@@ -1,6 +1,10 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
+//TODO: Check how many is too many targets (ERR_TOOMANYTARGETS). It seems like it is optional, not mandatory
+//TODO: Optional: modify broadcast to not send the message to the sender, not mandatory
+//TODO: It is a copy of "Notice" but responding to errors; if we modify "Notice", we need to modify this
+
 void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 {
     if (!client || !result)
@@ -13,19 +17,8 @@ void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
         return;
     }
 
-    ParserResultPrivmsg *res = static_cast<ParserResultPrivmsg*>(result);
-    std::vector<std::string> params = res->getPrivmsgParams();
-
-    if (params.size() < 2)
-    {
-        if (params.empty())
-            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NORECIPIENT,
-                                       ":No recipient given (PRIVMSG)");
-        else
-            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTEXTTOSEND,
-                                       ":No text to send");
-        return;
-    }
+    ParserResultPrivmsg *result2 = static_cast<ParserResultPrivmsg*>(result);
+    std::vector<std::string> params = result2->getPrivmsgParams();
 
     const std::string &target = params[0];
     const std::string &message = params[1];
@@ -49,7 +42,7 @@ void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 
         std::string msg = ":" + client->getPrefix() + " PRIVMSG " + target +
                           " :" + message + "\r\n";
-        chan->broadcast(msg); // broadcast to others
+        chan->broadcast(msg);
     }
     // User message
     else

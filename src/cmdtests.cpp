@@ -84,3 +84,34 @@ void runTestJoin(Server &server, Client *client,
     std::cout << "===========================================\n";
 }
 
+// === PRIVMSG Test ===
+void runTestPrivmsg(Server &server, Client *sender,
+                    const std::string &target, const std::string &message)
+{
+    ensureClientRegistered(server, sender);
+
+    std::cout << "\n=== TEST: " << sender->getNick()
+              << " PRIVMSG " << target << " :"
+              << message << " ===\n";
+
+    std::string raw = "PRIVMSG " + target + " :" + message;
+    server.executeRoutine(sender, raw, "PRIVMSG");
+
+    std::cout << "===========================================\n";
+}
+
+// === NOTICE Test ===
+void runTestNotice(Server &server, Client *sender,
+                   const std::string &target, const std::string &message)
+{
+    ensureClientRegistered(server, sender);
+
+    std::cout << "\n=== TEST: " << sender->getNick()
+              << " NOTICE " << target << " :"
+              << message << " ===\n";
+
+    std::string raw = "NOTICE " + target + " :" + message;
+    server.executeRoutine(sender, raw, "NOTICE");
+
+    std::cout << "===========================================\n";
+}

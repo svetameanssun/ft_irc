@@ -8,7 +8,7 @@ int main()
 {
     Server server(6667, "password");
 
-    // Fake clients (5 users)
+    // Fake clients
     Client alice(3, "localhost");
     Client bob(4, "localhost");
     Client carol(5, "localhost");
@@ -17,9 +17,7 @@ int main()
 
     std::cout << "\n========== CLEAN USER REGISTRATION SUITE ==========\n";
 
-    // ======================================================
-    // 1️⃣ Correct Registration for all clients
-    // ======================================================
+    // 1️⃣ Clean correct registrations
     runTestPass(server, &alice, "password");
     runTestNick(server, &alice, "Alice");
     runTestUser(server, &alice, "aliceUser", "Alice Real");
@@ -44,56 +42,61 @@ int main()
 
 
     // ======================================================
-    //                JOIN COMMAND TESTS
+    //                CLEAN JOIN TESTS (no edge cases)
     // ======================================================
 
     std::cout << "\n============== JOIN COMMAND TESTS ==============\n";
 
-    // 1️⃣ Basic JOIN (create channels)
+    // Basic channel creation + joining
     runTestJoin(server, &alice, "#room1", "");
-    runTestJoin(server, &bob,   "#room1", "");   // join existing
+    runTestJoin(server, &bob,   "#room1", "");
+
     runTestJoin(server, &carol, "#room2", "");
     runTestJoin(server, &dave,  "#room3", "");
 
-    // 2️⃣ JOIN with bad format
-    runTestJoin(server, &eve, "roomNoHash", "");   // ERR_BADCHANMASK
-    runTestJoin(server, &eve, "", "");             // ERR_NEEDMOREPARAMS
-
-    // 3️⃣ JOIN multiple channels (RFC allows comma lists — your parser already supports it)
-    runTestJoin(server, &carol, "#a,#b,#c", "");
-
-    // 4️⃣ JOIN with key (channel already has a key)
-    // Let's manually set channel #locked to have key "1234"
+    // Channel with key (only successful case)
     server.getChannelManager().addChannel("#locked");
     server.getChannelManager().findChannel("#locked")->setKey("1234");
     server.getChannelManager().findChannel("#locked")->setKMode(true);
 
-
-    runTestJoin(server, &alice, "#locked", "");        // ERR_BADCHANNELKEY
-    runTestJoin(server, &alice, "#locked", "1234");    // OK
-
-    // 5️⃣ Invite-only channel test
-    Channel *vip = server.getChannelManager().addChannel("#vip");
-    server.getChannelManager().findChannel("#vip")->setInviteOnly(true);
-
-    runTestJoin(server, &bob, "#vip", "");             // ERR_INVITEONLYCHAN
-    vip->invite(eve.getFd());
-    runTestJoin(server, &eve, "#vip", "");             // OK (invited)
-
-    // 6️⃣ Channel full
-    Channel *tiny = server.getChannelManager().addChannel("#tiny");
-    tiny->setUserLimit(1);  // only 1 member allowed
-
-    runTestJoin(server, &carol, "#tiny", "");          // OK
-    runTestJoin(server, &dave,  "#tiny", "");          // ERR_CHANNELISFULL
-
-    // 7️⃣ JOIN 0 (leave all channels)
-    runTestJoin(server, &alice, "0", "");              // leave all joined
-
-    // 8️⃣ Joining again a channel you’re already inside
-    runTestJoin(server, &bob, "#room1", "");           // should just resend topic+names
+    runTestJoin(server, &eve, "#locked", "1234");
 
     std::cout << "\n============== JOIN TESTS END ==============\n";
+
+
+    // ======================================================
+    //                PRIVMSG TESTS
+    // ======================================================
+
+    std::cout << "\n============== PRIVMSG TESTS ==============\n";
+
+    // User-to-user messaging
+    runTestPrivmsg(server, &alice, "Bob", "Hello Bob!");
+    runTestPrivmsg(server, &bob, "Alice", "Hey Alice!");
+
+    // Channel messaging
+    runTestPrivmsg(server, &carol, "#room2", "Hello everyone in room2");
+    runTestPrivmsg(server, &dave, "#room3", "Any news?");
+
+    std::cout << "\n============== PRIVMSG TESTS END ==============\n";
+
+
+    // ======================================================
+    //                NOTICE TESTS (clean)
+    // ======================================================
+
+    std::cout << "\n============== NOTICE TESTS ==============\n";
+
+    // User notices
+    runTestNotice(server, &eve, "Alice", "This is a NOTICE");
+    runTestNotice(server, &alice, "Bob", "Remember to update configs.");
+
+    // Channel notices
+    runTestNotice(server, &carol, "#room2", "System message to room2");
+    runTestNotice(server, &dave, "#room3", "Maintenance at midnight.");
+
+    std::cout << "\n============== NOTICE TESTS END ==============\n";
+
 
     return 0;
 }

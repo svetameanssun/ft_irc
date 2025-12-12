@@ -91,7 +91,8 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	(void) cmd;
 	int ret = launchParcing(rawCommand);
 
-	//TODO: [LANA]: When receiving a channel name with no "#" (JOIN command), I get a valid result (0), which should not be the case
+	//TODO: [LANA][JOIN command]: When receiving a channel name with no "#" , I get a valid result (0), which should not be the case
+	//TODO: [LANA][PrivMsg command]: For RFC compliant messages, it seems that it returs an error message, which should not be the case; not quite sure by th way
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
 
