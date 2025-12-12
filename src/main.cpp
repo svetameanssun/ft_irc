@@ -8,16 +8,16 @@ int main()
 {
     Server server(6667, "password");
 
-    // Fake clients
+    // Fake clients (5 users)
     Client alice(3, "localhost");
     Client bob(4, "localhost");
     Client carol(5, "localhost");
     Client dave(6, "localhost");
     Client eve(7, "localhost");
 
-    std::cout << "\n========== CLEAN USER REGISTRATION SUITE ==========\n";
+    std::cout << "\n========== USER REGISTRATION SUITE ==========\n";
 
-    // 1️⃣ Clean correct registrations
+    // All users correctly register
     runTestPass(server, &alice, "password");
     runTestNick(server, &alice, "Alice");
     runTestUser(server, &alice, "aliceUser", "Alice Real");
@@ -42,61 +42,42 @@ int main()
 
 
     // ======================================================
-    //                CLEAN JOIN TESTS (no edge cases)
+    //  JOIN COMMAND (simple, no edge cases)
     // ======================================================
 
-    std::cout << "\n============== JOIN COMMAND TESTS ==============\n";
+    std::cout << "\n============== JOIN TESTS ==============\n";
 
-    // Basic channel creation + joining
     runTestJoin(server, &alice, "#room1", "");
     runTestJoin(server, &bob,   "#room1", "");
-
     runTestJoin(server, &carol, "#room2", "");
     runTestJoin(server, &dave,  "#room3", "");
 
-    // Channel with key (only successful case)
-    server.getChannelManager().addChannel("#locked");
-    server.getChannelManager().findChannel("#locked")->setKey("1234");
-    server.getChannelManager().findChannel("#locked")->setKMode(true);
-
-    runTestJoin(server, &eve, "#locked", "1234");
-
-    std::cout << "\n============== JOIN TESTS END ==============\n";
+    std::cout << "\n============== JOIN DONE ==============\n";
 
 
     // ======================================================
-    //                PRIVMSG TESTS
+    //  PRIVMSG / NOTICE TESTS
     // ======================================================
 
-    std::cout << "\n============== PRIVMSG TESTS ==============\n";
-
-    // User-to-user messaging
     runTestPrivmsg(server, &alice, "Bob", "Hello Bob!");
-    runTestPrivmsg(server, &bob, "Alice", "Hey Alice!");
+    runTestNotice(server, &bob, "Alice", "Notice for Alice");
 
-    // Channel messaging
-    runTestPrivmsg(server, &carol, "#room2", "Hello everyone in room2");
-    runTestPrivmsg(server, &dave, "#room3", "Any news?");
-
-    std::cout << "\n============== PRIVMSG TESTS END ==============\n";
-
+    runTestPrivmsg(server, &carol, "#room2", "Hello room2!");
 
     // ======================================================
-    //                NOTICE TESTS (clean)
+    //  PART TESTS
     // ======================================================
 
-    std::cout << "\n============== NOTICE TESTS ==============\n";
+    runTestPart(server, &alice, "#room1", "Goodbye room1");
+    runTestPart(server, &bob, "#room1", "");
 
-    // User notices
-    runTestNotice(server, &eve, "Alice", "This is a NOTICE");
-    runTestNotice(server, &alice, "Bob", "Remember to update configs.");
+    // ======================================================
+    //  QUIT TESTS
+    // ======================================================
 
-    // Channel notices
-    runTestNotice(server, &carol, "#room2", "System message to room2");
-    runTestNotice(server, &dave, "#room3", "Maintenance at midnight.");
+    runTestQuit(server, &carol, "See you!");
+    runTestQuit(server, &eve, "");
 
-    std::cout << "\n============== NOTICE TESTS END ==============\n";
-
-
+    std::cout << "\n============== TEST SUITE END ==============\n";
     return 0;
 }

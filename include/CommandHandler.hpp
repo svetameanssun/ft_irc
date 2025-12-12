@@ -27,10 +27,10 @@ class CommandHandler
         void cmdPrivmsg(Client *client, AParserResult *result);
         void cmdNotice(Client *client, AParserResult *result);
         void cmdPart(Client *client, AParserResult *result);
-        //void cmdQuit(Client *client, AParserResult *result);
-        //void cmdPing(Client *client, AParserResult *result);
+        void cmdQuit(Client *client, AParserResult *result);
+        void cmdPing(Client *client, AParserResult *result);
         void cmdPong(Client *client, AParserResult *result);
-        //void cmdMode(Client *client, AParserResult *result);
+        void cmdMode(Client *client, AParserResult *result);
         void cmdTopic(Client *client, AParserResult *result);
         void cmdKick(Client *client, AParserResult *result);
         void cmdInvite(Client *client, AParserResult *result);

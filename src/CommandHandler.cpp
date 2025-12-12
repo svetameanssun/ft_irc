@@ -24,10 +24,10 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
         cmdPrivmsg(client, result);
     else if (command == "NOTICE")
         cmdNotice(client, result);
-    //else if (command == "PART")
-    //    cmdPart(client, result);
-    //else if (command == "QUIT")
-    //    cmdQuit(client, result);
+    else if (command == "PART")
+        cmdPart(client, result);
+    else if (command == "QUIT")
+        cmdQuit(client, result);
     //else if (command == "PING")
     //    cmdPing(client, result);
     //else if (command == "PONG")

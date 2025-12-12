@@ -13,8 +13,10 @@ void runTestPrivmsg(Server &server, Client *client,
                     const std::string &target, const std::string &msg);
 void runTestNotice(Server &server, Client *sender,
                    const std::string &target, const std::string &message);
-void runTestPart(Server &server, Client *client, const std::string &channel);
-void runTestQuit(Server &server, Client *client, const std::string &msg = "Leaving");
+void runTestPart(Server &server, Client *client,
+                 const std::string &channels,
+                 const std::string &comment);
+void runTestQuit(Server &server, Client *client, const std::string &message);
 void runTestPing(Server &server, Client *client, const std::string &token);
 void runTestPong(Server &server, Client *client, const std::string &token);
 void runTestMode(Server &server, Client *client);

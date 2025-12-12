@@ -115,3 +115,43 @@ void runTestNotice(Server &server, Client *sender,
 
     std::cout << "===========================================\n";
 }
+
+// === PART Test ===
+void runTestPart(Server &server, Client *client,
+                 const std::string &channels,
+                 const std::string &comment)
+{
+    ensureClientRegistered(server, client);
+
+    std::cout << "\n=== TEST: " << client->getNick()
+              << " PART " << channels;
+    if (!comment.empty())
+        std::cout << " :" << comment;
+    std::cout << " ===\n";
+
+    std::string raw = "PART " + channels;
+    if (!comment.empty())
+        raw += " :" + comment;
+
+    server.executeRoutine(client, raw, "PART");
+
+    std::cout << "===========================================\n";
+}
+
+// === QUIT Test ===
+void runTestQuit(Server &server, Client *client, const std::string &message)
+{
+    ensureClientRegistered(server, client);
+
+    std::cout << "\n=== TEST: " << client->getNick()
+              << " QUIT " << (message.empty() ? "" : ":" + message)
+              << " ===\n";
+
+    std::string raw = "QUIT";
+    if (!message.empty())
+        raw += " :" + message;
+
+    server.executeRoutine(client, raw, "QUIT");
+
+    std::cout << "===========================================\n";
+}

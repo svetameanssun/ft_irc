@@ -48,6 +48,7 @@ FILES    = 	main.cpp \
 			CmdUser.cpp \
 			CmdPrivmsg.cpp \
 			CmdNotice.cpp \
+			CmdPart.cpp \
 			CmdQuit.cpp \
 			CmdPingPong.cpp \
 			CmdMode.cpp \
