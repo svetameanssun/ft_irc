@@ -89,6 +89,40 @@ int main()
 
     std::cout << "\n============== KICK DONE ==============\n";
 
+    // ======================================================
+    //  INVITE TESTS
+    // ======================================================
+
+    std::cout << "\n============== INVITE TESTS ==============\n";
+
+    // Create invite-only channel
+    //Channel *vip = server.getChannelManager().addChannel("#vip");
+
+    // Alice joins and becomes operator
+    runTestJoin(server, &alice, "#vip", "");
+    server.getChannelManager().findChannel("#vip")->setInviteOnly(true);
+
+
+    // Bob tries to join without invite
+    runTestJoin(server, &bob, "#vip", "");      // ERR_INVITEONLYCHAN
+
+    // Alice invites Bob
+    runTestInvite(server, &alice, "Bob", "#vip");
+
+    // Bob can now join
+    runTestJoin(server, &bob, "#vip", "");
+    runTestInvite(server, &alice, "Bob", "#vip");   // Already invited
+    
+    std::cout << "\n============== WRONG INVITE TESTS ==============\n";
+
+    runTestInvite(server, &bob, "Carol", "#vip");  // ERR_CHANOPRIVSNEEDED
+    runTestInvite(server, &alice, "Ghost", "#vip");// ERR_NOSUCHNICK
+    runTestInvite(server, &alice, "Bob", "#nope"); // ERR_NOSUCHCHANNEL
+
+
+    std::cout << "\n============== INVITE DONE ==============\n";
+
+
     std::cout << "\n============== TEST SUITE END ==============\n";
     return 0;
 }

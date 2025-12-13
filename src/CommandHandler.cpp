@@ -38,8 +38,8 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
     //    cmdTopic(client, result);
     else if (command == "KICK")
         cmdKick(client, result);
-    //else if (command == "INVITE")
-    //    cmdInvite(client, result);
+    else if (command == "INVITE")
+        cmdInvite(client, result);
     else
         MessageSender::sendNumeric(_server.getServerName(), client, 421, command + " :Unknown command");
 }

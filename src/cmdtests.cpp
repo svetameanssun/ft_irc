@@ -178,3 +178,19 @@ void runTestKick(Server &server, Client *sender,
 
     std::cout << "===========================================\n";
 }
+
+// === INVITE Test ===
+void runTestInvite(Server &server, Client *sender,
+                   const std::string &target,
+                   const std::string &channel)
+{
+    ensureClientRegistered(server, sender);
+
+    std::cout << "\n=== TEST: " << sender->getNick()
+              << " INVITE " << target << " " << channel << " ===\n";
+
+    std::string raw = "INVITE " + target + " " + channel;
+    server.executeRoutine(sender, raw, "INVITE");
+
+    std::cout << "===========================================\n";
+}
