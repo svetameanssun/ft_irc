@@ -94,6 +94,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	//TODO: [LANA][JOIN command]: When receiving a channel name with no "#" , I get a valid result (0), which should not be the case
 	//TODO: [LANA][PrivMsg command]: For RFC compliant messages, it seems that it returs an error message, which should not be the case; not quite sure by th way
 	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
+	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
 
@@ -102,6 +103,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 		dispatchCommand(client, this->_parcingResult->getCommand());
 		//TODO:We need to verify how to free the resources
         //deleteParserResult();
+		//TODO: Remove this at the end of the project
 		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
 
     }
@@ -110,7 +112,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 		log_warning("Wrong command. Error case not yet implemented. Return proper message");
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
-	//TODO: Remove this at the end of the project
 }
 
 void    Server::deleteParserResult() { delete _parcingResult; }

@@ -191,6 +191,7 @@
 #define ERR_CANNOTSENDTOCHAN   404 // Cannot send message to channel (no access,e.g., +n, +m, banned) (PRIVMSG)
 #define ERR_UNKNOWNCOMMAND     421 // Command not recognized by the server (sent after any command the server doesn’t know)
 #define ERR_UNAVAILRESOURCE    437 // Target nickname temporarily unavailable (JOIN, NICK)
+#define ERR_NOTREGISTERED      451 // User is not registered
 #define ERR_NEEDMOREPARAMS     461 // Not enough parameters supplied to the command
 #define ERR_ALREADYREGISTRED   462 // USER command sent after client has already registered (PASS, USER, NICK)
 #define ERR_CHANOPRIVSNEEDED   482 // Inviter lacks privileges to do that (INVITE, TOPIC, MODE, KICK )

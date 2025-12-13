@@ -36,8 +36,8 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
     //    cmdMode(client, result);
     //else if (command == "TOPIC")
     //    cmdTopic(client, result);
-    //else if (command == "KICK")
-    //    cmdKick(client, result);
+    else if (command == "KICK")
+        cmdKick(client, result);
     //else if (command == "INVITE")
     //    cmdInvite(client, result);
     else

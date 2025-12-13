@@ -1,19 +1,15 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
+//TODO: Check the following statement: 
+//TODO: Because of this line in RFC2812: "There is no requirement that the channel, the target user is being invited to, must exist or be a valid channel."
+//TODO: The paramenters are not checked for this
 void CommandHandler::cmdInvite(Client *client, AParserResult *result)
 {
     if (!client || !result) return;
 
     ParserResultInvite *result2 = static_cast<ParserResultInvite*>(result);
     const std::vector<std::string> params = result2->getInviteParams();
-    if (params.size() < 2)
-    {
-        // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NEEDMOREPARAMS,
-                                    "INVITE :Not enough parameters");
-        return;
-    }
 
     const std::string &targetNick = params.at(0);
     const std::string &chanName = params.at(1);

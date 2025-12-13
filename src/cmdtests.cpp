@@ -155,3 +155,26 @@ void runTestQuit(Server &server, Client *client, const std::string &message)
 
     std::cout << "===========================================\n";
 }
+
+// === KICK Test ===
+void runTestKick(Server &server, Client *sender,
+                 const std::string &channel,
+                 const std::string &target,
+                 const std::string &comment)
+{
+    ensureClientRegistered(server, sender);
+
+    std::cout << "\n=== TEST: " << sender->getNick()
+              << " KICK " << channel << " " << target;
+    if (!comment.empty())
+        std::cout << " :" << comment;
+    std::cout << " ===\n";
+
+    std::string raw = "KICK " + channel + " " + target;
+    if (!comment.empty())
+        raw += " :" + comment;
+
+    server.executeRoutine(sender, raw, "KICK");
+
+    std::cout << "===========================================\n";
+}

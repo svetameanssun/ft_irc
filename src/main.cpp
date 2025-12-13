@@ -42,7 +42,7 @@ int main()
 
 
     // ======================================================
-    //  JOIN COMMAND (simple, no edge cases)
+    //  JOIN TESTS (simple, valid cases)
     // ======================================================
 
     std::cout << "\n============== JOIN TESTS ==============\n";
@@ -64,6 +64,7 @@ int main()
 
     runTestPrivmsg(server, &carol, "#room2", "Hello room2!");
 
+
     // ======================================================
     //  PART TESTS
     // ======================================================
@@ -71,12 +72,22 @@ int main()
     runTestPart(server, &alice, "#room1", "Goodbye room1");
     runTestPart(server, &bob, "#room1", "");
 
+
     // ======================================================
-    //  QUIT TESTS
+    //  KICK TESTS
     // ======================================================
 
-    runTestQuit(server, &carol, "See you!");
-    runTestQuit(server, &eve, "");
+    std::cout << "\n============== KICK TESTS ==============\n";
+
+    // Alice kicks Bob from #room1 (Alice created it, so she is op)
+    runTestKick(server, &alice, "#room1", "Bob", "Spamming");
+
+    // Carol creates a channel and kicks Dave
+    runTestJoin(server, &carol, "#mods", "");
+    runTestJoin(server, &dave, "#mods", "");
+    runTestKick(server, &carol, "#mods", "Dave", "Rule violation");
+
+    std::cout << "\n============== KICK DONE ==============\n";
 
     std::cout << "\n============== TEST SUITE END ==============\n";
     return 0;

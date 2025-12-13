@@ -3,65 +3,72 @@
 
 void CommandHandler::cmdKick(Client *client, AParserResult *result)
 {
-    if (!client || !result) return;
+    if (!client || !result)
+        return;
+
+    if (!client->isRegistered()) {
+        MessageSender::sendNumeric(_server.getServerName(), client,
+                                   ERR_NOTREGISTERED,
+                                   ":You have not registered");
+        return;
+    }
 
     ParserResultKick *result2 = static_cast<ParserResultKick*>(result);
+    const std::map<int,std::vector<std::string> > paramsMap = result2->getKickParamsMap();
 
-    const std::vector<std::string> params = result2->getKickParams();
-    if (params.size() < 2)
+    for (size_t i = 0; i < paramsMap.size(); ++i)
     {
-        // 461 ERR_NEEDMOREPARAMS
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NEEDMOREPARAMS,
-                                    "KICK :Not enough parameters");
-        return;
-    }
-    
-    //TODO: be sure which one is in which position
-    const std::string &chanName = params.at(0);
-    const std::string &targetNick = params.at(1);
-    std::string reason = (params.size() > 2) ? params.at(2) : "Kicked";
+        const std::vector<std::string> paramsVec = paramsMap.at(0);
+        const std::string &chanName  = paramsVec.at(0);
+        const std::string &targetNick = paramsVec.at(1);
+        
+        std::string reason = (!result2->getKickComment().empty()
+                                ? result2->getKickComment() : "Kicked");
 
-    Channel *chan = _server.getChannelManager().findChannel(chanName);
-    if (!chan)
-    {
-        // 403 ERR_NOSUCHCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL,
-                                    chanName + " :No such channel");
-        return;
-    }
+        Channel *chan = _server.getChannelManager().findChannel(chanName);
+        if (!chan)
+        {
+            MessageSender::sendNumeric(_server.getServerName(), client,
+                                       ERR_NOSUCHCHANNEL,
+                                       chanName + " :No such channel");
+            return;
+        }
 
-    if (!chan->isMember(client->getFd()))
-    {
-        // 442 ERR_NOTONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL,
-                                    chanName + " :You're not on that channel");
-        return;
-    }
+        if (!chan->isMember(client->getFd()))
+        {
+            MessageSender::sendNumeric(_server.getServerName(), client,
+                                       ERR_NOTONCHANNEL,
+                                       chanName + " :You're not on that channel");
+            return;
+        }
 
-    if (!chan->isOperator(client->getFd()))
-    {
-        // 482 ERR_CHANOPRIVSNEEDED
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED,
-                                    chanName + " :You're not channel operator");
-        return;
-    }
+        if (!chan->isOperator(client->getFd())) {
+            MessageSender::sendNumeric(_server.getServerName(), client,
+                                       ERR_CHANOPRIVSNEEDED,
+                                       chanName + " :You're not channel operator");
+            return;
+        }
 
-    Client *target = _server.getClientManager().findByNick(targetNick);
-    if (!target || !chan->isMember(target->getFd()))
-    {
-        // 441 ERR_USERNOTINCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_USERNOTINCHANNEL,
-                                   targetNick + " " + chanName + " :They aren't on that channel");
-        return;
-    }
+        Client *target = _server.getClientManager().findByNick(targetNick);
+        if (!target || !chan->isMember(target->getFd())) {
+            MessageSender::sendNumeric(_server.getServerName(), client,
+                                       ERR_USERNOTINCHANNEL,
+                                       targetNick + " " + chanName +
+                                       " :They aren't on that channel");
+            return;
+        }
 
-    // Broadcast KICK message
-    std::string kickMsg = ":" + client->getNick() + "!" + client->getUser() + "@" + client->getHost() +
-                          " KICK " + chanName + " " + targetNick + " :" + reason + "\r\n";
-    chan->broadcast(kickMsg);
+        // Build and broadcast KICK message
+        std::string kickMsg = ":" + client->getPrefix() +
+                              " KICK " + chanName + " " + targetNick +
+                              " :" + reason + "\r\n";
 
-    // Remove the target
-    chan->removeMember(target);
+        chan->broadcast(kickMsg);
 
-    if (chan->isEmpty()) { _server.getChannelManager().removeChannel(chanName); }
+        // Remove target from channel
+        chan->removeMember(target);
+
+        // Remove empty channel
+        if (chan->isEmpty()) { _server.getChannelManager().removeChannel(chanName); }
+    }  
 }
