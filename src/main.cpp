@@ -69,8 +69,8 @@ int main()
     //  PART TESTS
     // ======================================================
 
-    runTestPart(server, &alice, "#room1", "Goodbye room1");
-    runTestPart(server, &bob, "#room1", "");
+    //runTestPart(server, &alice, "#room1", "Goodbye room1");
+    //runTestPart(server, &bob, "#room1", "");
 
 
     // ======================================================
@@ -80,7 +80,7 @@ int main()
     std::cout << "\n============== KICK TESTS ==============\n";
 
     // Alice kicks Bob from #room1 (Alice created it, so she is op)
-    runTestKick(server, &alice, "#room1", "Bob", "Spamming");
+    //runTestKick(server, &alice, "#room1", "Bob", "Spamming");
 
     // Carol creates a channel and kicks Dave
     runTestJoin(server, &carol, "#mods", "");

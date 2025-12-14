@@ -105,7 +105,7 @@ void Channel::broadcast(const std::string &message) const
 {
     int excludeFd = -1;
     log_msg("[Channel] broadcasting to all users: ");
-    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); ++it)
+    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
     {
         int fd = it->first;
         Client *c = it->second;

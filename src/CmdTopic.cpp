@@ -1,8 +1,6 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-//TODO: I do not actually know which parameter is the topic
-//TODO: Adapt logic so it is only done by operators of the channel
 void CommandHandler::cmdTopic(Client *client, AParserResult *result)
 {
     if (!client || !result)
@@ -11,7 +9,7 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
     if (!client->isRegistered())
     {
         MessageSender::sendNumeric(_server.getServerName(), client,
-                                   451, ":You have not registered");
+                                   ERR_NOTREGISTERED, ":You have not registered");
         return;
     }
 
@@ -47,6 +45,11 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
     {
         if (chan->getTopic().empty())
         {
+            //TODO: [LANA] There are 2 possibilities when the Topic msg is empty:
+            //TODO: “query topic” or “clear topic” . We distinguish them by whether the TOPIC command includes a trailing parameter (:) or not.
+            //TODO: If it has a trailing (:) -> Clear topic
+            //TODO: if it has not -> Query topic 
+            //TODO: Do we have a way to distinguish this?
             MessageSender::sendNumeric(_server.getServerName(), client,
                                        RPL_NOTOPIC,
                                        chanName + " :No topic is set");
@@ -73,7 +76,7 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
 
     std::string msg = ":" + client->getPrefix() +
                       " TOPIC " + chanName +
-                      " :" + "\r\n"; //result2->getTopic() + "\r\n";
+                      " :" + result2->getTopicMessage() + "\r\n";
 
     chan->broadcast(msg);
 }
