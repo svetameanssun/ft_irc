@@ -122,6 +122,91 @@ int main()
 
     std::cout << "\n============== INVITE DONE ==============\n";
 
+    // ======================================================
+    //  TOPIC COMMAND TESTS
+    // ======================================================
+
+    std::cout << "\n============== TOPIC BASIC TESTS ==============\n";
+
+    // Alice sets topic
+    runTestTopic(server, &alice, "#room1", "Welcome to room1");
+
+    // Bob queries topic
+    runTestTopic(server, &bob, "#room1", "");
+
+    // Carol sets topic in her own channel
+    runTestTopic(server, &carol, "#room2", "Room2 discussion");
+
+    // Carol queries again
+    runTestTopic(server, &carol, "#room2", "");
+
+
+    // ======================================================
+    //  TOPIC OVERWRITE (NO +t MODE)
+    // ======================================================
+
+    std::cout << "\n============== TOPIC OVERWRITE TESTS ==============\n";
+
+    // Bob overwrites topic (allowed when +t not set)
+    runTestTopic(server, &bob, "#room1", "New topic by Bob");
+
+    // Alice queries to confirm update
+    runTestTopic(server, &alice, "#room1", "");
+
+
+    // ======================================================
+    //  TOPIC +t (TOPIC PROTECTED)
+    // ======================================================
+
+    std::cout << "\n============== TOPIC +t MODE TESTS ==============\n";
+
+    Channel *room1 = server.getChannelManager().findChannel("#room1");
+    room1->setTMode(true);   // +t
+
+    // Non-operator tries to change topic
+    runTestTopic(server, &bob, "#room1", "Bob tries to change topic");
+
+    // Operator changes topic
+    runTestTopic(server, &alice, "#room1", "Operator topic change");
+
+    // Bob queries topic
+    runTestTopic(server, &bob, "#room1", "");
+
+
+    // ======================================================
+    //  TOPIC CLEARING
+    // ======================================================
+
+    std::cout << "\n============== TOPIC CLEAR TEST ==============\n";
+
+    // Alice clears topic
+    runTestTopic(server, &alice, "#room1", "");
+
+    // Bob queries -> no topic
+    runTestTopic(server, &bob, "#room1", "");
+
+
+    // ======================================================
+    //  TOPIC NOT-ON-CHANNEL
+    // ======================================================
+
+    std::cout << "\n============== TOPIC NOT-ON-CHANNEL TESTS ==============\n";
+
+    // Eve is not in #room1
+    runTestTopic(server, &eve, "#room1", "");
+    runTestTopic(server, &eve, "#room1", "Trying to set topic");
+
+
+    // ======================================================
+    //  TOPIC INVALID CHANNEL
+    // ======================================================
+
+    std::cout << "\n============== TOPIC INVALID CHANNEL TESTS ==============\n";
+
+    // Channel does not exist
+    runTestTopic(server, &alice, "#ghost", "");
+    runTestTopic(server, &alice, "#ghost", "Hello?");
+
 
     std::cout << "\n============== TEST SUITE END ==============\n";
     return 0;

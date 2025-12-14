@@ -194,3 +194,24 @@ void runTestInvite(Server &server, Client *sender,
 
     std::cout << "===========================================\n";
 }
+
+
+void runTestTopic(Server &server, Client *client,
+                  const std::string &channel,
+                  const std::string &topic)
+{
+    ensureClientRegistered(server, client);
+
+    std::cout << "\n=== TEST: " << client->getNick() << " TOPIC " << channel;
+    if (!topic.empty())
+        std::cout << " :" << topic;
+    std::cout << " ===\n";
+
+    std::string raw = "TOPIC " + channel;
+    if (!topic.empty())
+        raw += " :" + topic;
+
+    server.executeRoutine(client, raw, "TOPIC");
+
+    std::cout << "===========================================\n";
+}

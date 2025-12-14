@@ -22,11 +22,11 @@ void runTestPong(Server &server, Client *client, const std::string &token);
 void runTestMode(Server &server, Client *client);
 void runTestTopic(Server &server, Client *client,
                   const std::string &channel,
-                  const std::string &topic = "");
+                  const std::string &topic);
 void runTestKick(Server &server, Client *client,
                  const std::string &channel,
                  const std::string &target,
-                 const std::string &reason = "Kicked");
+                 const std::string &reason);
 void runTestInvite(Server &server, Client *client,
                    const std::string &target,
                    const std::string &channel);
