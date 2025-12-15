@@ -81,6 +81,7 @@
 // ---- CHANNEL MODE Command Errors ----
 #define ERR_KEYSET             467 // Channel already has a key set (+k)
 #define ERR_UNKNOWNMODE        472 // Unknown MODE flag for a channel
+#define RPL_UMODEIS            221 // Returns the mode of a user
 
 
 

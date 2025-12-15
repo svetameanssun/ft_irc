@@ -32,8 +32,8 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
     //    cmdPing(client, result);
     //else if (command == "PONG")
     //    cmdPong(client, result);
-    //else if (command == "MODE")
-    //    cmdMode(client, result);
+    else if (command == "MODE")
+        cmdMode(client, result);
     else if (command == "TOPIC")
         cmdTopic(client, result);
     else if (command == "KICK")

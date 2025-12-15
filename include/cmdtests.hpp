@@ -19,7 +19,10 @@ void runTestPart(Server &server, Client *client,
 void runTestQuit(Server &server, Client *client, const std::string &message);
 void runTestPing(Server &server, Client *client, const std::string &token);
 void runTestPong(Server &server, Client *client, const std::string &token);
-void runTestMode(Server &server, Client *client);
+void runTestMode(Server &server, Client *client,
+                 const std::string &target,
+                 const std::string &modes,
+                 const std::string &params);
 void runTestTopic(Server &server, Client *client,
                   const std::string &channel,
                   const std::string &topic);

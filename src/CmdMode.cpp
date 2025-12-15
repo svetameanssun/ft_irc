@@ -1,45 +1,42 @@
-
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-/*
+
 //TODO: Very big command, change it into smaller pieces; refactor and adapt the logic 
 void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
-    if (!client)
+    if (!client || !result)
         return;
 
-    if (args.empty())
-    {
-        MessageSender::sendNumeric(_server.getServerName(), client, 461, "MODE :Not enough parameters");
-        return;
-    }
+    ParserResultMode *result2 = static_cast<ParserResultMode*>(result);
+    result2->printResult();
 
-    const std::string &target = args[0];
-
+    const std::vector<std::string> &paramsVec = result2->getModeParams();
+    const std::string firstParam = paramsVec.at(0);
     // ===============================================
     // USER MODES
     // ===============================================
-    if (target[0] != '#')
+    if (firstParam.at(0) != '#')
     {
         // Only server can grant +o (IRC operator)
-        if (args.size() == 1)
+        //TODO: [LANA][MODE cmd] I believe that when attempting to "query user mode", the parser gives an error
+        if (paramsVec.size() == 2)
         {
             // Query user mode
             std::string modes = client->isOperator() ? "+o" : "";
-            MessageSender::sendNumeric(_server.getServerName(), client, 221, client->getNick() + " " + modes);
+            MessageSender::sendNumeric(_server.getServerName(), client, RPL_UMODEIS, client->getNick() + " " + modes);
             return;
         }
-
-        const std::string &modeStr = args[1];
+        //TODO: Check if we receive the modes as a single string or if they are divided each mode as different string
+        const std::string &modeStr = paramsVec.at(1);
         if (modeStr.find('o') != std::string::npos)
         {
             // Users cannot set themselves as IRC operators //TODO: it needs to ignore silently
-            MessageSender::sendNumeric(_server.getServerName(), client, 481, ":Permission Denied - You're not an IRC operator");
+            return;
         }
         else
         {
-            MessageSender::sendNumeric(_server.getServerName(), client, 472, modeStr + " :Unknown mode flag");
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_UNKNOWNMODE, modeStr + " :Unknown mode flag");
         }
         return;
     }
@@ -47,15 +44,15 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     // ===============================================
     // CHANNEL MODES
     // ===============================================
-    Channel *chan = _server.getChannelManager().findChannel(target);
+    Channel *chan = _server.getChannelManager().findChannel(firstParam);
     if (!chan)
     {
-        MessageSender::sendNumeric(_server.getServerName(), client, 403, target + " :No such channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL, firstParam + " :No such channel");
         return;
     }
 
-    // Query channel modes
-    if (args.size() == 1)
+    // Query channel modes, append all the modes that are active
+    if (paramsVec.size() == 1)
     {
         std::string modeStr = "+";
         if (chan->isInviteOnly()) modeStr += "i";
@@ -70,17 +67,19 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     // Must be operator to modify modes
     if (!chan->isMember(client->getFd()))
     {
-        MessageSender::sendNumeric(_server.getServerName(), client, 442, target + " :You're not on that channel");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL, firstParam + " :You're not on that channel");
         return;
     }
     if (!chan->isOperator(client->getFd()))
     {
-        MessageSender::sendNumeric(_server.getServerName(), client, 482, target + " :You're not channel operator");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED, firstParam + " :You're not channel operator");
         return;
     }
 
     // --- Parse and apply modes ---
-    const std::string &modeStr = args[1];
+    //TODO: This needs to be done IF it hasn't been done in the parser already
+    //TODO: Leave it for later
+    const std::string &modeStr = firstParam;
     bool adding = true;
     size_t argIndex = 2;
 
@@ -103,12 +102,12 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
             case 'k':
                 if (adding)
                 {
-                    if (argIndex >= args.size())
+                    if (argIndex >= paramsVec.size())
                     {
                         MessageSender::sendNumeric(_server.getServerName(), client, 461, "MODE +k :Not enough parameters");
                         return;
                     }
-                    chan->setKey(args[argIndex++]);
+                    chan->setKey(paramsVec[argIndex++]);
                 }
                 else
                 {
@@ -117,13 +116,13 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                 break;
 
             case 'o':
-                if (argIndex >= args.size())
+                if (argIndex >= paramsVec.size())
                 {
                     MessageSender::sendNumeric(_server.getServerName(), client, 461, "MODE +o :Not enough parameters");
                     return;
                 }
                 {
-                    std::string targetNick = args[argIndex++];
+                    std::string targetNick = paramsVec[argIndex++];
                     Client *targetClient = _server.getClientManager().findByNick(targetNick);
                     if (!targetClient || !chan->isMember(targetClient->getFd()))
                     {
@@ -140,12 +139,12 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
             case 'l':
                 if (adding)
                 {
-                    if (argIndex >= args.size())
+                    if (argIndex >= paramsVec.size())
                     {
                         MessageSender::sendNumeric(_server.getServerName(), client, 461, "MODE +l :Not enough parameters");
                         return;
                     }
-                    int limit = std::atoi(args[argIndex++].c_str());
+                    int limit = std::atoi(paramsVec[argIndex++].c_str());
                     if (limit <= 0)
                         limit = 0;
                     chan->setUserLimit(limit);
@@ -165,12 +164,11 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     // Broadcast the final mode change to the channel
     std::ostringstream oss;
     oss << ":" << client->getNick() << "!" << client->getUser() << "@" << client->getHost()
-        << " MODE " << target << " " << modeStr;
+        << " MODE " << firstParam<< " " << modeStr;
     // Append arguments used (if any)
-    for (size_t j = 2; j < args.size(); ++j)
-        oss << " " << args[j];
+    for (size_t j = 2; j < paramsVec.size(); ++j)
+        oss << " " << paramsVec[j];
     oss << "\r\n";
 
     chan->broadcast(oss.str());
 }
-*/

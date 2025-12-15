@@ -207,6 +207,55 @@ int main()
     runTestTopic(server, &alice, "#ghost", "");
     runTestTopic(server, &alice, "#ghost", "Hello?");
 
+    // ======================================================
+    //  MODE COMMAND TESTS
+    // ======================================================
+
+    std::cout << "\n============== MODE TESTS ==============\n";
+
+    // Precondition: Alice and Bob are in #room1
+    // Alice is channel operator (creator)
+
+    // 1️⃣ Query channel modes
+    runTestMode(server, &alice, "#room1", "", "");
+
+    // 2️⃣ Set invite-only (+i)
+    runTestMode(server, &alice, "#room1", "+i", "");
+
+    // 3️⃣ Remove invite-only (-i)
+    runTestMode(server, &alice, "#room1", "-i", "");
+
+    // 4️⃣ Set topic lock (+t)
+    runTestMode(server, &alice, "#room1", "+t", "");
+
+    // 5️⃣ Set channel key (+k)
+    runTestMode(server, &alice, "#room1", "+k", "secret");
+
+    // 6️⃣ Remove channel key (-k)
+    runTestMode(server, &alice, "#room1", "-k", "");
+
+    // 7️⃣ Set user limit (+l)
+    runTestMode(server, &alice, "#room1", "+l", "2");
+
+    // 8️⃣ Remove user limit (-l)
+    runTestMode(server, &alice, "#room1", "-l", "");
+
+    // 9️⃣ Promote Bob to operator (+o)
+    runTestMode(server, &alice, "#room1", "+o", "Bob");
+
+    // 🔟 Demote Bob from operator (-o)
+    runTestMode(server, &alice, "#room1", "-o", "Bob");
+
+    // 1️⃣1️⃣ Bob tries to set a mode without privileges (should fail)
+    runTestMode(server, &bob, "#room1", "+i", "");
+
+    // 1️⃣2️⃣ User MODE query (Bob querying his own modes)
+    runTestMode(server, &bob, "Bob", "", "");
+
+    // 1️⃣3️⃣ User tries to give himself +o (should fail or ignore)
+    runTestMode(server, &bob, "Bob", "+o", "");
+
+    std::cout << "\n============== MODE TESTS END ==============\n";
 
     std::cout << "\n============== TEST SUITE END ==============\n";
     return 0;

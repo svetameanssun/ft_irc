@@ -215,3 +215,32 @@ void runTestTopic(Server &server, Client *client,
 
     std::cout << "===========================================\n";
 }
+
+// === MODE Test ===
+void runTestMode(Server &server, Client *client,
+                 const std::string &target,
+                 const std::string &modes,
+                 const std::string &params)
+{
+    ensureClientRegistered(server, client);
+
+    std::cout << "\n=== TEST: " << client->getNick()
+              << " MODE " << target;
+
+    if (!modes.empty())
+        std::cout << " " << modes;
+    if (!params.empty())
+        std::cout << " " << params;
+
+    std::cout << " ===\n";
+
+    std::string raw = "MODE " + target;
+    if (!modes.empty())
+        raw += " " + modes;
+    if (!params.empty())
+        raw += " " + params;
+
+    server.executeRoutine(client, raw, "MODE");
+
+    std::cout << "===========================================\n";
+}
