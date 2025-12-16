@@ -18,8 +18,11 @@ class ParserResultTopic : public AParserResult {
     
   /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> topicCommand);
+    void setTopicQuery(bool flag);
+
     const std::vector<std::string> getTopicParams(void) const;
     const std::string getTopicMessage(void) const;
+    bool isTopicQuery(void);
 
     /*================= COMMAND CHECKING ================*/
     int checkTopicParams(std::vector<std::string> messageVec);
@@ -30,6 +33,7 @@ class ParserResultTopic : public AParserResult {
   private:
     std::vector <std::string> _topicParamsVec;
     std::string _topicMessage;
+    bool _topicQuery; // 1 - query the topic , 0 - clear the topic
 };
 
 #endif

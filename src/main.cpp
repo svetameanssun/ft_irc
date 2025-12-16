@@ -160,6 +160,51 @@ void testPrivmsgEdgeCases(Server &server)
     // ❌ No such channel
     runTestPrivmsg(server, &alice, "#doesnotexist", "Hello");
 
+    // ======================================================
+//  NOTICE COMMAND TESTS
+// ======================================================
+
+    std::cout << "\n============== NOTICE TESTS ==============\n";
+
+    // 1️⃣ NOTICE to a user
+    runTestNotice(server, &alice, "Bob", "Hello Bob (notice)");
+
+    // 2️⃣ NOTICE to a channel
+    runTestNotice(server, &bob, "#room1", "Notice to room1");
+
+    // 3️⃣ NOTICE to non-existing user (MUST SILENTLY FAIL)
+    runTestNotice(server, &alice, "GhostUser", "You should not see this");
+
+    // 4️⃣ NOTICE to non-existing channel (MUST SILENTLY FAIL)
+    runTestNotice(server, &alice, "#ghost", "This channel does not exist");
+
+    // 6️⃣ NOTICE with empty message (parser may block; OK either way)
+    runTestNotice(server, &alice, "Bob", "");
+
+    // 7️⃣ NOTICE to self (allowed)
+    runTestNotice(server, &alice, "Alice", "Talking to myself");
+
+    std::cout << "\n============== NOTICE TESTS END ==============\n";
+
+        // 1️⃣ NOTICE to a user
+    runTestPrivmsg(server, &alice, "Bob", "Hello Bob (notice)");
+    
+    // 2️⃣ NOTICE to a channel
+    runTestPrivmsg(server, &bob, "#room1", "Notice to room1");
+    
+    // 3️⃣ NOTICE to non-existing user (MUST SILENTLY FAIL)
+    runTestPrivmsg(server, &alice, "GhostUser", "You should not see this");
+    
+    // 4️⃣ NOTICE to non-existing channel (MUST SILENTLY FAIL)
+    runTestPrivmsg(server, &alice, "#ghost", "This channel does not exist");
+    
+    // 6️⃣ NOTICE with empty message (parser may block; OK either way)
+    runTestPrivmsg(server, &alice, "Bob", "");
+    
+    // 7️⃣ NOTICE to self (allowed)
+    runTestPrivmsg(server, &alice, "Alice", "Talking to myself");
+
+
     std::cout << "\n========== PRIVMSG EDGE CASES END ==========\n";
 }
 
@@ -194,6 +239,7 @@ void testQuitEdgeCases(Server &server)
     Client ghost(99, "localhost");
     runTestQuit(server, &ghost, "Bye");
 
+    
     std::cout << "\n========== QUIT EDGE CASES END ==========\n";
 }
 

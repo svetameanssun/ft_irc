@@ -15,10 +15,9 @@ void CommandHandler::cmdNotice(Client *client, AParserResult *result)
     ParserResultNotice *result2 = static_cast<ParserResultNotice*>(result);
     std::vector<std::string> targetsVec = result2->getTargetVec();
     //TODO:Right now we just get the first target
-    const std::string &target  = targetsVec.at(0);//params[0];
-    //TODO: [LANA] Funny thing, when I receive the message, it is all joined, no spaces
-    const std::string &message = result2->getNoticeMessage();//params[1];
-    log_debug("Message: %s", message.c_str());
+    const std::string &target  = targetsVec.at(0);
+
+    const std::string &message = result2->getNoticeMessage();
 
     // Channel NOTICE
     if (!target.empty() && target[0] == '#')

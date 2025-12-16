@@ -45,11 +45,7 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
     {
         if (chan->getTopic().empty())
         {
-            //TODO: [LANA] There are 2 possibilities when the Topic msg is empty:
-            //TODO: “query topic” or “clear topic” . We distinguish them by whether the TOPIC command includes a trailing parameter (:) or not.
-            //TODO: If it has a trailing (:) -> Clear topic
-            //TODO: if it has not -> Query topic 
-            //TODO: Do we have a way to distinguish this?
+            //TODO: Implement both cases
             MessageSender::sendNumeric(_server.getServerName(), client,
                                        RPL_NOTOPIC,
                                        chanName + " :No topic is set");

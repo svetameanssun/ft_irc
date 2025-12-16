@@ -91,7 +91,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	(void) cmd;
 	int ret = launchParcing(rawCommand);
 
-	//TODO: [LANA][PrivMsg command]: For RFC compliant messages, it seems that it returs an error message, which should not be the case; not quite sure by th way
 	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
