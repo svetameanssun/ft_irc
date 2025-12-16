@@ -57,7 +57,6 @@ void runTestUser(Server &server, Client *client,
               << " " << realname << " ===\n";
 
     // RFC format: USER <username> 0 * :<realname>
-    //TODO: [LANA]: It seems like the parser does not get correctly the real name
     std::string rawCommand = "USER " + username + " 0 * :" + realname;
 
     server.executeRoutine(client, rawCommand, "USER");

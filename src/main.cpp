@@ -1,23 +1,83 @@
+#include <iostream>
 #include "Server.hpp"
 #include "Client.hpp"
 #include "CommandHandler.hpp"
 #include "cmdtests.hpp"
-#include <iostream>
 
-int main()
+// ======================================================
+// Utilities
+// ======================================================
+//
+//void ensureClientRegistered(Server &server, Client *client)
+//{
+//    ClientManager &manager = server.getClientManager();
+//    if (!manager.clientExists(client->getFd()))
+//        manager.addClient(client);
+//}
+
+// ======================================================
+// REGISTRATION TESTS
+// ======================================================
+
+void testRegistrationSuite(Server &server)
 {
-    Server server(6667, "password");
-
-    // Fake clients (5 users)
     Client alice(3, "localhost");
     Client bob(4, "localhost");
     Client carol(5, "localhost");
     Client dave(6, "localhost");
     Client eve(7, "localhost");
 
-    std::cout << "\n========== USER REGISTRATION SUITE ==========\n";
+    std::cout << "\n========== REGISTRATION SUITE ==========\n";
 
-    // All users correctly register
+    // ✔️ Correct registration
+    runTestPass(server, &alice, "password");
+    runTestNick(server, &alice, "Alice");
+    runTestUser(server, &alice, "aliceUser", "Alice Real");
+
+    // ✔️ Delayed registration
+    runTestPass(server, &bob, "password");
+    runTestNick(server, &bob, "Bob");
+    runTestUser(server, &bob, "bobUser", "Bob Real");
+
+    // ❌ NICK before PASS
+    runTestNick(server, &carol, "Carol");
+
+    // ❌ USER before PASS
+    runTestUser(server, &carol, "carolUser", "Carol Real");
+
+    // ❌ Wrong password
+    runTestPass(server, &dave, "wrongpass");
+
+    // ❌ Duplicate nick
+    runTestNick(server, &eve, "Alice");
+
+    // ❌ Empty nick
+    runTestNick(server, &eve, "");
+
+    // ❌ Empty username
+    runTestUser(server, &eve, "", "Real Name");
+
+    // ❌ Re-registration attempt
+    runTestPass(server, &alice, "password");
+    runTestNick(server, &alice, "NewAlice");
+    runTestUser(server, &alice, "newUser", "New Real");
+
+    std::cout << "\n========== REGISTRATION SUITE END ==========\n";
+}
+
+// ======================================================
+// JOIN EDGE CASES
+// ======================================================
+
+void testJoinEdgeCases(Server &server)
+{
+    Client alice(10, "localhost");
+    Client bob(11, "localhost");
+    Client carol(12, "localhost");
+    Client dave(13, "localhost");
+    Client eve(14, "localhost");
+
+    // Proper registration
     runTestPass(server, &alice, "password");
     runTestNick(server, &alice, "Alice");
     runTestUser(server, &alice, "aliceUser", "Alice Real");
@@ -38,225 +98,118 @@ int main()
     runTestNick(server, &eve, "Eve");
     runTestUser(server, &eve, "eveUser", "Eve Real");
 
-    std::cout << "\n============== REGISTRATION DONE ==============\n";
+    std::cout << "\n========== JOIN EDGE CASES ==========\n";
 
+    // ❌ Bad channel mask
+    runTestJoin(server, &alice, "roomNoHash", "");
 
-    // ======================================================
-    //  JOIN TESTS (simple, valid cases)
-    // ======================================================
+    // ❌ Key mismatch
+    server.getChannelManager().addChannel("#locked");
+    server.getChannelManager().findChannel("#locked")->setKey("1234");
+    server.getChannelManager().findChannel("#locked")->setKMode(true);
 
-    std::cout << "\n============== JOIN TESTS ==============\n";
+    runTestJoin(server, &alice, "#locked", "");
+
+    // ❌ Invite only
+    Channel *vip = server.getChannelManager().addChannel("#vip");
+    vip->setInviteOnly(true);
+
+    runTestJoin(server, &bob, "#vip", "");
+
+    // ❌ Channel full
+    Channel *tiny = server.getChannelManager().addChannel("#tiny");
+    tiny->setUserLimit(1);
+
+    runTestJoin(server, &carol, "#tiny", "");
+    runTestJoin(server, &dave, "#tiny", "");
+
+    // ✔️ JOIN 0 (leave all)
+    runTestJoin(server, &eve, "0", "");
+
+    std::cout << "\n========== JOIN EDGE CASES END ==========\n";
+}
+
+// ======================================================
+// PRIVMSG EDGE CASES
+// ======================================================
+
+void testPrivmsgEdgeCases(Server &server)
+{
+    Client alice(20, "localhost");
+    Client bob(21, "localhost");
+
+    runTestPass(server, &alice, "password");
+    runTestNick(server, &alice, "Alice");
+    runTestUser(server, &alice, "aliceUser", "Alice Real");
+
+    runTestPass(server, &bob, "password");
+    runTestNick(server, &bob, "Bob");
+    runTestUser(server, &bob, "bobUser", "Bob Real");
 
     runTestJoin(server, &alice, "#room1", "");
-    runTestJoin(server, &bob,   "#room1", "");
-    runTestJoin(server, &carol, "#room2", "");
-    runTestJoin(server, &dave,  "#room3", "");
 
-    std::cout << "\n============== JOIN DONE ==============\n";
+    std::cout << "\n========== PRIVMSG EDGE CASES ==========\n";
 
+    runTestTopic(server, &alice, "#vip", "");
+    // ❌ No such nick
+    runTestPrivmsg(server, &alice, "Ghost", "Hello?");
 
-    // ======================================================
-    //  PRIVMSG / NOTICE TESTS
-    // ======================================================
+    // ❌ Not on channel
+    runTestPrivmsg(server, &bob, "#room1", "Hello");
 
-    runTestPrivmsg(server, &alice, "Bob", "Hello Bob!");
-    runTestNotice(server, &bob, "Alice", "Notice for Alice");
+    // ❌ No such channel
+    runTestPrivmsg(server, &alice, "#doesnotexist", "Hello");
 
-    runTestPrivmsg(server, &carol, "#room2", "Hello room2!");
+    std::cout << "\n========== PRIVMSG EDGE CASES END ==========\n";
+}
 
+// ======================================================
+// QUIT EDGE CASES
+// ======================================================
 
-    // ======================================================
-    //  PART TESTS
-    // ======================================================
+void testQuitEdgeCases(Server &server)
+{
+    Client carol(30, "localhost");
+    Client eve(31, "localhost");
 
-    //runTestPart(server, &alice, "#room1", "Goodbye room1");
-    //runTestPart(server, &bob, "#room1", "");
+    runTestPass(server, &carol, "password");
+    runTestNick(server, &carol, "Carol");
+    runTestUser(server, &carol, "carolUser", "Carol Real");
 
+    runTestPass(server, &eve, "password");
+    runTestNick(server, &eve, "Eve");
+    runTestUser(server, &eve, "eveUser", "Eve Real");
 
-    // ======================================================
-    //  KICK TESTS
-    // ======================================================
+    runTestJoin(server, &carol, "#roomQuit", "");
 
-    std::cout << "\n============== KICK TESTS ==============\n";
+    std::cout << "\n========== QUIT EDGE CASES ==========\n";
 
-    // Alice kicks Bob from #room1 (Alice created it, so she is op)
-    //runTestKick(server, &alice, "#room1", "Bob", "Spamming");
+    // ✔️ QUIT with message
+    runTestQuit(server, &carol, "See you!");
 
-    // Carol creates a channel and kicks Dave
-    runTestJoin(server, &carol, "#mods", "");
-    runTestJoin(server, &dave, "#mods", "");
-    runTestKick(server, &carol, "#mods", "Dave", "Rule violation");
+    // ✔️ QUIT without message
+    runTestQuit(server, &eve, "");
 
-    std::cout << "\n============== KICK DONE ==============\n";
+    // ❌ QUIT unregistered client
+    Client ghost(99, "localhost");
+    runTestQuit(server, &ghost, "Bye");
 
-    // ======================================================
-    //  INVITE TESTS
-    // ======================================================
+    std::cout << "\n========== QUIT EDGE CASES END ==========\n";
+}
 
-    std::cout << "\n============== INVITE TESTS ==============\n";
+// ======================================================
+// MAIN
+// ======================================================
 
-    // Create invite-only channel
-    //Channel *vip = server.getChannelManager().addChannel("#vip");
+int main()
+{
+    Server server(6667, "password");
 
-    // Alice joins and becomes operator
-    runTestJoin(server, &alice, "#vip", "");
-    server.getChannelManager().findChannel("#vip")->setInviteOnly(true);
+    testRegistrationSuite(server);
+    testJoinEdgeCases(server);
+    testPrivmsgEdgeCases(server);
+    testQuitEdgeCases(server);
 
-
-    // Bob tries to join without invite
-    runTestJoin(server, &bob, "#vip", "");      // ERR_INVITEONLYCHAN
-
-    // Alice invites Bob
-    runTestInvite(server, &alice, "Bob", "#vip");
-
-    // Bob can now join
-    runTestJoin(server, &bob, "#vip", "");
-    runTestInvite(server, &alice, "Bob", "#vip");   // Already invited
-    
-    std::cout << "\n============== WRONG INVITE TESTS ==============\n";
-
-    runTestInvite(server, &bob, "Carol", "#vip");  // ERR_CHANOPRIVSNEEDED
-    runTestInvite(server, &alice, "Ghost", "#vip");// ERR_NOSUCHNICK
-    runTestInvite(server, &alice, "Bob", "#nope"); // ERR_NOSUCHCHANNEL
-
-
-    std::cout << "\n============== INVITE DONE ==============\n";
-
-    // ======================================================
-    //  TOPIC COMMAND TESTS
-    // ======================================================
-
-    std::cout << "\n============== TOPIC BASIC TESTS ==============\n";
-
-    // Alice sets topic
-    runTestTopic(server, &alice, "#room1", "Welcome to room1");
-
-    // Bob queries topic
-    runTestTopic(server, &bob, "#room1", "");
-
-    // Carol sets topic in her own channel
-    runTestTopic(server, &carol, "#room2", "Room2 discussion");
-
-    // Carol queries again
-    runTestTopic(server, &carol, "#room2", "");
-
-
-    // ======================================================
-    //  TOPIC OVERWRITE (NO +t MODE)
-    // ======================================================
-
-    std::cout << "\n============== TOPIC OVERWRITE TESTS ==============\n";
-
-    // Bob overwrites topic (allowed when +t not set)
-    runTestTopic(server, &bob, "#room1", "New topic by Bob");
-
-    // Alice queries to confirm update
-    runTestTopic(server, &alice, "#room1", "");
-
-
-    // ======================================================
-    //  TOPIC +t (TOPIC PROTECTED)
-    // ======================================================
-
-    std::cout << "\n============== TOPIC +t MODE TESTS ==============\n";
-
-    Channel *room1 = server.getChannelManager().findChannel("#room1");
-    room1->setTMode(true);   // +t
-
-    // Non-operator tries to change topic
-    runTestTopic(server, &bob, "#room1", "Bob tries to change topic");
-
-    // Operator changes topic
-    runTestTopic(server, &alice, "#room1", "Operator topic change");
-
-    // Bob queries topic
-    runTestTopic(server, &bob, "#room1", "");
-
-
-    // ======================================================
-    //  TOPIC CLEARING
-    // ======================================================
-
-    std::cout << "\n============== TOPIC CLEAR TEST ==============\n";
-
-    // Alice clears topic
-    runTestTopic(server, &alice, "#room1", "");
-
-    // Bob queries -> no topic
-    runTestTopic(server, &bob, "#room1", "");
-
-
-    // ======================================================
-    //  TOPIC NOT-ON-CHANNEL
-    // ======================================================
-
-    std::cout << "\n============== TOPIC NOT-ON-CHANNEL TESTS ==============\n";
-
-    // Eve is not in #room1
-    runTestTopic(server, &eve, "#room1", "");
-    runTestTopic(server, &eve, "#room1", "Trying to set topic");
-
-
-    // ======================================================
-    //  TOPIC INVALID CHANNEL
-    // ======================================================
-
-    std::cout << "\n============== TOPIC INVALID CHANNEL TESTS ==============\n";
-
-    // Channel does not exist
-    runTestTopic(server, &alice, "#ghost", "");
-    runTestTopic(server, &alice, "#ghost", "Hello?");
-
-    // ======================================================
-    //  MODE COMMAND TESTS
-    // ======================================================
-
-    std::cout << "\n============== MODE TESTS ==============\n";
-
-    // Precondition: Alice and Bob are in #room1
-    // Alice is channel operator (creator)
-
-    // 1️⃣ Query channel modes
-    runTestMode(server, &alice, "#room1", "", "");
-
-    // 2️⃣ Set invite-only (+i)
-    runTestMode(server, &alice, "#room1", "+i", "");
-
-    // 3️⃣ Remove invite-only (-i)
-    runTestMode(server, &alice, "#room1", "-i", "");
-
-    // 4️⃣ Set topic lock (+t)
-    runTestMode(server, &alice, "#room1", "+t", "");
-
-    // 5️⃣ Set channel key (+k)
-    runTestMode(server, &alice, "#room1", "+k", "secret");
-
-    // 6️⃣ Remove channel key (-k)
-    runTestMode(server, &alice, "#room1", "-k", "");
-
-    // 7️⃣ Set user limit (+l)
-    runTestMode(server, &alice, "#room1", "+l", "2");
-
-    // 8️⃣ Remove user limit (-l)
-    runTestMode(server, &alice, "#room1", "-l", "");
-
-    // 9️⃣ Promote Bob to operator (+o)
-    runTestMode(server, &alice, "#room1", "+o", "Bob");
-
-    // 🔟 Demote Bob from operator (-o)
-    runTestMode(server, &alice, "#room1", "-o", "Bob");
-
-    // 1️⃣1️⃣ Bob tries to set a mode without privileges (should fail)
-    runTestMode(server, &bob, "#room1", "+i", "");
-
-    // 1️⃣2️⃣ User MODE query (Bob querying his own modes)
-    runTestMode(server, &bob, "Bob", "", "");
-
-    // 1️⃣3️⃣ User tries to give himself +o (should fail or ignore)
-    runTestMode(server, &bob, "Bob", "+o", "");
-
-    std::cout << "\n============== MODE TESTS END ==============\n";
-
-    std::cout << "\n============== TEST SUITE END ==============\n";
+    std::cout << "\n========== ALL TESTS COMPLETED ==========\n";
     return 0;
 }

@@ -1,5 +1,8 @@
 #include "ParserResultUser.hpp"
 
+//TODO: [LANA]: It seems like the parser does not get correctly the real name
+// my parser has to accept this:
+// USER guest 0 * :Ronnie Reagan
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
@@ -38,7 +41,7 @@ void ParserResultUser::setParams(std::vector<std::string> userCommand){
   	}
   	this->_userParamsVec = userCommand;
 
-	//_realname.push_back('\0'); not sure if it is needed.
+	_realname.push_back('\0'); //not sure if it is needed.
 	this->_nickname += userCommand.at(0); 
 	if (userCommand.at(2)[0]!= ':'){
 		_realname+=userCommand.at(2);

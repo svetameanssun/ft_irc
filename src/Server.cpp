@@ -69,7 +69,7 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
-	//TODO: [LANA] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
+	//TODO:[LANA] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
 	CommandParcer *parcer = new CommandParcer(messageStr);
 	if (!parcer->splitMessage())
 	{
@@ -91,7 +91,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	(void) cmd;
 	int ret = launchParcing(rawCommand);
 
-	//TODO: [LANA][JOIN command]: When receiving a channel name with no "#" , I get a valid result (0), which should not be the case
 	//TODO: [LANA][PrivMsg command]: For RFC compliant messages, it seems that it returs an error message, which should not be the case; not quite sure by th way
 	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
