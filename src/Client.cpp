@@ -50,14 +50,14 @@ std::vector<std::string> Client::extractMessages()
 // ask the server->ChannelManager to do it 
 void Client::joinChannel(const std::string &name)
 {
-    log_msg("Client: I want to join a channel :D");
+    log_debug("[Client] I want to join a channel :D");
     if (std::find(_channels.begin(), _channels.end(), name) == _channels.end())
         _channels.push_back(name);
 }
 
 void Client::leaveChannel(const std::string &name)
 {
-    log_msg("Client: I want to leave a channel :()");
+    log_debug("[Client] I want to leave a channel :(");
     std::vector<std::string>::iterator it =
         std::find(_channels.begin(), _channels.end(), name);
     if (it != _channels.end())

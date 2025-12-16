@@ -35,6 +35,10 @@ void ParserResultTopic::setParams(std::vector<std::string> topicCommand) {
   this->_topicParamsVec = topicCommand;
 }
 
+void ParserResultTopic::setTopicQuery(bool flag) {
+    this->_topicQuery = flag;
+}
+
 const std::vector<std::string> ParserResultTopic::getTopicParams(void) const {
   return (this->_topicParamsVec);
 }
@@ -43,11 +47,18 @@ const std::string ParserResultTopic::getTopicMessage(void) const{
     return (this->_topicMessage);
 }
 
+bool ParserResultTopic::isTopicQuery(void) {
+    return (this->_topicQuery);
+}
+
+
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
 int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector){
+    
+    //Command: TOPIC <channel> [ <topic> ]
     if (messageVector.size() == 1){
         return (ERR_NEEDMOREPARAMS);
     }
@@ -58,11 +69,26 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         std::cout << this->getTopicMessage(); //I have to send the message to the client from here!!!
         return (0);
     }
-    if (messageVector[2][0] != ':'){
-        return (ERR_UNKNOWNCOMMAND);
+    if (messageVector[2].empty()){
+        this->setTopicQuery(1);//query the topic
     }
-    for (size_t i = 2; i < messageVector.size(); i++){
-        this->_topicMessage+= messageVector[i];
+    else{
+        if (messageVector[2] == ":"){
+            this->setTopicQuery(0);
+            return (0);
+        }
+    //TODO: check how to parse the "TOPIC #channel topic message"
+        if (messageVector[2][0] != ':'){
+            this->_topicMessage+= messageVector[2];
+            return 0;
+            //return (ERR_UNKNOWNCOMMAND);
+        }
+        for (size_t i = 2; i < messageVector.size(); i++){
+            this->_topicMessage+= messageVector[i];
+            this->_topicMessage+= " ";
+    
+        }
+        this->_topicMessage.erase(_topicMessage.size()-1,1);
     }
     return (0);
 }

@@ -29,8 +29,8 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
         return ERR_NONICKNAMEGIVEN;
     }
     if (messageVec.size() > 2){
-        return ERR_NEEDLESSPARAMS;
         delete(resultNick);
+        return ERR_NEEDLESSPARAMS;
     }
     if (!resultNick->isValidNick(messageVec.at(1))){
         delete(resultNick);
@@ -167,10 +167,11 @@ int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
 int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
     //trailing params
     ParserResultPrivmsg * resultPrivmsg = new ParserResultPrivmsg();
-    if (!resultPrivmsg->checkPrivmsgParams(messageVec))
+    int res = resultPrivmsg->checkPrivmsgParams(messageVec);
+    if (res > 0)
     {
         delete resultPrivmsg;
-        return ERR_UNKNOWNCOMMAND;
+        return (res);
     }
     resultPrivmsg->setParams(messageVec);
     this->_parserResult = resultPrivmsg;

@@ -6,8 +6,9 @@ ClientManager::ClientManager() {}
 
 ClientManager::~ClientManager()
 {
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-        delete it->second;
+    //TODO: there are problems with doble free here. Check what happens
+    //for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+    //    delete it->second;
 }
 
 void ClientManager::addClient(Client *client)//Add hostname if needed; maybe override, const std::string &hostname)

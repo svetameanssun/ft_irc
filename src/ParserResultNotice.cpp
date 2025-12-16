@@ -95,9 +95,13 @@ int ParserResultNotice::checkNoticeParams(std::vector <std::string> messageVecto
     else{
         for (size_t i = 2; i < messageVector.size(); ++i){
             this->_noticeMessage += messageVector[i];
+            this->_noticeMessage += " ";
+
         }
         this->_noticeMessage.erase(0, 1); // It removes the 1st char
                                             // (which in this case is ':')
+        this->_noticeMessage.erase(_noticeMessage.size()-1, 1);                              
+        
     }
     int res = checkNoticeTarget(messageVector[1]);
     if (res > 0){

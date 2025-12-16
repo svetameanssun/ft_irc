@@ -1,6 +1,8 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
+//TODO: It is a copy of "Notice" but responding to errors; if we modify "Notice", we need to modify this
+
 void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 {
     if (!client || !result)
@@ -13,22 +15,15 @@ void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
         return;
     }
 
-    ParserResultPrivmsg *res = static_cast<ParserResultPrivmsg*>(result);
-    std::vector<std::string> params = res->getPrivmsgParams();
-
-    if (params.size() < 2)
-    {
-        if (params.empty())
-            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NORECIPIENT,
-                                       ":No recipient given (PRIVMSG)");
-        else
-            MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTEXTTOSEND,
-                                       ":No text to send");
-        return;
-    }
+    ParserResultPrivmsg *result2 = static_cast<ParserResultPrivmsg*>(result);
+    std::vector<std::string> params = result2->getPrivmsgParams();
 
     const std::string &target = params[0];
     const std::string &message = params[1];
+    const std::string &message2 = result2->getPrivmsgMessage();
+    log_debug("Message from paramsVecPrivMsg: %s", message.c_str());
+    log_debug("Message from getPrivMsg: %s", message2.c_str());
+
 
     // Channel message
     if (!target.empty() && target[0] == '#')
@@ -49,7 +44,7 @@ void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 
         std::string msg = ":" + client->getPrefix() + " PRIVMSG " + target +
                           " :" + message + "\r\n";
-        chan->broadcast(msg); // broadcast to others
+        chan->broadcast(msg);
     }
     // User message
     else

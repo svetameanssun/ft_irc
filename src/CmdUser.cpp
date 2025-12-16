@@ -16,16 +16,6 @@ void CommandHandler::cmdUser(Client *client, AParserResult *result)
     }
 
     ParserResultUser *result2 = static_cast<ParserResultUser*>(result);
-    
-
-    //It should be done in the parser 
-    // We accept a simplified form: USER <username> <realname>
-    //if (args.size() < 2)
-    //{
-    //    // 461 ERR_NEEDMOREPARAMS
-    //    MessageSender::sendNumeric(_server.getServerName(), client, 461, "USER :Not enough parameters");
-    //    return;
-    //}
 
     if (result2)
     {
@@ -35,8 +25,8 @@ void CommandHandler::cmdUser(Client *client, AParserResult *result)
     else 
         return log_warning("[Command Handler] cmdUser: No args");
 
-    const std::string username = result2->getUserParams().at(0);
-    const std::string realname = result2->getUserParams().at(1);
+    const std::string username = result2->getNickname();
+    const std::string realname = result2->getRealname();
 
     client->setUser(username);
     client->setRealName(realname);

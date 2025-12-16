@@ -18,28 +18,28 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
         cmdNick(client, result);
     else if (command == "USER")
         cmdUser(client, result);
-    //else if (command == "JOIN")
-    //    cmdJoin(client, result);
-    //else if (command == "PRIVMSG")
-    //    cmdPrivmsg(client, result);
-    //else if (command == "NOTICE")
-    //    cmdNotice(client, result);
-    //else if (command == "PART")
-    //    cmdPart(client, result);
-    //else if (command == "QUIT")
-    //    cmdQuit(client, result);
+    else if (command == "JOIN")
+        cmdJoin(client, result);
+    else if (command == "PRIVMSG")
+        cmdPrivmsg(client, result);
+    else if (command == "NOTICE")
+        cmdNotice(client, result);
+    else if (command == "PART")
+        cmdPart(client, result);
+    else if (command == "QUIT")
+        cmdQuit(client, result);
     //else if (command == "PING")
     //    cmdPing(client, result);
     //else if (command == "PONG")
     //    cmdPong(client, result);
-    //else if (command == "MODE")
-    //    cmdMode(client, result);
-    //else if (command == "TOPIC")
-    //    cmdTopic(client, result);
-    //else if (command == "KICK")
-    //    cmdKick(client, result);
-    //else if (command == "INVITE")
-    //    cmdInvite(client, result);
+    else if (command == "MODE")
+        cmdMode(client, result);
+    else if (command == "TOPIC")
+        cmdTopic(client, result);
+    else if (command == "KICK")
+        cmdKick(client, result);
+    else if (command == "INVITE")
+        cmdInvite(client, result);
     else
         MessageSender::sendNumeric(_server.getServerName(), client, 421, command + " :Unknown command");
 }

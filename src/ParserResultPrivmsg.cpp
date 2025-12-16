@@ -94,9 +94,12 @@ int ParserResultPrivmsg::checkPrivmsgParams(std::vector <std::string> messageVec
     else{
         for (size_t i = 2; i < messageVector.size(); ++i){
             this->_privmsgMessage += messageVector[i];
+            this->_privmsgMessage += " ";
+
         }
         this->_privmsgMessage.erase(0, 1); // It removes the 1st char
                                             // (which in this case is ':')
+        this->_privmsgMessage.erase(_privmsgMessage.size()-1, 1);                              
     }
     int res = checkPrivmsgTarget(messageVector[1]);
     if (res > 0){

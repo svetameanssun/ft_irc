@@ -6,6 +6,7 @@
 
 class Client
 {
+    //TODO: A max limit of joined channels must be set; the implementation depends on the server, but for us, 10 should be just fine
     private:
         int         _fd;            //for the socket
         bool        _passAccepted;  //The client provided the good password

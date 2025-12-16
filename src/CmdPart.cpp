@@ -1,43 +1,71 @@
-
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
 void CommandHandler::cmdPart(Client *client, AParserResult *result)
 {
-    if (!client || !result) return;
-
-    //TODO: Change for the good class type
-    AParserResult *result2 = static_cast<ParserResultPrivmsg*>(result);
-
-    if (result2->getCommand().c_str()[0] != 'P')
-    {
-        log_err("PART: Not implemented yet");
-
-        //MessageSender::sendNumeric(_server.getServerName(), client, 461,
-                                    //"PART :Not enough parameters");
+    if (!client || !result)
         return;
-    }
-    //TODO:change this
-    std::string chanName = result2->getCommand();
-    Channel *chan = _server.getChannelManager().findChannel(chanName);
 
-    if (!chan || !chan->isMember(client->getFd()))
+    if (!client->isRegistered())
     {
-        // 442 ERR_NOTONCHANNEL
-        MessageSender::sendNumeric(_server.getServerName(), client, 442,
-                                    chanName + " :You're not on that channel");
+        MessageSender::sendNumeric(_server.getServerName(),
+                                   client, 451,
+                                   ":You have not registered");
         return;
     }
 
-    // Broadcast PART to channel
-    std::string partMsg = ":" + client->getNick() + "!" + client->getUser() + "@" +
-                          client->getHost() + " PART :" + chanName + "\r\n";
-    chan->broadcast(partMsg);
+    ParserResultPart *result2 = static_cast<ParserResultPart*>(result);
 
-    // Remove from channel
-    chan->removeMember(client);
+    // Multiple channels allowed: PART #a,#b,#c :optional message
+    const std::vector<std::string> &channels = result2->getPartChannelsVec();
+    const std::string &comment = result2->getPartMessage();
 
-    // If channel is now empty, remove it
-    if (chan->isEmpty())
-        _server.getChannelManager().removeChannel(chanName);
+    if (channels.empty())
+    {
+        MessageSender::sendNumeric(_server.getServerName(),
+                                   client, ERR_NEEDMOREPARAMS,
+                                   "PART :Not enough parameters");
+        return;
+    }
+
+    for (size_t i = 0; i < channels.size(); i++)
+    {
+        const std::string &chanName = channels[i];
+
+        Channel *chan = _server.getChannelManager().findChannel(chanName);
+        if (!chan)
+        {
+            MessageSender::sendNumeric(_server.getServerName(),
+                                       client, ERR_NOSUCHCHANNEL,
+                                       chanName + " :No such channel");
+            continue;
+        }
+
+        if (!chan->userExists(client->getFd()))
+        {
+            MessageSender::sendNumeric(_server.getServerName(),
+                                       client, ERR_NOTONCHANNEL,
+                                       chanName + " :You're not on that channel");
+            continue;
+        }
+
+        // Build PART message
+        std::string partMsg = ":" + client->getPrefix()
+                              + " PART " + chanName;
+
+        if (!comment.empty())
+            partMsg += " :" + comment;
+
+        partMsg += "\r\n";
+
+        // Send to others in channel
+        chan->broadcast(partMsg);
+
+        // Remove user
+        chan->removeMember(client);
+
+        // If channel empty → delete it
+        if (chan->isEmpty())
+            _server.getChannelManager().removeChannel(chanName);
+    }
 }

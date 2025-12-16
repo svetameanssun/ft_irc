@@ -18,8 +18,6 @@ int CommandParcer::commandProccess(void){
 	std::string cmd = getMessageVec().at(0);
 	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
 	this->_messageVec.at(0) = cmd;
-	//std::cout << _messageVec.at(0);
-	//std::cout << _message;
 	return (_cmdDisp.dispatch(_messageVec));
 }
 

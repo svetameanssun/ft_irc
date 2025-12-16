@@ -17,8 +17,9 @@ Server::~Server()
         ::close(_listenFd);
 
     //free all clients & channels
-    _clientManager.freeResources();
-    _channelManager.freeResources();
+	//TODO: It seems that there is a problem with a double free here
+    //_clientManager.freeResources();
+    //_channelManager.freeResources();
     log_msg("Hi I am the server, I am done here :)");
 }
 
@@ -68,7 +69,7 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
-	//TODO: [LANA] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
+	//TODO:[LANA] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
 	CommandParcer *parcer = new CommandParcer(messageStr);
 	if (!parcer->splitMessage())
 	{
@@ -90,6 +91,8 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 	(void) cmd;
 	int ret = launchParcing(rawCommand);
 
+	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
+	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
 
@@ -98,13 +101,15 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
 		dispatchCommand(client, this->_parcingResult->getCommand());
 		//TODO:We need to verify how to free the resources
         //deleteParserResult();
+		//TODO: Remove this at the end of the project
+		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
+
     }
     else
 	{
-		log_warning("Error case not yet implemented");
+		log_warning("Wrong command. Error case not yet implemented. Return proper message");
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
-	std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
 }
 
 void    Server::deleteParserResult() { delete _parcingResult; }
