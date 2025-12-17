@@ -1,5 +1,6 @@
 #include "Server.hpp"
-
+//TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
+//TODO [RUBEN] Check client and channel classes to find bugs
 // Default constructor
 Server::Server()
 : _serverName("irc_server"), _listenFd(-1), _port(0), _password(""),
