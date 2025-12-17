@@ -17,7 +17,7 @@ Server::~Server()
         ::close(_listenFd);
 
     //free all clients & channels
-	//TODO: It seems that there is a problem with a double free here
+	//TODO: [POINTERS] It seems that there is a problem with a double free here
     //_clientManager.freeResources();
     //_channelManager.freeResources();
     log_msg("Hi I am the server, I am done here :)");
@@ -68,8 +68,8 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "user newNickname  dddd:dddd"; // wrong input
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
-	//TODO:[LANA] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
-	//TODO:[LANA] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
+	//TODO:[LANA] [POINTERS] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
+	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
 	CommandParcer *parcer = new CommandParcer(messageStr);
 	if (!parcer->splitMessage())
 	{
@@ -85,10 +85,9 @@ int Server::launchParcing(std::string messageStr)
 	return result;
 }
 
-//TODO: Remove the const char param and put the return message correctly
-void Server::executeRoutine(Client *client, std::string &rawCommand, const char *cmd)
+//TODO: put the return message correctly
+void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	(void) cmd;
 	int ret = launchParcing(rawCommand);
 
 	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
@@ -99,7 +98,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand, const char 
     if (isAllowed(ret))
     {
 		dispatchCommand(client, this->_parcingResult->getCommand());
-		//TODO:We need to verify how to free the resources
+		//TODO:[POINTERS] We need to verify how to free the resources
         //deleteParserResult();
 		//TODO: Remove this at the end of the project
 		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;

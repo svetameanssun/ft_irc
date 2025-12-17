@@ -186,7 +186,7 @@ void testPrivmsgEdgeCases(Server &server)
 
     std::cout << "\n============== NOTICE TESTS END ==============\n";
 
-        // 1️⃣ NOTICE to a user
+    // 1️⃣ NOTICE to a user
     runTestPrivmsg(server, &alice, "Bob", "Hello Bob (notice)");
     
     // 2️⃣ NOTICE to a channel

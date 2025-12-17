@@ -1,9 +1,6 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-//TODO: Check the following statement: 
-//TODO: Because of this line in RFC2812: "There is no requirement that the channel, the target user is being invited to, must exist or be a valid channel."
-//TODO: The paramenters are not checked for this
 void CommandHandler::cmdInvite(Client *client, AParserResult *result)
 {
     if (!client || !result) return;

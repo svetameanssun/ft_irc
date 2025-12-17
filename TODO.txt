@@ -6,3 +6,4 @@ SERVER:
 CLIENT:
     - Check how to handle the buffer of the messages received
 
+Remove all the log messages 

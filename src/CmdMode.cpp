@@ -31,7 +31,8 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         const std::string &modeStr = paramsVec.at(1);
         if (modeStr.find('o') != std::string::npos)
         {
-            // Users cannot set themselves as IRC operators //TODO: it needs to ignore silently
+            // Users cannot set themselves as IRC operators
+            //TODO: it needs to ignore silently
             return;
         }
         else

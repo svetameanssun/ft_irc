@@ -29,7 +29,8 @@ void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 
 // Buffer handling
-void Client::appendToBuffer(const std::string &data) { _buffer += data; } //TODO: We need to work on this 
+//TODO: [NETWORKING] We need to work on this
+void Client::appendToBuffer(const std::string &data) { _buffer += data; }  
 
 std::vector<std::string> Client::extractMessages()
 {

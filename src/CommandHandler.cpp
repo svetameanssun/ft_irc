@@ -4,10 +4,6 @@
 
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
-//TODO: We need to review each of them to check that everything works as intended
-//TODO: See if all the commands match with the specification of the subject and the partner has the same
-
-
 // Entry point: dispatch commands
 void CommandHandler::execute(Client *client, const std::string &command, AParserResult *result)
 {
