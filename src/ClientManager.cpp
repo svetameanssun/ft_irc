@@ -33,7 +33,8 @@ void ClientManager::removeClient(int fd)
 {
     std::map<int, Client*>::iterator it = _clients.find(fd);
     if (it != _clients.end()) {
-        delete it->second;
+        //TODO: [POINTERS]Right now clients are declared on stack, not valid deletion
+        //delete it->second;
         _clients.erase(it);
         std::cout << "[ClientManager] Removed client fd=" << fd << std::endl;
     }
@@ -59,13 +60,14 @@ Client *ClientManager::findByFd(int fd)
     return (it != _clients.end()) ? it->second : NULL;
 }
 
-static std::string toLower(const std::string &s)
-{
-    std::string r = s;
-    for (size_t i = 0; i < r.size(); i++)
-        r[i] = std::tolower(r[i]);
-    return r;
-}
+//TODO: [END] see if this is actually necessary
+//static std::string toLower(const std::string &s)
+//{
+//    std::string r = s;
+//    for (size_t i = 0; i < r.size(); i++)
+//        r[i] = std::tolower(r[i]);
+//    return r;
+//}
 
 Client *ClientManager::findByNick(const std::string &nick)
 {
@@ -75,13 +77,13 @@ Client *ClientManager::findByNick(const std::string &nick)
         log_warning("[Client Manager]: Nick is empty, returning...");
         return NULL;
     }
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+    this->printClients();
+    log_debug("Looking for %s", nick.c_str());
+    for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++)
     {
-        log_debug("[Client Manager] Listing clients... First: %i and Second: %s", it->first, it->second->getNick().c_str());
-        if (toLower(it->second->getNick()) == toLower(nick))
+        if (it->second->getNick() == nick)
         {
             std::cout << nick << std::endl;
-            log_msg("[Client Manager]: Nickname as param: %s", nick.c_str());
             log_msg("[Client Manager]: Found nickname: %s", it->second->getNick().c_str());
             return it->second;
         }
@@ -93,7 +95,7 @@ Client *ClientManager::findByNick(const std::string &nick)
 void ClientManager::broadcast(const std::string &msg, int excludeFd)
 {
     log_msg("[Client Mamanger]: Broadcasting to all the clients: ");
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
     {
         if (it->first == excludeFd) continue;
         //TODO: [NETWORKING] change this when connection established
@@ -105,14 +107,14 @@ void ClientManager::broadcast(const std::string &msg, int excludeFd)
 void ClientManager::printClients() const
 {
     std::cout << "Active clients:" << std::endl;
-    for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+    for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++)
         std::cout << " - FD: " << it->first << " Nick: " << it->second->getNick() << std::endl;
 }
 
 void ClientManager::freeResources()
 {
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-        delete it->second;
-    _clients.clear();
-    log_msg("[Client Manager]: resources freed");
+    //for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+    //    delete it->second;
+    //_clients.clear();
+    log_warning("[Client Manager]: resources not freed");
 }

@@ -1,7 +1,6 @@
 SERVER:
     - Implement checking for password and port, and decide where
     - (At the end) Implement signals 
-    - For the end: start looking at how to handle connections
 
 CLIENT:
     - Check how to handle the buffer of the messages received
