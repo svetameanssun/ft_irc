@@ -15,11 +15,7 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
 
     ParserResultTopic *result2 = static_cast<ParserResultTopic*>(result);
     const std::vector<std::string> paramsVec = result2->getTopicParams();
-    for (std::vector<std::string>::const_iterator it = paramsVec.begin();
-        it != paramsVec.end(); it++)
-    {
-        log_debug("[TOPIC cmd] Parameter[%s]", it->c_str());
-    }
+
 
     const std::string &chanName = paramsVec.at(0);
     Channel *chan = _server.getChannelManager().findChannel(chanName);
@@ -43,20 +39,40 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
     // === QUERY TOPIC ===
     if (result2->getTopicMessage().empty())
     {
-        if (chan->getTopic().empty())
+        if (result2->isTopicQuery())
         {
-            //TODO: Implement both cases
-            MessageSender::sendNumeric(_server.getServerName(), client,
-                                       RPL_NOTOPIC,
-                                       chanName + " :No topic is set");
+
+            if (chan->getTopic().empty())
+            {
+                MessageSender::sendNumeric(_server.getServerName(), client,
+                RPL_NOTOPIC,
+                chanName + " :No topic is set");
+            }
+            else
+            {
+                MessageSender::sendNumeric(_server.getServerName(), client,
+                RPL_TOPIC,
+                chanName + " :" + chan->getTopic());
+            }
+            return;
         }
         else
         {
-            MessageSender::sendNumeric(_server.getServerName(), client,
-                                       RPL_TOPIC,
-                                       chanName + " :" + chan->getTopic());
+            if (chan->isTopicLocked() && !chan->isOperator(client->getFd()))
+            {
+                MessageSender::sendNumeric(_server.getServerName(), client,
+                                           ERR_CHANOPRIVSNEEDED,
+                                           chanName + " :You're not channel operator");
+                return;
+            }
+            chan->setTopic("");
+
+            std::string msg = ":" + client->getPrefix() +
+                              " TOPIC " + chanName + " :\r\n";
+
+            chan->broadcast(msg);
+            return;
         }
-        return;
     }
 
     // === SET TOPIC ===

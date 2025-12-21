@@ -22,7 +22,7 @@ void CommandHandler::cmdPass(Client *client, AParserResult *result)
 
     if (!_server.getPassword().empty() && pass != _server.getPassword())
     {
-        //TODO: I believe we need to cut the connection if the password does not match; the user needs to open a new connection
+        //TODO: [NETWORKING] I believe we need to cut the connection if the password does not match; the user needs to open a new connection
         // 464 ERR_PASSWDMISMATCH
         client->setPassAccepted(false);
         log_warning("Password is not correct, user cannot register");

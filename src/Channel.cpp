@@ -52,6 +52,7 @@ bool Channel::addMember(Client *client, bool isOp)
         return false; // already member
     }
     _members[fd] = client;
+    client->joinChannel(this->getName());
     if (isOp)
     {
         log_msg("[Channel]: the user is a operator, added to op list");
@@ -66,6 +67,7 @@ void Channel::removeMember(Client *client)
     _members.erase(fd);
     _operators.erase(fd);
     _invited.erase(fd);
+    client->leaveChannel(this->getName());
     log_msg("[Channel]: The member has been deleted from the channel");
 }
 

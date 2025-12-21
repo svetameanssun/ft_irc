@@ -28,5 +28,5 @@ void CommandHandler::cmdQuit(Client *client, AParserResult *result)
     //// 3) Remove from server
     //_server.getClientManager().removeClient(client->getFd());
 //
-    ////TODO:(Networking layer must close the socket — not here)
+    ////TODO[NETWORKING](Networking layer must close the socket — not here)
 }

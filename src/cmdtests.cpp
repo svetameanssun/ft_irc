@@ -4,7 +4,7 @@
 #include "cmdtests.hpp"
 
 // Utility: ensure client exists in the registry
-//TODO: When networking implemented, we need to move this to its proper location
+//TODO: [NETWORKING] When networking implemented, we need to move this to its proper location
 void ensureClientRegistered(Server &server, Client *client)
 {
     ClientManager &manager = server.getClientManager();
@@ -29,7 +29,7 @@ void runTestPass(Server &server, Client *client, const std::string &password)
     std::cout << "\n=== TEST: " << client->getNick() << " PASS " << password << " ===\n";
 
     std::string rawCommand = "PASS " + password;
-    server.executeRoutine(client, rawCommand, "PASS");
+    server.executeRoutine(client, rawCommand);
 
     std::cout << "===========================================\n";
 }
@@ -42,7 +42,7 @@ void runTestNick(Server &server, Client *client, const std::string &newNick)
     std::cout << "\n=== TEST: " << client->getNick() << " NICK " << newNick << " ===\n";
 
     std::string rawCommand = "NICK " + newNick;
-    server.executeRoutine(client, rawCommand, "NICK");
+    server.executeRoutine(client, rawCommand);
 
     std::cout << "===========================================\n";
 }
@@ -59,7 +59,7 @@ void runTestUser(Server &server, Client *client,
     // RFC format: USER <username> 0 * :<realname>
     std::string rawCommand = "USER " + username + " 0 * :" + realname;
 
-    server.executeRoutine(client, rawCommand, "USER");
+    server.executeRoutine(client, rawCommand);
 
     std::cout << "===========================================\n";
 }
@@ -78,7 +78,7 @@ void runTestJoin(Server &server, Client *client,
     if (!key.empty())
         rawCommand += " " + key;
 
-    server.executeRoutine(client, rawCommand, "JOIN");
+    server.executeRoutine(client, rawCommand);
 
     std::cout << "===========================================\n";
 }
@@ -94,7 +94,7 @@ void runTestPrivmsg(Server &server, Client *sender,
               << message << " ===\n";
 
     std::string raw = "PRIVMSG " + target + " :" + message;
-    server.executeRoutine(sender, raw, "PRIVMSG");
+    server.executeRoutine(sender, raw);
 
     std::cout << "===========================================\n";
 }
@@ -110,7 +110,7 @@ void runTestNotice(Server &server, Client *sender,
               << message << " ===\n";
 
     std::string raw = "NOTICE " + target + " :" + message;
-    server.executeRoutine(sender, raw, "NOTICE");
+    server.executeRoutine(sender, raw);
 
     std::cout << "===========================================\n";
 }
@@ -132,7 +132,7 @@ void runTestPart(Server &server, Client *client,
     if (!comment.empty())
         raw += " :" + comment;
 
-    server.executeRoutine(client, raw, "PART");
+    server.executeRoutine(client, raw);
 
     std::cout << "===========================================\n";
 }
@@ -150,7 +150,7 @@ void runTestQuit(Server &server, Client *client, const std::string &message)
     if (!message.empty())
         raw += " :" + message;
 
-    server.executeRoutine(client, raw, "QUIT");
+    server.executeRoutine(client, raw);
 
     std::cout << "===========================================\n";
 }
@@ -173,7 +173,7 @@ void runTestKick(Server &server, Client *sender,
     if (!comment.empty())
         raw += " :" + comment;
 
-    server.executeRoutine(sender, raw, "KICK");
+    server.executeRoutine(sender, raw);
 
     std::cout << "===========================================\n";
 }
@@ -189,7 +189,7 @@ void runTestInvite(Server &server, Client *sender,
               << " INVITE " << target << " " << channel << " ===\n";
 
     std::string raw = "INVITE " + target + " " + channel;
-    server.executeRoutine(sender, raw, "INVITE");
+    server.executeRoutine(sender, raw);
 
     std::cout << "===========================================\n";
 }
@@ -210,7 +210,7 @@ void runTestTopic(Server &server, Client *client,
     if (!topic.empty())
         raw += " :" + topic;
 
-    server.executeRoutine(client, raw, "TOPIC");
+    server.executeRoutine(client, raw);
 
     std::cout << "===========================================\n";
 }
@@ -239,7 +239,7 @@ void runTestMode(Server &server, Client *client,
     if (!params.empty())
         raw += " " + params;
 
-    server.executeRoutine(client, raw, "MODE");
+    server.executeRoutine(client, raw);
 
     std::cout << "===========================================\n";
 }
