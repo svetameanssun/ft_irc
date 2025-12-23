@@ -9,6 +9,7 @@ OBJ_DIR  = obj/
 INC_FILES =		Server.hpp \
 				Client.hpp \
 				Channel.hpp \
+				NetworkManager.hpp \
 				ClientManager.hpp \
 				ChannelManager.hpp \
 				MessageSender.hpp \
@@ -40,6 +41,7 @@ FILES    = 	main.cpp \
 			Channel.cpp \
 			ClientManager.cpp \
 			ChannelManager.cpp \
+			NetworkManager.cpp \
 			MessageSender.cpp \
 			CommandHandler.cpp \
 			CmdPass.cpp \
