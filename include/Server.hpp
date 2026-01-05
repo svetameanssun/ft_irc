@@ -26,7 +26,8 @@ class Server
 {
     private:
         const std::string           _serverName;    // Name of the server
-        int                         _listenFd;      // listening socket //TODO: review function of this
+         //TODO: review function of this _listenFd
+        int                         _listenFd;      // listening socket
         int                         _port;          // port number
         std::string                 _password;      // optional server password
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
@@ -67,7 +68,7 @@ class Server
         // command handling 
         int     launchParcing(std::string messageStr);
         void    dispatchCommand(Client *client, const std::string &cmd);
-        void    executeRoutine(Client *client, std::string &rawCommand, const char *cmd);
+        void    executeRoutine(Client *client, std::string &rawCommand);
 
         // aux
         void    deleteParserResult(); 

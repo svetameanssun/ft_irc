@@ -1,4 +1,5 @@
 #include "MessageSender.hpp"
+#include <iomanip>
 
 // Send raw message
 void MessageSender::sendToClient(Client *client, const std::string &msg)
@@ -9,8 +10,7 @@ void MessageSender::sendToClient(Client *client, const std::string &msg)
     // For now, write to std::cout instead of socket
     std::cout << "Sending to " << client->getNick() << ": " << msg;
 
-    // TODO: Later: enable real network send message
-    // TODO: Define which structure we use
+    // TODO: [NETWORKING] enable real network send message
     log_warning("MessageSender: connection not established");
     // ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
@@ -22,9 +22,13 @@ void MessageSender::sendNumeric(const std::string &serverName, Client *client,
     if (!client)
         return;
 
+    //Necessary to comply with the requirements of the 3 digit reply
     std::ostringstream oss;
-    oss << ":" << serverName << " " << code << " " << client->getNick()
-        << " " << msg << "\r\n";
+    oss << ":" << serverName << " "
+    << std::setw(3) << std::setfill('0') << code
+    << " " << client->getNick()
+    << " " << msg << "\r\n";
+
 
     sendToClient(client, oss.str());
 }

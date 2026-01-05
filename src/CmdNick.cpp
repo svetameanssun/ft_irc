@@ -16,22 +16,13 @@ void CommandHandler::cmdNick(Client *client, AParserResult *result)
     ParserResultNick *result2 = static_cast<ParserResultNick*>(result);
 
     const std::string newNick = result2->getNickname();
-    //It should be done in the parser 
-    // check nickname validity basic rules (length > 0). We can add further validation later.
-    //if (newNick.empty())
-    //{
-    //    MessageSender::sendNumeric(_server.getServerName(), client, 431, ":No nickname given");
-    //    return;
-    //}
 
-    //TODO: check if nick already in use by another client; look at how to validate
     Client *other = _server.getClientManager().findByNick(newNick);
-    
-    if (other)
+
+    if (other && other->getFd() != client->getFd())
     {
-        // 436 ERR_NICKCOLLISION
         MessageSender::sendNumeric(_server.getServerName(),
-                                    client, ERR_NICKCOLLISION,
+                                    client, ERR_NICKNAMEINUSE,
                                     newNick + " :Nickname is already in use");
         return;
     }
@@ -57,6 +48,5 @@ void CommandHandler::cmdNick(Client *client, AParserResult *result)
         // RPL_WELCOME 001
         MessageSender::sendNumeric(_server.getServerName(), client, RPL_WELCOME,
                                     ":Welcome to the IRC network, " + client->getNick());
-        // Optionally send other welcome numerics (002,003,004) per RFC later
     }
 }

@@ -13,40 +13,48 @@ void CommandHandler::cmdNotice(Client *client, AParserResult *result)
         return;
 
     ParserResultNotice *result2 = static_cast<ParserResultNotice*>(result);
-    std::vector<std::string> targetsVec = result2->getTargetVec();
-    //TODO:Right now we just get the first target
-    const std::string &target  = targetsVec.at(0);
-
+    
+    const std::vector<std::string> &targetsVec = result2->getTargetVec();
     const std::string &message = result2->getNoticeMessage();
-
-    // Channel NOTICE
-    if (!target.empty() && target[0] == '#')
+    
+    for (size_t i = 0; i < targetsVec.size(); ++i)
     {
-        Channel *chan = _server.getChannelManager().findChannel(target);
-
-        // If channel doesn't exist or user is not in it → silently ignore
-        if (!chan || !chan->userExists(client->getFd()))
-            return;
-
-        std::string msg = ":" + client->getPrefix() +
-                          " NOTICE " + target +
-                          " :" + message + "\r\n";
-
-        chan->broadcast(msg);
+        const std::string &target = targetsVec[i];
+    
+        // ============================
+        // Channel NOTICE
+        // ============================
+        if (!target.empty() && target[0] == '#')
+        {
+            Channel *chan = _server.getChannelManager().findChannel(target);
+        
+            // RFC: silently ignore invalid channel or not-on-channel
+            if (!chan || !chan->userExists(client->getFd()))
+                continue;
+        
+            std::string msg = ":" + client->getPrefix() +
+                              " NOTICE " + target +
+                              " :" + message + "\r\n";
+        
+            chan->broadcast(msg);
+        }
+        // ============================
+        // User NOTICE
+        // ============================
+        else
+        {
+            Client *receiver = _server.getClientManager().findByNick(target);
+        
+            // RFC: silently ignore unknown nick
+            if (!receiver)
+                continue;
+        
+            std::string msg = ":" + client->getPrefix() +
+                              " NOTICE " + target +
+                              " :" + message + "\r\n";
+        
+            MessageSender::sendToClient(receiver, msg);
+        }
     }
-    // Direct NOTICE to user
-    else
-    {
-        Client *receiver = _server.getClientManager().findByNick(target);
 
-        // No such nick → silently ignore
-        if (!receiver)
-            return;
-
-        std::string msg = ":" + client->getPrefix() +
-                          " NOTICE " + target +
-                          " :" + message + "\r\n";
-
-        MessageSender::sendToClient(receiver, msg);
-    }
 }
