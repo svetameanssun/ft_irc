@@ -13,6 +13,7 @@
 #include "CommandHandler.hpp"
 #include "ClientManager.hpp"
 #include "ChannelManager.hpp"
+#include "NetworkManager.hpp"
 #include "Channel.hpp"
 #include "CommandParcer.hpp"
 #include "utils.hpp"
@@ -37,6 +38,7 @@ class Server
         CommandHandler              _cmdHandler;    
         ClientManager               _clientManager;
         ChannelManager              _channelManager;
+        NetworkManager              _networkManager;
 
 
         Server(const Server &other);                // Copy of the server is not allowed
@@ -49,6 +51,8 @@ class Server
 
         // core methods
         void    init(char *argv[]);
+        void    run();
+        // is this still needed?
         void    initSocket();
         void    stop();
 
@@ -64,6 +68,7 @@ class Server
         // Managers accessors
         ClientManager &getClientManager() { return _clientManager; }
         ChannelManager &getChannelManager() { return _channelManager; }
+        //TODO: Make a NetworkManager accesor?
 
         // command handling 
         int     launchParcing(std::string messageStr);
@@ -72,4 +77,9 @@ class Server
 
         // aux
         void    deleteParserResult(); 
+
+        // handle client data 
+        void    onClientConnected(int fd);
+        void    onClientData(int fd);
+        void    disconnectClient(int fd);
 };

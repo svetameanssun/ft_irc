@@ -4,6 +4,8 @@
 #include <string>
 #include <poll.h>
 
+class Server; 
+
 class NetworkManager
 {
 private:
@@ -18,6 +20,7 @@ public:
     ~NetworkManager();
 
     void init();
+    void run(Server &server);
     void pollOnce();
 
     int acceptClient();

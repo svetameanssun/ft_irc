@@ -1,10 +1,12 @@
 #include "NetworkManager.hpp"
+#include "Server.hpp"
 
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 
 NetworkManager::NetworkManager(int port)
     : _listenFd(-1), _port(port) {}
@@ -13,7 +15,31 @@ NetworkManager::~NetworkManager() {  }
 
 void NetworkManager::init() { setupSocket(); }
 
+void NetworkManager::run(Server &server)
+{
+    init();
 
+    while (true)
+    {
+        log_debug("[Network manager] Inside the loop..");
+        poll(_pollFds.data(), _pollFds.size(), -1);
+
+        for (size_t i = 0; i < _pollFds.size(); ++i)
+        {
+            if (!(_pollFds[i].revents & POLLIN))
+                continue;
+
+            // Look at these functions
+            if (_pollFds[i].fd == _listenFd)
+                server.onClientConnected(acceptClient());
+            else
+                server.onClientData(_pollFds[i].fd);
+        }
+    }
+}
+
+
+//TODO: do not use throw clauses
 void NetworkManager::setupSocket()
 {
     _listenFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -21,7 +47,11 @@ void NetworkManager::setupSocket()
         throw std::runtime_error("socket failed");
 
     int opt = 1;
-    setsockopt(_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    if (setsockopt(_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+    {
+        log_err("Socket not initialized correctly");
+        return ;
+    }
 
     sockaddr_in addr;
     std::memset(&addr, 0, sizeof(addr));
@@ -44,6 +74,7 @@ void NetworkManager::setupSocket()
 
 void NetworkManager::pollOnce()
 {
+    //TODO: Check if it needs to be zero for nonblocking
     int ret = poll(&_pollFds[0], _pollFds.size(), -1);
     if (ret < 0)
         throw std::runtime_error("poll failed");
@@ -58,6 +89,9 @@ int NetworkManager::acceptClient()
     int clientFd = accept(_listenFd, (sockaddr*)&clientAddr, &len);
     if (clientFd < 0)
         return -1;
+    
+    fcntl(clientFd, F_SETFL, O_NONBLOCK);
+
 
     struct pollfd pfd;
     pfd.fd = clientFd;
@@ -68,7 +102,7 @@ int NetworkManager::acceptClient()
     return clientFd;
 }
 
-
+//TODO: Rigth now the data is handled on the server side
 ssize_t NetworkManager::receiveFrom(int fd, std::string &out)
 {
     char buffer[512];

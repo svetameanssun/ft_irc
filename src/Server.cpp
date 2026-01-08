@@ -1,15 +1,16 @@
 #include "Server.hpp"
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
 //TODO [RUBEN] Check client and channel classes to find bugs
+//TODO: Change the default constructor, it should always have a specified port
 // Default constructor
 Server::Server()
 : _serverName("irc_server"), _listenFd(-1), _port(0), _password(""),
-    _running(false), _cmdHandler(*this), _clientManager(), _channelManager() {}
+    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(6667) {}
 
 // Parametrized constructor
 Server::Server(int port, const std::string &password)
 : _serverName("irc_server"), _listenFd(-1), _port(port), _password(password),
-    _running(false), _cmdHandler(*this), _clientManager(), _channelManager() {}
+    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(port) {}
 
 // Destructor
 Server::~Server()
@@ -26,14 +27,19 @@ Server::~Server()
 
 void Server::init(char *argv[])
 {
-    //Check for input - password and port number
+    //TODO:: heck for input - password and port number
     //And remove the password
     setPassword(argv[2]);
-    log_debug("Password: %s", getPassword().c_str());
+    log_debug("[Server] Password: %s", getPassword().c_str());
 
     setPort(atoi(argv[1]));
-    log_debug("Server listening in port number: %d", getPort());
+    log_debug("[Server] Server listening in port number: %d", getPort());
+
+	log_debug("[Server] Running routine: ");
+	run();
 }
+
+void Server::run() { _networkManager.run(*this); }
 
 //setters
 void Server::setPort(int port) { _port = port; }
@@ -44,9 +50,8 @@ const std::string &Server::getServerName() const { return _serverName; }
 int Server::getPort() const { return _port; }
 const std::string &Server::getPassword() const { return _password; }
 
-
+// command handling
 void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parcingResult); }
-
 int Server::launchParcing(std::string messageStr)
 {
 	// string OUTSIDE the functions.
@@ -111,5 +116,51 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
 }
+
+// communication with network layer
+
+void Server::onClientConnected(int fd)
+{
+    Client *client = new Client(fd, "localhost"); // TODO: hostname later
+    _clientManager.addClient(client);
+
+    std::cout << "[Server] New client connected: fd=" << fd << std::endl;
+}
+
+//TODO: The recv func should be in the network layer I believe
+void Server::onClientData(int fd)
+{
+    char buf[512];
+    ssize_t bytes = recv(fd, buf, sizeof(buf), 0);
+
+    if (bytes <= 0)
+    {
+        disconnectClient(fd);
+        return;
+    }
+
+    Client *client = _clientManager.findByFd(fd);
+    if (!client) return;
+
+    client->appendToBuffer(std::string(buf, bytes));
+
+    std::vector<std::string> messages = client->extractMessages();
+
+    for (size_t i = 0; i < messages.size(); i++)
+        executeRoutine(client, messages[i]);
+}
+
+void Server::disconnectClient(int fd)
+{
+    Client *client = _clientManager.findByFd(fd);
+
+    if (client)
+		//TODO: I guess it is just to send a message to the client
+        //_commandHandler.handleQuit(client, "Connection closed");
+
+    _networkManager.closeFd(fd);
+    _clientManager.removeClient(fd);
+}
+
 
 void    Server::deleteParserResult() { delete _parcingResult; }

@@ -138,7 +138,7 @@ fclean: clean
 re: fclean all
 
 run: 
-	@./$(NAME) //9000 9@ft_irc2025
+	@./$(NAME) 6667 9@ft_irc2025
 
 test:
 	@if [ ! -f "$(TEST)" ]; then \
