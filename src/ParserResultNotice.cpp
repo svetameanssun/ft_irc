@@ -8,7 +8,7 @@ ParserResultNotice::ParserResultNotice()
         _command = "NOTICE";
 }
 
-ParserResultNotice::ParserResultNotice(const ParserResultNotice &other){
+ParserResultNotice::ParserResultNotice(const ParserResultNotice &other): AParserResult(){
     this->_command = other._command;
     this->_noticeParamsVec = other._noticeParamsVec;
     this->_targetVec = other._targetVec;

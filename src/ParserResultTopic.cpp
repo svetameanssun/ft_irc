@@ -7,7 +7,7 @@ ParserResultTopic::ParserResultTopic()
         _command = "TOPIC";
 }
 
-ParserResultTopic::ParserResultTopic(const ParserResultTopic &other){
+ParserResultTopic::ParserResultTopic(const ParserResultTopic &other) : AParserResult(){
     this->_command = other._command;
     this->_topicParamsVec = other._topicParamsVec;
 }

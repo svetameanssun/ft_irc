@@ -7,7 +7,7 @@ ParserResultMode::ParserResultMode()
         _command = "MODE";
 }
 
-ParserResultMode::ParserResultMode(const ParserResultMode &other){
+ParserResultMode::ParserResultMode(const ParserResultMode &other): AParserResult(){
     this->_command = other._command;
     this->_modeParamsVec = other._modeParamsVec;
 }
