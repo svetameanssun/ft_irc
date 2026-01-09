@@ -2,6 +2,7 @@
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
 //TODO [RUBEN] Check client and channel classes to find bugs
 //TODO: Change the default constructor, it should always have a specified port
+//TODO: [END] S I G N A L S
 // Default constructor
 Server::Server()
 : _serverName("irc_server"), _listenFd(-1), _port(0), _password(""),
@@ -104,7 +105,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
     if (isAllowed(ret))
     {
 		dispatchCommand(client, this->_parcingResult->getCommand());
-		//TODO:[POINTERS] We need to verify how to free the resources
+		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
         //deleteParserResult();
 		//TODO: Remove this at the end of the project
 		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
@@ -128,7 +129,6 @@ void Server::onClientConnected(int fd)
 }
 
 //TODO: The recv func should be in the network layer I believe
-//TODO: Remove all the log messages once the bug is fixed
 void Server::onClientData(int fd)
 {
     char buf[512];
@@ -153,7 +153,7 @@ void Server::onClientData(int fd)
 
 	if (messages.size() == 0)
 		log_warning("No messages");
-		
+
     for (size_t i = 0; i < messages.size(); i++)
         executeRoutine(client, messages[i]);
 }
