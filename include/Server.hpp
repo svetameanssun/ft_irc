@@ -16,6 +16,7 @@
 #include "NetworkManager.hpp"
 #include "Channel.hpp"
 #include "CommandParcer.hpp"
+#include "MessageSender.hpp"
 #include "utils.hpp"
 #include <sstream>
 

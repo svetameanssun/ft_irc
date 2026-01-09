@@ -33,10 +33,7 @@ void NetworkManager::run(Server &server)
             if (_pollFds[i].fd == _listenFd)
                 server.onClientConnected(acceptClient());
             else
-            {
-                log_debug("[Network Manager]: extracting data from buffer..");
                 server.onClientData(_pollFds[i].fd);
-            }
         }
     }
 }
@@ -77,7 +74,6 @@ void NetworkManager::setupSocket()
 
 void NetworkManager::pollOnce()
 {
-    //TODO: Check if it needs to be zero for nonblocking
     int ret = poll(&_pollFds[0], _pollFds.size(), -1);
     if (ret < 0)
         throw std::runtime_error("poll failed");

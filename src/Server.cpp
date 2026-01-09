@@ -27,7 +27,7 @@ Server::~Server()
 
 void Server::init(char *argv[])
 {
-    //TODO:: heck for input - password and port number
+    //TODO:: check for input - password and port number
     //And remove the password
     setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
@@ -82,7 +82,7 @@ int Server::launchParcing(std::string messageStr)
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
-	
+
 	int result = parcer->commandProccess();//
 	if (!parcer->getCommandDispatcher().getParserResult())
 		return (result);
@@ -146,21 +146,16 @@ void Server::onClientData(int fd)
 		log_warning("[onClientData] There is no client");
 		return;
 	}
-	log_debug("recv() returned %zd bytes", bytes);
 	std::string raw(buf, bytes);
-	log_debug("Raw data: [%s]", raw.c_str());
     client->appendToBuffer(std::string(buf, bytes));
 
-	log_debug("Buffer of client: %s", client->getBuffer().c_str());
     std::vector<std::string> messages = client->extractMessages();
 
 	if (messages.size() == 0)
 		log_warning("No messages");
+		
     for (size_t i = 0; i < messages.size(); i++)
-	{
-		log_debug("Executing routine...");
         executeRoutine(client, messages[i]);
-	}
 }
 
 void Server::disconnectClient(int fd)

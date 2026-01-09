@@ -10,9 +10,8 @@ void MessageSender::sendToClient(Client *client, const std::string &msg)
     // For now, write to std::cout instead of socket
     std::cout << "Sending to " << client->getNick() << ": " << msg;
 
-    // TODO: [NETWORKING] enable real network send message
-    log_warning("MessageSender: connection not established");
-    // ::send(client->getFd(), msg.c_str(), msg.size(), 0);
+    log_debug("MessageSender: sending to client");
+    ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 
 // Send numeric reply
