@@ -55,6 +55,7 @@ class Client
 
         //buffer handling, do it when we know how to handle data
         void appendToBuffer(const std::string &data);
+        const std::string &getBuffer();
         std::vector<std::string> extractMessages();
 
         //channel handling; look if it is really necessary to get the channels

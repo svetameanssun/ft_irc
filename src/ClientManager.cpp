@@ -1,4 +1,5 @@
 #include "ClientManager.hpp"
+#include "Server.hpp"
 
 ClientManager::ClientManager() {}
 
@@ -14,17 +15,8 @@ ClientManager::~ClientManager()
 void ClientManager::addClient(Client *client)//Add hostname if needed; maybe override, const std::string &hostname)
 {
     // TODO: resolve actual hostname with getpeername() maybe??
-    //TODO: [NETWORKING] Ensure that the clients are created correctly once we establish the connection
     _clients[client->getFd()] = client;
     log_warning("[Client Manager] addClient: Connection not established yet");
-
-    //TODO: [NETWORKING] When connections will be implemented
-    // Add to pollfd list
-    //struct pollfd pfd;
-    //pfd.fd = fd;
-    //pfd.events = POLLIN;
-    //pfd.revents = 0;
-    //_pollFds.push_back(pfd);
 
     log_msg("[ClientManager] Added client fd=%d", client->getFd());
 }
@@ -38,16 +30,6 @@ void ClientManager::removeClient(int fd)
         _clients.erase(it);
         std::cout << "[ClientManager] Removed client fd=" << fd << std::endl;
     }
-
-    //TODO: [NETWORKING] when we will implement the network part
-    log_warning("[Client Manager] removeClient: connection not established yet");
-    // Erase from pollfd list
-    //_pollFds.erase(
-    //    std::remove_if(_pollFds.begin(), _pollFds.end(),
-    //                   [fd](const struct pollfd& p) { return p.fd == fd; }),
-    //    _pollFds.end());
-
-    // Close socket
     close(fd);
 }
 
@@ -60,15 +42,6 @@ Client *ClientManager::findByFd(int fd)
     return (it != _clients.end()) ? it->second : NULL;
 }
 
-//TODO: [END] see if this is actually necessary
-//static std::string toLower(const std::string &s)
-//{
-//    std::string r = s;
-//    for (size_t i = 0; i < r.size(); i++)
-//        r[i] = std::tolower(r[i]);
-//    return r;
-//}
-
 Client *ClientManager::findByNick(const std::string &nick)
 {
     log_msg("[Client Manager]: Finding by name: ");
@@ -78,7 +51,6 @@ Client *ClientManager::findByNick(const std::string &nick)
         return NULL;
     }
     this->printClients();
-    log_debug("Looking for %s", nick.c_str());
     for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++)
     {
         if (it->second->getNick() == nick)
@@ -98,8 +70,8 @@ void ClientManager::broadcast(const std::string &msg, int excludeFd)
     for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
     {
         if (it->first == excludeFd) continue;
-        //TODO: [NETWORKING] change this when connection established
-        // sendToClient(it->second, msg); // later use MessageSender
+        //TODO: [END] [NETWORKING] verify this
+        MessageSender::sendToClient(it->second, msg);
         std::cout << "[Broadcast] " << msg << std::endl;
     }
 }
