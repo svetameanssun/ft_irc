@@ -30,8 +30,8 @@ void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
 // Buffer handling
-//TODO: [NETWORKING] We need to work on this
-void Client::appendToBuffer(const std::string &data) { _buffer += data; }  
+void Client::appendToBuffer(const std::string &data) { _buffer += data; }
+const std::string &Client::getBuffer() { return _buffer; }  
 
 std::vector<std::string> Client::extractMessages()
 {

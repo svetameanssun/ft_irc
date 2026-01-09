@@ -3,8 +3,8 @@
 #include "Client.hpp"
 #include "cmdtests.hpp"
 
+//TODO: Remove this file once it is done
 // Utility: ensure client exists in the registry
-//TODO: [NETWORKING] When networking implemented, we need to move this to its proper location
 void ensureClientRegistered(Server &server, Client *client)
 {
     ClientManager &manager = server.getClientManager();

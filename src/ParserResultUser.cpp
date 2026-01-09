@@ -40,14 +40,20 @@ void ParserResultUser::setParams(std::vector<std::string> userCommand){
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
   	}
   	this->_userParamsVec = userCommand;
-
+	// guest 0 * :Ronnie Reagan
 	_realname.push_back('\0'); //not sure if it is needed.
-	this->_nickname += userCommand.at(0); 
-	if (userCommand.at(2)[0]!= ':'){
-		_realname+=userCommand.at(2);
+	this->_nickname += userCommand.at(0);
+	
+	size_t i = 1;
+	if (userCommand.size() >= 4 && userCommand.at(1) == "0" && userCommand.at(2) == "*"){
+		i = 3;
+	}
+
+	if (userCommand.at(i)[0]!= ':'){
+		_realname+=userCommand.at(i);
 	}
 	else{
-		for (size_t i = 1; i < userCommand.size(); i++){
+		for (; i < userCommand.size(); i++){
 			_realname += userCommand.at(i);
 		}
 	}
@@ -85,13 +91,22 @@ bool ParserResultUser::isAllowedChar(char c){
 }
 
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
+	//TODO: [LANA]: It seems like the parser does not get correctly the real name
+	// my parser has to accept this:
 	
-	if (messageVec.size() > 15)
+	if (messageVec.size() > 15){
 		return (ERR_NEEDLESSPARAMS);
-	if (messageVec.size() < 3)
+	}
+	if (messageVec.size() < 3){
 		return (ERR_NEEDMOREPARAMS);
+	}
+	size_t i = 2;
+	
+	if (messageVec.size() >= 5 && messageVec.at(2) == "0" && messageVec.at(3) == "*"){
+		i = 4;
+	}
 	//NUL, CR, LF, space
-	for (size_t i = 2; i < messageVec.size(); i++){
+	for (; i < messageVec.size(); i++){
 		for (size_t j = 0; j  < messageVec.at(i).length(); j++){
 			if (!isAllowedChar(messageVec.at(i)[j]))
 				return (ERR_WRONGINPUT);
