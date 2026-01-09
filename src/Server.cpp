@@ -97,7 +97,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
 	int ret = launchParcing(rawCommand);
 
-	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
+	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
