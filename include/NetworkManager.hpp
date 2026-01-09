@@ -24,7 +24,7 @@ public:
     void pollOnce();
 
     int acceptClient();
-    ssize_t receiveFrom(int fd, std::string &out);
+    //ssize_t receiveFrom(int fd, std::string &out);
     void sendTo(int fd, const std::string &msg);
     void closeFd(int fd);
 
