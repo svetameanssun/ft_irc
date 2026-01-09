@@ -128,6 +128,7 @@ void Server::onClientConnected(int fd)
 }
 
 //TODO: The recv func should be in the network layer I believe
+//TODO: Remove all the log messages once the bug is fixed
 void Server::onClientData(int fd)
 {
     char buf[512];
@@ -140,14 +141,26 @@ void Server::onClientData(int fd)
     }
 
     Client *client = _clientManager.findByFd(fd);
-    if (!client) return;
-
+    if (!client)
+	{
+		log_warning("[onClientData] There is no client");
+		return;
+	}
+	log_debug("recv() returned %zd bytes", bytes);
+	std::string raw(buf, bytes);
+	log_debug("Raw data: [%s]", raw.c_str());
     client->appendToBuffer(std::string(buf, bytes));
 
+	log_debug("Buffer of client: %s", client->getBuffer().c_str());
     std::vector<std::string> messages = client->extractMessages();
 
+	if (messages.size() == 0)
+		log_warning("No messages");
     for (size_t i = 0; i < messages.size(); i++)
+	{
+		log_debug("Executing routine...");
         executeRoutine(client, messages[i]);
+	}
 }
 
 void Server::disconnectClient(int fd)
@@ -155,6 +168,9 @@ void Server::disconnectClient(int fd)
     Client *client = _clientManager.findByFd(fd);
 
     if (client)
+	{
+		log_debug("[Disconnect client]: bye bye baby");
+	}
 		//TODO: I guess it is just to send a message to the client
         //_commandHandler.handleQuit(client, "Connection closed");
 

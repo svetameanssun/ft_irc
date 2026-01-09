@@ -24,7 +24,7 @@ void NetworkManager::run(Server &server)
         log_debug("[Network manager] Inside the loop..");
         poll(_pollFds.data(), _pollFds.size(), -1);
 
-        for (size_t i = 0; i < _pollFds.size(); ++i)
+        for (size_t i = 0; i < _pollFds.size(); i++)
         {
             if (!(_pollFds[i].revents & POLLIN))
                 continue;
@@ -33,7 +33,10 @@ void NetworkManager::run(Server &server)
             if (_pollFds[i].fd == _listenFd)
                 server.onClientConnected(acceptClient());
             else
+            {
+                log_debug("[Network Manager]: extracting data from buffer..");
                 server.onClientData(_pollFds[i].fd);
+            }
         }
     }
 }
@@ -102,7 +105,7 @@ int NetworkManager::acceptClient()
     return clientFd;
 }
 
-//TODO: Rigth now the data is handled on the server side
+//TODO: Right now the data is handled on the server side
 ssize_t NetworkManager::receiveFrom(int fd, std::string &out)
 {
     char buffer[512];
