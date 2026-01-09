@@ -1,15 +1,17 @@
 #include "Server.hpp"
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
 //TODO [RUBEN] Check client and channel classes to find bugs
+//TODO: Change the default constructor, it should always have a specified port
+//TODO: [END] S I G N A L S
 // Default constructor
 Server::Server()
 : _serverName("irc_server"), _listenFd(-1), _port(0), _password(""),
-    _running(false), _cmdHandler(*this), _clientManager(), _channelManager() {}
+    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(6667) {}
 
 // Parametrized constructor
 Server::Server(int port, const std::string &password)
 : _serverName("irc_server"), _listenFd(-1), _port(port), _password(password),
-    _running(false), _cmdHandler(*this), _clientManager(), _channelManager() {}
+    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(port) {}
 
 // Destructor
 Server::~Server()
@@ -26,14 +28,19 @@ Server::~Server()
 
 void Server::init(char *argv[])
 {
-    //Check for input - password and port number
+    //TODO:: check for input - password and port number
     //And remove the password
     setPassword(argv[2]);
-    log_debug("Password: %s", getPassword().c_str());
+    log_debug("[Server] Password: %s", getPassword().c_str());
 
     setPort(atoi(argv[1]));
-    log_debug("Server listening in port number: %d", getPort());
+    log_debug("[Server] Server listening in port number: %d", getPort());
+
+	log_debug("[Server] Running routine: ");
+	run();
 }
+
+void Server::run() { _networkManager.run(*this); }
 
 //setters
 void Server::setPort(int port) { _port = port; }
@@ -44,9 +51,8 @@ const std::string &Server::getServerName() const { return _serverName; }
 int Server::getPort() const { return _port; }
 const std::string &Server::getPassword() const { return _password; }
 
-
+// command handling
 void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parcingResult); }
-
 int Server::launchParcing(std::string messageStr)
 {
 	// string OUTSIDE the functions.
@@ -77,7 +83,7 @@ int Server::launchParcing(std::string messageStr)
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
-	
+
 	int result = parcer->commandProccess();//
 	if (!parcer->getCommandDispatcher().getParserResult())
 		return (result);
@@ -91,7 +97,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
 	int ret = launchParcing(rawCommand);
 
-	//TODO: [LANA][QUIT command]: apparently it segfaults somewhere; I've commented my code and it is not there
+	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
@@ -99,7 +105,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
     if (isAllowed(ret))
     {
 		dispatchCommand(client, this->_parcingResult->getCommand());
-		//TODO:[POINTERS] We need to verify how to free the resources
+		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
         //deleteParserResult();
 		//TODO: Remove this at the end of the project
 		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
@@ -111,5 +117,61 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
         //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
 	}
 }
+
+// communication with network layer
+
+void Server::onClientConnected(int fd)
+{
+    Client *client = new Client(fd, "localhost"); // TODO: hostname later
+    _clientManager.addClient(client);
+
+    std::cout << "[Server] New client connected: fd=" << fd << std::endl;
+}
+
+//TODO: The recv func should be in the network layer I believe
+void Server::onClientData(int fd)
+{
+    char buf[512];
+    ssize_t bytes = recv(fd, buf, sizeof(buf), 0);
+
+    if (bytes <= 0)
+    {
+        disconnectClient(fd);
+        return;
+    }
+
+    Client *client = _clientManager.findByFd(fd);
+    if (!client)
+	{
+		log_warning("[onClientData] There is no client");
+		return;
+	}
+	std::string raw(buf, bytes);
+    client->appendToBuffer(std::string(buf, bytes));
+
+    std::vector<std::string> messages = client->extractMessages();
+
+	if (messages.size() == 0)
+		log_warning("No messages");
+
+    for (size_t i = 0; i < messages.size(); i++)
+        executeRoutine(client, messages[i]);
+}
+
+void Server::disconnectClient(int fd)
+{
+    Client *client = _clientManager.findByFd(fd);
+
+    if (client)
+	{
+		log_debug("[Disconnect client]: bye bye baby");
+	}
+		//TODO: I guess it is just to send a message to the client
+        //_commandHandler.handleQuit(client, "Connection closed");
+
+    _networkManager.closeFd(fd);
+    _clientManager.removeClient(fd);
+}
+
 
 void    Server::deleteParserResult() { delete _parcingResult; }

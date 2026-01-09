@@ -1,8 +1,7 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-
-//TODO: Very big command, change it into smaller pieces; refactor and adapt the logic 
+//TODO: [LANA] Implement the parser here, Ruben will implement the checks
 void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
     if (!client || !result)
@@ -19,7 +18,6 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     if (firstParam.at(0) != '#')
     {
         // Only server can grant +o (IRC operator)
-        //TODO: [LANA][MODE cmd] I believe that when attempting to "query user mode", the parser gives an error
         if (paramsVec.size() == 2)
         {
             // Query user mode
@@ -27,12 +25,10 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
             MessageSender::sendNumeric(_server.getServerName(), client, RPL_UMODEIS, client->getNick() + " " + modes);
             return;
         }
-        //TODO: Check if we receive the modes as a single string or if they are divided each mode as different string
         const std::string &modeStr = paramsVec.at(1);
         if (modeStr.find('o') != std::string::npos)
         {
             // Users cannot set themselves as IRC operators
-            //TODO: it needs to ignore silently
             return;
         }
         else
@@ -78,8 +74,6 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     }
 
     // --- Parse and apply modes ---
-    //TODO: This needs to be done IF it hasn't been done in the parser already
-    //TODO: Leave it for later
     const std::string &modeStr = firstParam;
     bool adding = true;
     size_t argIndex = 2;
@@ -162,14 +156,15 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         }
     }
 
-    // Broadcast the final mode change to the channel
-    std::ostringstream oss;
-    oss << ":" << client->getNick() << "!" << client->getUser() << "@" << client->getHost()
-        << " MODE " << firstParam<< " " << modeStr;
-    // Append arguments used (if any)
-    for (size_t j = 2; j < paramsVec.size(); ++j)
-        oss << " " << paramsVec[j];
-    oss << "\r\n";
-
-    chan->broadcast(oss.str());
+    //TODO: [RUBEN] I guess this is needed at the end of the command
+    //// Broadcast the final mode change to the channel
+    //std::ostringstream oss;
+    //oss << ":" << client->getNick() << "!" << client->getUser() << "@" << client->getHost()
+    //    << " MODE " << firstParam<< " " << modeStr;
+    //// Append arguments used (if any)
+    //for (size_t j = 2; j < paramsVec.size(); ++j)
+    //    oss << " " << paramsVec[j];
+    //oss << "\r\n";
+//
+    //chan->broadcast(oss.str());
 }
