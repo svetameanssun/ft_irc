@@ -7,7 +7,7 @@ ParserResultPrivmsg::ParserResultPrivmsg()
         _command = "PRIVMSG";
 }
 
-ParserResultPrivmsg::ParserResultPrivmsg(const ParserResultPrivmsg &other){
+ParserResultPrivmsg::ParserResultPrivmsg(const ParserResultPrivmsg &other): AParserResult(){
     this->_command = other._command;
     this->_privmsgParamsVec = other._privmsgParamsVec;
     this->_targetVec = other._targetVec;
