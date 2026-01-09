@@ -28,7 +28,6 @@ class Server
 {
     private:
         const std::string           _serverName;    // Name of the server
-         //TODO: review function of this _listenFd
         int                         _listenFd;      // listening socket
         int                         _port;          // port number
         std::string                 _password;      // optional server password
@@ -42,17 +41,18 @@ class Server
         NetworkManager              _networkManager;
 
 
+        Server();                                   // We do not want a server without port   
         Server(const Server &other);                // Copy of the server is not allowed
         Server &operator=(const Server& other);
 
     public:
-        Server();                                       
         Server(int port, const std::string& password);
         ~Server();                                     
 
         // core methods
-        void    init(char *argv[]);
+        void    init();
         void    run();
+
         // is this still needed?
         void    initSocket();
         void    stop();
@@ -69,7 +69,6 @@ class Server
         // Managers accessors
         ClientManager &getClientManager() { return _clientManager; }
         ChannelManager &getChannelManager() { return _channelManager; }
-        //TODO: Make a NetworkManager accesor?
 
         // command handling 
         int     launchParcing(std::string messageStr);
@@ -82,5 +81,5 @@ class Server
         // handle client data 
         void    onClientConnected(int fd);
         void    onClientData(int fd);
-        void    disconnectClient(int fd);
+        void    disconnectClient(int fd, const std::string &reason);
 };

@@ -1,7 +1,6 @@
 #include "ChannelManager.hpp"
 
 ChannelManager::ChannelManager() {}
-//ChannelManager::ChannelManager(Server &server) : _server(server) {}
 
 ChannelManager::~ChannelManager()
 {
@@ -54,13 +53,12 @@ void ChannelManager::broadcastToChannel(const std::string &name, const std::stri
 
 void ChannelManager::broadcastToJoinedChannels(int fd, const std::string &msg)
 {
+    log_debug("ChannelManager is looking for all channels where user belongs to broadcast");
     for(std::map<std::string, Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); ++it)
     {
         if (it->second->isMember(fd))
             it->second->broadcast(msg);
     }
-    log_debug("ChannelManager is looking for all channels where user belongs to broadcast");
-
 }
 
 void ChannelManager::removeClientFromChannels(Client *client)
@@ -79,7 +77,7 @@ void ChannelManager::removeClientFromChannels(Client *client)
                 continue;
             }
         }
-        ++it;
+        it++;
     }
     log_debug("ChannelManager is removing the user from all the channels");
 

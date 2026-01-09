@@ -1,7 +1,6 @@
 #include "Server.hpp"
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
-//TODO [RUBEN] Check client and channel classes to find bugs
-//TODO: Change the default constructor, it should always have a specified port
+//TODO: [RUBEN] Check client and channel classes to find bugs
 //TODO: [END] S I G N A L S
 // Default constructor
 Server::Server()
@@ -23,19 +22,13 @@ Server::~Server()
 	//TODO: [POINTERS] It seems that there is a problem with a double free here
     //_clientManager.freeResources();
     //_channelManager.freeResources();
-    log_msg("Hi I am the server, I am done here :)");
+    log_debug("[Server Destructor] Hi I am the server, I am done here :)");
 }
 
-void Server::init(char *argv[])
+void Server::init()
 {
-    //TODO:: check for input - password and port number
-    //And remove the password
-    setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
-
-    setPort(atoi(argv[1]));
     log_debug("[Server] Server listening in port number: %d", getPort());
-
 	log_debug("[Server] Running routine: ");
 	run();
 }
@@ -128,7 +121,6 @@ void Server::onClientConnected(int fd)
     std::cout << "[Server] New client connected: fd=" << fd << std::endl;
 }
 
-//TODO: The recv func should be in the network layer I believe
 void Server::onClientData(int fd)
 {
     char buf[512];
@@ -136,7 +128,7 @@ void Server::onClientData(int fd)
 
     if (bytes <= 0)
     {
-        disconnectClient(fd);
+        disconnectClient(fd, "Connection lost");
         return;
     }
 
@@ -158,18 +150,21 @@ void Server::onClientData(int fd)
         executeRoutine(client, messages[i]);
 }
 
-void Server::disconnectClient(int fd)
+void Server::disconnectClient(int fd, const std::string &reason)
 {
     Client *client = _clientManager.findByFd(fd);
 
-    if (client)
-	{
-		log_debug("[Disconnect client]: bye bye baby");
-	}
-		//TODO: I guess it is just to send a message to the client
-        //_commandHandler.handleQuit(client, "Connection closed");
+	if (!client) return;
+	if (client->isRegistered())
+    {
+        std::string quitMsg = ":" + client->getPrefix() +
+                              " QUIT :" + reason + "\r\n";
+
+        _channelManager.broadcastToJoinedChannels(fd, quitMsg);
+    }
 
     _networkManager.closeFd(fd);
+	_channelManager.removeClientFromChannels(client);
     _clientManager.removeClient(fd);
 }
 

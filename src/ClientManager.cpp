@@ -70,7 +70,6 @@ void ClientManager::broadcast(const std::string &msg, int excludeFd)
     for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
     {
         if (it->first == excludeFd) continue;
-        //TODO: [END] [NETWORKING] verify this
         MessageSender::sendToClient(it->second, msg);
         std::cout << "[Broadcast] " << msg << std::endl;
     }

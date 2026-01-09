@@ -42,6 +42,7 @@ void log_err(const char* format, ...)
     std::cerr << std::endl << RESET;
 }
 
+//TODO: Check if there are all the possibilities
 bool isAllowed(int code)
 {
     switch (code)
@@ -112,8 +113,65 @@ bool isAllowed(int code)
     }
 }
 
-
+//TODO: is this going to be used?
 void getRetMsg(int ret)
 {
     log_warning("Need to implement message for reply %d", ret);
+}
+
+// the suite for the check params function
+static bool isNumber(const std::string &s)
+{
+    if (s.empty()) return false;
+    for (size_t i = 0; i < s.size(); i++)
+        if (!std::isdigit(s[i]))
+            return false;
+    return true;
+}
+
+static bool isValidPassword(const std::string &pass)
+{
+    if (pass.empty())
+        return false;
+
+    for (size_t i = 0; i < pass.size(); i++)
+    {
+        if (std::isspace(pass[i]) || !std::isprint(pass[i]))
+            return false;
+    }
+    return true;
+}
+
+int checkParams(int argc, char **argv)
+{
+    if (argc != 3)
+    {
+        std::cerr << "Usage: ./ircserv <port> <password>" << std::endl;
+        return -1;
+    }
+
+    std::string portStr = argv[1];
+    std::string password = argv[2];
+
+    if (!isNumber(portStr))
+    {
+        std::cerr << "Error: Port must be numeric." << std::endl;
+        return -1;
+    }
+
+    int port = std::atoi(portStr.c_str());
+
+    if (port < 1024 || port > 65535)
+    {
+        std::cerr << "Error: Port must be between 1024 and 65535." << std::endl;
+        return -1;
+    }
+
+    if (!isValidPassword(password))
+    {
+        std::cerr << "Error: Invalid password." << std::endl;
+        return -1;
+    }
+
+    return 0;
 }

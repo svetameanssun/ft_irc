@@ -101,17 +101,16 @@ int NetworkManager::acceptClient()
     return clientFd;
 }
 
-//TODO: Right now the data is handled on the server side
-ssize_t NetworkManager::receiveFrom(int fd, std::string &out)
-{
-    char buffer[512];
-    ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
-
-    if (bytes > 0)
-        out.assign(buffer, bytes);
-
-    return bytes;
-}
+//ssize_t NetworkManager::receiveFrom(int fd, std::string &out)
+//{
+//    char buffer[512];
+//    ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
+//
+//    if (bytes > 0)
+//        out.assign(buffer, bytes);
+//
+//    return bytes;
+//}
 
 
 void NetworkManager::sendTo(int fd, const std::string &msg)
