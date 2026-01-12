@@ -18,7 +18,7 @@ const std::vector<std::string> &CommandParser::getMessageVec(void) const{
 	return (_messageVec);
 }
 
-const CommandDispatcher &CommandParcer::getCommandDispatcher() const { return this->_cmdDisp; }
+const CommandDispatcher &CommandParser::getCommandDispatcher() const { return this->_cmdDisp; }
 
 CommandParser::~CommandParser(){}
 
