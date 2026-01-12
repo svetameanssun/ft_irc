@@ -71,8 +71,8 @@ class Server
         ChannelManager &getChannelManager() { return _channelManager; }
         //TODO: Make a NetworkManager accesor?
 
-        // command handling 
-        int     launchParsing(std::string messageStr,  CommandParser &parser);
+        // command handling
+        int     launchParsing(CommandParser &parser);
         void    dispatchCommand(Client *client, const std::string &cmd);
         void    executeRoutine(Client *client, std::string &rawCommand);
 
