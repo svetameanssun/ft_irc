@@ -16,7 +16,7 @@ INC_FILES =		Server.hpp \
 				CommandHandler.hpp \
 				AParserResult.hpp \
 				CommandDispatcher.hpp \
-				CommandParcer.hpp \
+				CommandParser.hpp \
 				ParserResultJoin.hpp \
 				ParserResultNick.hpp \
 				ParserResultPass.hpp \
@@ -60,8 +60,8 @@ FILES    = 	main.cpp \
 			AParserResult.cpp \
 			CommandDispatcher.cpp \
 			CommandDispatcherUtils.cpp \
-			CommandParcer.cpp \
-			CommandParcerUtils.cpp \
+			CommandParser.cpp \
+			CommandParserUtils.cpp \
 			ParserResultJoin.cpp \
 			ParserResultNick.cpp \
 			ParserResultPass.cpp \
@@ -88,8 +88,8 @@ FILES_TEST	=	Server.cpp \
 				AParserResult.cpp \
 				CommandDispatcher.cpp \
 				CommandDispatcherUtils.cpp \
-				CommandParcer.cpp \
-				CommandParcerUtils.cpp \
+				CommandParser.cpp \
+				CommandParserUtils.cpp \
 				ParserResultJoin.cpp \
 				ParserResultNick.cpp \
 				ParserResultPass.cpp \

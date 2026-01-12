@@ -9,12 +9,14 @@ ParserResultMode::ParserResultMode()
 
 ParserResultMode::ParserResultMode(const ParserResultMode &other): AParserResult(){
     this->_command = other._command;
+    this->_modeFlagsStr = other._modeFlagsStr;
     this->_modeParamsVec = other._modeParamsVec;
 }
 
 ParserResultMode& ParserResultMode::operator=(const ParserResultMode& other){
     if(this != &other) {
         this->_modeParamsVec = other._modeParamsVec;
+        this->_modeFlagsStr = other._modeFlagsStr;
         this->_command = other._command;
     }
     return (*this);
@@ -31,11 +33,25 @@ void ParserResultMode::setParams(std::vector<std::string> modeCommand){
         modeCommand.erase(modeCommand.begin());  // drop the first element, which is the command itself
     }
     this->_modeParamsVec = modeCommand;
+    //I start with i = 1, becase I do not need channel name in my string;
+    for (size_t i = 1; i < modeCommand.size(); i++){
+        this->_modeFlagsStr += modeCommand.at(i);
+        this->_modeFlagsStr += " ";
+    }
+    if(_modeFlagsStr.at(_modeFlagsStr.length() - 1) == ' '){
+		_modeFlagsStr.erase(_modeFlagsStr.length() - 1, 1);
+	}
+
 }
 
 const std::vector<std::string> ParserResultMode::getModeParams(void) const{
     return (this->_modeParamsVec);
 }
+
+const std::string ParserResultMode::getModeFlagsStr(void) const{
+    return (this->_modeFlagsStr);
+}
+
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
@@ -98,20 +114,27 @@ const std::vector<std::string> ParserResultMode::getModeParams(void) const{
     if (c == 'l' && messageVec.size() != 4){
         return (false);
     }
-}
+}*/
 
-bool ParserResultMode::isValidChanFlag(std::string channelFlag){
-    if (channelFlag.at(0) != '-' && '+')
-        return(false);
-    std::string allowedFlags = "itkol\0";
-    int i = 1;
-    for (int i = 1; i < channelFlag.length() ; i++){
-        if (allowedFlags.find(channelFlag[i]) == std::string::npos){
+bool ParserResultMode::isChanFlag(char channelFlag){
+    std::string flags = "kolit";
+    for (size_t i = 0; i < flags.length() ; i++){
+        if (flags.find(channelFlag) == std::string::npos){
             return(false);
         }
     }
     return (true);
-}*/
+}
+
+bool ParserResultMode::hasPlusMinus(std::string channelFlags){
+    for (size_t i = 0; i < channelFlags.length() ; i++){
+        if (channelFlags.find('+') == std::string::npos && channelFlags.find('-') == std::string::npos){
+            return(false);
+        }
+    }
+    return (true);
+}
+
 /*Valid combinations of flags (with no parameters)
     +i
     +t
@@ -145,7 +168,6 @@ bool ParserResultMode::isValidChanFlag(std::string channelFlag){
             i t 
         WITH PARAMS:
             k o l
-    
     
     if (messageVec.at(2).length() > 3){
         return (false);
