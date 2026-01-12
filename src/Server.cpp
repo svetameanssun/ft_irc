@@ -94,7 +94,7 @@ int Server::launchParsing(CommandParser &parser)
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	CommandParser parser(rawCommand);
+	CommandParser parser(rawCommand); // THIS WILL NOT WORK! OTHER solution! 
 	int ret = launchParsing(parser);
 
 	//TODO: [LANA][QUIT command]: double check it
