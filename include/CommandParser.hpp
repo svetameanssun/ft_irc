@@ -18,9 +18,9 @@
 class CommandParser {
   public:
     CommandParser(const std::string &message): _message(message) {};
-    CommandParcer(const CommandParser&other);
+    CommandParser(const CommandParser&other);
     CommandParser&operator=(const CommandParser&other);
-    ~CommandParcer();
+    ~CommandParser();
 
     bool splitMessage(void);
     int commandProccess(void);
@@ -37,11 +37,11 @@ class CommandParser {
 /**
  * @brief parses and analizes the command and its params.
  *
- * This function initiates parcing, analizes the command and parameter
+ * This function initiates parsing, analizes the command and parameter
  * structure, and passes the data to the server.
  *
  * @param NOW void
- *		LATER Parcer &parcer, to init Parcer class outside
+ *		LATER Parser &parser, to init Parser class outside
  * @returns RPL/0 on  success or l ERR (from Replies.hpp)
  */
 
