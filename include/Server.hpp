@@ -72,7 +72,7 @@ class Server
         //TODO: Make a NetworkManager accesor?
 
         // command handling 
-        int     launchParcing(std::string messageStr);
+        int     launchParsing(std::string messageStr,  CommandParcer &parser);
         void    dispatchCommand(Client *client, const std::string &cmd);
         void    executeRoutine(Client *client, std::string &rawCommand);
 
