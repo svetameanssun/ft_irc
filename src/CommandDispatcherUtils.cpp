@@ -70,7 +70,7 @@ int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
         return res;
     }
     resultJoin->setParams(messageVec);
-    // Transfer ownership to _parcerResult
+    // Transfer ownership to _parserResult
     this->_parserResult = resultJoin;
     this->_parserResult->printResult();
     return(0);
