@@ -77,18 +77,18 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] [POINTERS] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
-	CommandParcer *parcer = new CommandParcer(messageStr);
-	if (!parcer->splitMessage())
+	//why do we need to do it dynamic?
+	CommandParcer parser(messageStr);
+	if (!parser.splitMessage())
 	{
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 
-	int result = parcer->commandProccess();//
-	if (!parcer->getCommandDispatcher().getParserResult())
+	int result = parser.commandProccess();//
+	if (!parser.getCommandDispatcher().getParserResult())
 		return (result);
-	this->_parcingResult = parcer->getCommandDispatcher().getParserResult();
-
+	this->_parcingResult = parser.getCommandDispatcher().getParserResult();
 	return result;
 }
 
