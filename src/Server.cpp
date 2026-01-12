@@ -52,8 +52,8 @@ int Server::getPort() const { return _port; }
 const std::string &Server::getPassword() const { return _password; }
 
 // command handling
-void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parcingResult); }
-int Server::launchParsing(std::string &messageStr, CommandParcer &parser)
+void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parsingResult); }
+int Server::launchParsing(std::string &messageStr, CommandParser &parser)
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
@@ -75,7 +75,7 @@ int Server::launchParsing(std::string &messageStr, CommandParcer &parser)
 	//messageStr = "user newNickname  dddd:dddd"; // wrong input
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
-	//TODO:[LANA] [POINTERS] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
+	//TODO:[LANA] [POINTERS] I needed to do the CommandParser dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
 	if (!parser.splitMessage())
 	{
@@ -86,7 +86,7 @@ int Server::launchParsing(std::string &messageStr, CommandParcer &parser)
 	int result = parser.commandProccess();//
 	if (!parser.getCommandDispatcher().getParserResult())
 		return (result);
-	this->_parcingResult = parser.getCommandDispatcher().getParserResult();
+	this->_parsingResult = parser.getCommandDispatcher().getParserResult();
 	return result;
 }
 
