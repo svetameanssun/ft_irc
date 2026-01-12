@@ -53,7 +53,7 @@ const std::string &Server::getPassword() const { return _password; }
 
 // command handling
 void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parcingResult); }
-int Server::launchParcing(std::string messageStr)
+int Server::launchParsing(std::string &messageStr, CommandParcer &parser)
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
@@ -77,8 +77,7 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] [POINTERS] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
-	//why do we need to do it dynamic?
-	CommandParcer parser(messageStr);
+	//CommandParcer parser(messageStr);
 	if (!parser.splitMessage())
 	{
 		std::cout << "THIS";
@@ -95,7 +94,8 @@ int Server::launchParcing(std::string messageStr)
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	int ret = launchParcing(rawCommand);
+	CommandParcer parser(rawCommand);
+	int ret = launchParsing(rawCommand, parser);
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
