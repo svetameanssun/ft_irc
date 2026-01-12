@@ -9,39 +9,72 @@
 //            i t 
 //          WITH PARAMS:
 //            k o l
+
+//applyFlag(paramsVec[i][j], paramsVec[iFlagParams])
+
+//+kol
+int applyFlag(Client *client, char flag, std::string params){
+    
+    
+}
+
+//+it
+int applyFlag(Client *client, char flag){
+    if (flag == 'i' ){
+        
+    }
+    if (flag == 't'){
+        
+    }
+    
+}
+
+-o
+int removeFlag(Client *client, char flag, std::string params){
+    
+}
+
+-kl
+int removeFlag(Client *client, char flag){
+    
+}
+
 void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
-
-    ParserResultMode *result2 = static_cast<ParserResultMode*>(result);
-    result2->printResult();
-    const std::vector<std::string> &paramsVec = result2->getModeParams();
-    const std::string & modeFlagsStr = result2->getModeFlagsStr();
+    // as far as I understand, only chops can do this actions
+    //so I check whether the client has the operator status
+    if (!client->isOperator()){
+        // [CHECK] 
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED, " :You’re not channel operator");
+        return;
+    }
+    ParserResultMode *parserRes = static_cast<ParserResultMode*>(result);
+    parserRes->printResult();
+    const std::vector<std::string> &paramsVec = parserRes->getModeParams();
+    const std::string & modeFlagsStr = parserRes->getModeFlagsStr();
     size_t iFlagParams;
     bool flagOn;
     size_t i;
 
     //checks if the channel name is valid
-    if (!result2->isValidChanName(paramsVec.at(0))){
+    if (!parserRes->isValidChanName(paramsVec.at(0))){
         // returns smth that indicates that the channel name is invalid
+        // [CHECK] 
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOSUCHCHANNEL, " :No such channel");
+        return;
     }
 
     for (i = 1; i < paramsVec.size(); i++){
-        if (!result2->hasPlusMinus(paramsVec[i])){
+        if (!parserRes->hasPlusMinus(paramsVec[i])){
             iFlagParams = i;
             break;
         }
     }
-
     for (i = 1; i < paramsVec.size(); i++){
-        if (result2->hasPlusMinus(paramsVec[i]) &&  i < iFlagParams){
+        if (parserRes->hasPlusMinus(paramsVec[i]) &&  i < iFlagParams){
             for(int j = 0; paramsVec[i].length(); j++){
-                if (iFlagParams >= paramsVec.size()){
-                            // we need to send back to the client this error:
-                            //     ERR_NEEDMOREPARAMS (MODE)
-                        break;
-                }
                 if (paramsVec[i][j] == '+'){
                     flagOn = true;
                     j++;
@@ -52,47 +85,32 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                 }
                 if (paramsVec[i][j] == 'k' || paramsVec[i][j] == 'o'|| paramsVec[i][j] == 'l'){
                     if (flagOn){
-
-                        //HERE [RUBEN] has to apply a flag -> paramsVec[i][j]
-                        //               with its parameter -> paramsVec[iFlagParams];
-                        //Ex. of a function:
-                        //  applyFlag(paramsVec[i][j], paramsVec[iFlagParams]);
+                        applyFlag(client, paramsVec[i][j], paramsVec[iFlagParams]);
                         iFlagParams++;
                     }
                     else{
                         if (paramsVec[i][j] == 'k' || paramsVec[i][j] == 'l'){
-                            //[RUBEN] removes one of 2 flags, no parameters needed;
-                            //Ex. of a function:
-                            //  removeFlag(paramsVec[i][j]);
+                            //No parameters needed to remove these flags;
+                            removeFlag(client, paramsVec[i][j]);
                         }
                         else if(paramsVec[i][j] == 'o'){
-                        //HERE [RUBEN] has to remove a flag -> paramsVec[i][j]
-                        //               with its parameter -> paramsVec[iFlagParams];
-
-                        //Ex. of a function:
-                        //  removeFlag(paramsVec[i][j], paramsVec[iFlagParams]);
+                        removeFlag(client, paramsVec[i][j], paramsVec[iFlagParams]);
                         iFlagParams++;
                         }
                     }
                 }
                 else if (paramsVec[i][j] == 'i' || paramsVec[i][j] == 't'){
                     if (flagOn){
-                        //HERE [RUBEN] has to apply a flag -> paramsVec[i][j], no params needed!
-                        ///Ex. of a function:
-                        //  applyFlag(paramsVec[i][j]);
+                        applyFlag(client, paramsVec[i][j]);
                     }
                     else{
-                        //HERE [RUBEN] has to remove a flag -> paramsVec[i][j], no params needed!
-                        ///Ex. of a function:
-                        //  removeFlag(paramsVec[i][j]);
+                        removeFlag(client, paramsVec[i][j]);
                     }
                 }
+                else{
+                    
+                }
             }
-        }
-        if (iFlagParams >= paramsVec.size()){
-                            // we need to send back to the client this error:
-                            //     ERR_NEEDMOREPARAMS (MODE)
-            break;
         }
     }
     //TODO: [RUBEN] I guess this is needed at the end of the command
@@ -130,7 +148,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         }
         else
         {
-            MessageSender::sendNumeric(_server.getServerName(), client, ERR_UNKNOWNMODE, modeStr + " :Unknown mode flag");
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_UNKNOWNMODE, " :Unknown mode flag");
         }
         return;
     }

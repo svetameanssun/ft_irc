@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <netinet/in.h>     //for sockaddr_in, look if if there is another way
+#include ""
 
 #define MAX_CHANNELS_JOINED 15
 
@@ -21,7 +22,9 @@ class Client
         std::string _buffer;        //partial data received, until newline
         std::vector<std::string> _channels; // list of joined channels    <<---- check if this is the best design
         int         _nbrChannelJoined; //keep the count of the channels to see if it reachs the limit
-
+        [LANA EDIT]
+        CommandParser *_cmdParser;
+        [---------]
         //copy not available
         Client(const Client &other);
         Client &operator=(const Client &other);
@@ -52,6 +55,11 @@ class Client
         void setOperator(bool value);
         void setPassAccepted(bool value);
         void setLimitReached(bool value);
+
+        [LANA EDIT]
+        void createCmdParser(std::string rawStr);
+        [---------]
+        
 
         //buffer handling, do it when we know how to handle data
         void appendToBuffer(const std::string &data);

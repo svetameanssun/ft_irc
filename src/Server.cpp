@@ -54,7 +54,7 @@ const std::string &Server::getPassword() const { return _password; }
 // command handling
 void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parsingResult); }
 
-int Server::launchParsing(CommandParser &parser)
+int Server::launchParsing(CommandParser &cmdParser)
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
@@ -94,8 +94,9 @@ int Server::launchParsing(CommandParser &parser)
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	CommandParser parser(rawCommand); // THIS WILL NOT WORK! OTHER solution! 
-	int ret = launchParsing(parser);
+	//CommandParser parser(rawCommand); // <--THIS WILL NOT WORK! we need OTHER solution! 
+	client->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
+	int ret = launchParsing(client->_cmdParser); // we use launchParsing of the Server to parse the command client received.
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
