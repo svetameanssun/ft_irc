@@ -55,10 +55,14 @@ void ParserResultUser::setParams(std::vector<std::string> userCommand){
 	else{
 		for (; i < userCommand.size(); i++){
 			_realname += userCommand.at(i);
+			_realname += " ";
 		}
 	}
 	if(_realname.at(0) == ':'){
 		_realname.erase(0, 1);
+	}
+	if(_realname.at(_realname.length() - 1) == ' '){
+		_realname.erase(_realname.length() - 1, 1);
 	}
 }
 

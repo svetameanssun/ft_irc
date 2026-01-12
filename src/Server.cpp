@@ -52,8 +52,9 @@ int Server::getPort() const { return _port; }
 const std::string &Server::getPassword() const { return _password; }
 
 // command handling
-void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parcingResult); }
-int Server::launchParcing(std::string messageStr)
+void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parsingResult); }
+
+int Server::launchParsing(CommandParser &parser)
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
@@ -75,36 +76,35 @@ int Server::launchParcing(std::string messageStr)
 	//messageStr = "user newNickname  dddd:dddd"; // wrong input
 	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
-	//TODO:[LANA] [POINTERS] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
+	//TODO:[LANA] [POINTERS] I needed to do the CommandParser dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
-	CommandParcer *parcer = new CommandParcer(messageStr);
-	if (!parcer->splitMessage())
+	if (!parser.splitMessage())
 	{
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 
-	int result = parcer->commandProccess();//
-	if (!parcer->getCommandDispatcher().getParserResult())
+	int result = parser.commandProccess();//
+	if (!parser.getCommandDispatcher().getParserResult())
 		return (result);
-	this->_parcingResult = parcer->getCommandDispatcher().getParserResult();
-
+	this->_parsingResult = parser.getCommandDispatcher().getParserResult();
 	return result;
 }
 
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	int ret = launchParcing(rawCommand);
+	CommandParser parser(rawCommand);
+	int ret = launchParsing(parser);
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
-	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
+	log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
 
     if (isAllowed(ret))
     {
-		dispatchCommand(client, this->_parcingResult->getCommand());
+		dispatchCommand(client, this->_parsingResult->getCommand());
 		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
         //deleteParserResult();
 		//TODO: Remove this at the end of the project
@@ -174,4 +174,4 @@ void Server::disconnectClient(int fd)
 }
 
 
-void    Server::deleteParserResult() { delete _parcingResult; }
+void    Server::deleteParserResult() { delete _parsingResult; }

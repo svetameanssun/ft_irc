@@ -15,7 +15,7 @@
 #include "ChannelManager.hpp"
 #include "NetworkManager.hpp"
 #include "Channel.hpp"
-#include "CommandParcer.hpp"
+#include "CommandParser.hpp"
 #include "MessageSender.hpp"
 #include "utils.hpp"
 #include <sstream>
@@ -34,7 +34,7 @@ class Server
         std::string                 _password;      // optional server password
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
         bool                        _running;       // server loop flag
-        AParserResult              *_parcingResult; // result of the parse
+        AParserResult              *_parsingResult; // result of the parse
 
         CommandHandler              _cmdHandler;    
         ClientManager               _clientManager;
@@ -71,8 +71,8 @@ class Server
         ChannelManager &getChannelManager() { return _channelManager; }
         //TODO: Make a NetworkManager accesor?
 
-        // command handling 
-        int     launchParcing(std::string messageStr);
+        // command handling
+        int     launchParsing(CommandParser &parser);
         void    dispatchCommand(Client *client, const std::string &cmd);
         void    executeRoutine(Client *client, std::string &rawCommand);
 
