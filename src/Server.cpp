@@ -93,17 +93,17 @@ int Server::launchParsing(std::string &messageStr, CommandParser &parser)
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	CommandParcer parser(rawCommand);
+	CommandParser parser(rawCommand);
 	int ret = launchParsing(rawCommand, parser);
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
-	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
+	log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
 
     if (isAllowed(ret))
     {
-		dispatchCommand(client, this->_parcingResult->getCommand());
+		dispatchCommand(client, this->_parsingResult->getCommand());
 		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
         //deleteParserResult();
 		//TODO: Remove this at the end of the project
@@ -173,4 +173,4 @@ void Server::disconnectClient(int fd)
 }
 
 
-void    Server::deleteParserResult() { delete _parcingResult; }
+void    Server::deleteParserResult() { delete _parsingResult; }
