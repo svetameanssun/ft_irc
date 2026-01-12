@@ -20,7 +20,7 @@ class ParserResultMode : public AParserResult {
     const std::string getModeFlagsStr(void) const;
 
     void printResult() const;
-    bool isChanFlag(std::string channelFlag);
+    bool isChanFlag(char channelFlag);
     bool hasPlusMinus(std::string channelFlags);
     //bool isValidChanName(std::string channelName);
     //bool isValidChanNameChar(int c);

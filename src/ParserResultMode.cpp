@@ -9,14 +9,14 @@ ParserResultMode::ParserResultMode()
 
 ParserResultMode::ParserResultMode(const ParserResultMode &other): AParserResult(){
     this->_command = other._command;
-    this->_modeParamsStr = other._modeParamsStr;
+    this->_modeFlagsStr = other._modeFlagsStr;
     this->_modeParamsVec = other._modeParamsVec;
 }
 
 ParserResultMode& ParserResultMode::operator=(const ParserResultMode& other){
     if(this != &other) {
         this->_modeParamsVec = other._modeParamsVec;
-        this->_modeParamsStr = other._modeParamsStr;
+        this->_modeFlagsStr = other._modeFlagsStr;
         this->_command = other._command;
     }
     return (*this);
@@ -116,10 +116,9 @@ const std::string ParserResultMode::getModeFlagsStr(void) const{
     }
 }*/
 
-
 bool ParserResultMode::isChanFlag(char channelFlag){
     std::string flags = "kolit";
-    for (int i = 0; i < flags.length() ; i++){
+    for (size_t i = 0; i < flags.length() ; i++){
         if (flags.find(channelFlag) == std::string::npos){
             return(false);
         }
@@ -128,7 +127,7 @@ bool ParserResultMode::isChanFlag(char channelFlag){
 }
 
 bool ParserResultMode::hasPlusMinus(std::string channelFlags){
-    for (int i = 0; i < channelFlag.length() ; i++){
+    for (size_t i = 0; i < channelFlags.length() ; i++){
         if (channelFlags.find('+') == std::string::npos && channelFlags.find('-') == std::string::npos){
             return(false);
         }

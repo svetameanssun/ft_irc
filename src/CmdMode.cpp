@@ -18,15 +18,16 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     result2->printResult();
     const std::vector<std::string> &paramsVec = result2->getModeParams();
     const std::string & modeFlagsStr = result2->getModeFlagsStr();
-    size_t iFlagParms;
+    size_t iFlagParams;
     bool flagOn;
+    size_t i;
 
     //checks if the channel name is valid
     if (!result2->isValidChanName(paramsVec.at(0))){
         // returns smth that indicates that the channel name is invalid
     }
 
-    for (size_t i = 1; i < paramsVec.size(); i++){
+    for (i = 1; i < paramsVec.size(); i++){
         if (!result2->hasPlusMinus(paramsVec[i])){
             iFlagParams = i;
             break;
@@ -36,7 +37,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     for (i = 1; i < paramsVec.size(); i++){
         if (result2->hasPlusMinus(paramsVec[i]) &&  i < iFlagParams){
             for(int j = 0; paramsVec[i].length(); j++){
-                if (iFlagParams >= paramVec.size()){
+                if (iFlagParams >= paramsVec.size()){
                             // we need to send back to the client this error:
                             //     ERR_NEEDMOREPARAMS (MODE)
                         break;
@@ -88,7 +89,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                 }
             }
         }
-        if (iFlagParams >= paramVec.size()){
+        if (iFlagParams >= paramsVec.size()){
                             // we need to send back to the client this error:
                             //     ERR_NEEDMOREPARAMS (MODE)
             break;
