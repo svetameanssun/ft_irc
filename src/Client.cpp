@@ -6,7 +6,7 @@ Client::Client() : _fd(-1), _registered(false), _isOperator(false) {}
 Client::Client(int fd) : _fd(fd), _registered(false), _isOperator(false) {}
 Client::Client(int fd, const std::string &hostname)
     : _fd(fd), _hostname(hostname), _registered(false), _isOperator(false) {}
-Client::~Client() {}
+Client::~Client() { delete(this->_cmdParser); }
 
 //getters
 int Client::getFd() const { return _fd; }
@@ -29,6 +29,14 @@ void Client::setRegistered(bool value) { _registered = value; }
 void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
+
+[LANA EDIT]
+void Client::createCmdParser(std::string rawStr){
+    delete(this->_cmdParser);
+    this->_cmdParser = new _cmdParser(rawStr);
+}
+[---------]
+            
 // Buffer handling
 void Client::appendToBuffer(const std::string &data) { _buffer += data; }
 const std::string &Client::getBuffer() { return _buffer; }  
