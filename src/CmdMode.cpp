@@ -13,29 +13,46 @@
 //applyFlag(paramsVec[i][j], paramsVec[iFlagParams])
 
 //+kol
-int applyFlag(Client *client, char flag, std::string params){
-    
+int applyFlag(Client *client,char flag, std::string params){
+    if (flag == 'k' ){
+        // [CHECK] what message?
+        msg = channelName + "key is set";
+    }
+    if (flag == 'o' ){
+        // [CHECK] what message?
+        msg = channelName + "should have +i flag (invitation only)";
+    }
+    if (flag == 'l' ){
+        // [CHECK] what message?
+        msg = channelName + "should have +i flag (invitation only)";
+    }
+    ChannelManager::broadcastToChannel(channelName, msg);
+    return;
     
 }
 
 //+it
-int applyFlag(Client *client, char flag){
+void applyFlag(std::string channelName,char flag){
+    std::string msg;
     if (flag == 'i' ){
-        
+        // [CHECK] what message?
+        msg = channelName + "should have +i flag (invitation only)";
     }
     if (flag == 't'){
-        
+        // [CHECK] what message?
+        msg = "If activated, only opped (+o) users may set the topic";
     }
+    ChannelManager::broadcastToChannel(channelName, msg);
+    return;
+}
+
+//-o
+void removeFlag(Client *client,char flag, std::string params){
     
 }
 
--o
-int removeFlag(Client *client, char flag, std::string params){
-    
-}
-
--kl
-int removeFlag(Client *client, char flag){
+//-kl
+void removeFlag(Client *client,char flag){
     
 }
 
@@ -45,11 +62,18 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         return;
     // as far as I understand, only chops can do this actions
     //so I check whether the client has the operator status
-    if (!client->isOperator()){
+    if (!client->isOnChannel()){
         // [CHECK] 
-        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED, " :You’re not channel operator");
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_NOTONCHANNEL, paramsVec.at(0) + ":You`re not on that channel");
         return;
     }
+
+    if (!client->isOperator()){
+        // [CHECK] 
+        MessageSender::sendNumeric(_server.getServerName(), client, ERR_CHANOPRIVSNEEDED, " :You`re not channel operator");
+        return;
+    }
+
     ParserResultMode *parserRes = static_cast<ParserResultMode*>(result);
     parserRes->printResult();
     const std::vector<std::string> &paramsVec = parserRes->getModeParams();
@@ -57,6 +81,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     size_t iFlagParams;
     bool flagOn;
     size_t i;
+    size_t paramsCount;
 
     //checks if the channel name is valid
     if (!parserRes->isValidChanName(paramsVec.at(0))){
@@ -85,32 +110,39 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                 }
                 if (paramsVec[i][j] == 'k' || paramsVec[i][j] == 'o'|| paramsVec[i][j] == 'l'){
                     if (flagOn){
-                        applyFlag(client, paramsVec[i][j], paramsVec[iFlagParams]);
+                        applyFlag(Client *client, paramsVec[i][j], paramsVec[iFlagParams]);
                         iFlagParams++;
                     }
                     else{
                         if (paramsVec[i][j] == 'k' || paramsVec[i][j] == 'l'){
                             //No parameters needed to remove these flags;
-                            removeFlag(client, paramsVec[i][j]);
+                            removeFlag(Client *client,paramsVec[i][j]);
                         }
                         else if(paramsVec[i][j] == 'o'){
-                        removeFlag(client, paramsVec[i][j], paramsVec[iFlagParams]);
+                        removeFlag(Client *client,paramsVec[i][j], paramsVec[iFlagParams]);
                         iFlagParams++;
                         }
                     }
                 }
                 else if (paramsVec[i][j] == 'i' || paramsVec[i][j] == 't'){
                     if (flagOn){
-                        applyFlag(client, paramsVec[i][j]);
+                        applyFlag(Client *client,paramsVec[i][j]);
                     }
                     else{
-                        removeFlag(client, paramsVec[i][j]);
+                        removeFlag(Client *client,paramsVec[i][j]);
                     }
                 }
                 else{
-                    
+                    MessageSender::sendNumeric(_server.getServerName(), client, ERR_UNKNOWNMODE, paramsVec[i][j] + " :is unknown mode char to me for " + _modeParamsVec.at(0));
+                    return; 
                 }
             }
+        }
+        else{
+            
+            MessageSender::sendNumeric(_server.getServerName(), client, ERR_UNKNOWNCOMMAND, _modeParamsStr + " :Unknown command");
+            return;
+
         }
     }
     //TODO: [RUBEN] I guess this is needed at the end of the command

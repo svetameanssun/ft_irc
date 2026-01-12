@@ -58,6 +58,7 @@ class Client
 
         [LANA EDIT]
         void createCmdParser(std::string rawStr);
+        bool isOnChannel(std::string channelName) const;
         [---------]
         
 
@@ -69,6 +70,6 @@ class Client
         //channel handling; look if it is really necessary to get the channels
         void joinChannel(const std::string &name);
         void leaveChannel(const std::string &name);
-        const std::vector<std::string> &getChannels() const;
+        const std::vector<std::string> &getChannels() const; // [LANA] I will use this one! 
 };
 

@@ -30,12 +30,23 @@ void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
 
-[LANA EDIT]
+//[LANA EDIT]
 void Client::createCmdParser(std::string rawStr){
     delete(this->_cmdParser);
     this->_cmdParser = new _cmdParser(rawStr);
 }
-[---------]
+
+
+//[LANA EDIT]
+
+bool Client::isOnChannel(std::string channelName) const{
+    std::vector<std::string> channels = getChannels();
+    if (std::find(channels.begin(), channels.end(), channelName) == channels.end()){
+        return (false);
+    }
+    return (true);
+}
+//[---------]
             
 // Buffer handling
 void Client::appendToBuffer(const std::string &data) { _buffer += data; }
