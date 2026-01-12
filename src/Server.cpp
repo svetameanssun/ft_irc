@@ -77,7 +77,6 @@ int Server::launchParsing(std::string &messageStr, CommandParcer &parser)
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] [POINTERS] I needed to do the CommandParcer dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
-	//CommandParcer parser(messageStr);
 	if (!parser.splitMessage())
 	{
 		std::cout << "THIS";
