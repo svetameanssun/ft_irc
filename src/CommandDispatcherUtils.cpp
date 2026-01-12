@@ -12,7 +12,7 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
         delete(resultPass);
     }
     resultPass->setParams(messageVec);
-    // Transfer ownership into _parcerResult
+    // Transfer ownership into _parserResult
     this->_parserResult = resultPass;
     this->_parserResult->printResult();
     //the command PASS sould send the reply welcome,
@@ -55,7 +55,7 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
         return (err);
     }
     resultUser->setParams(messageVec);
-    // Transfer ownership to _parcerResult 
+    // Transfer ownership to _parserResult 
     this->_parserResult = resultUser;
     this->_parserResult->printResult();
     std::cout << messageVec.at(0)<< std::endl;
