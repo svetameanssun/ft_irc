@@ -140,7 +140,7 @@ int checkParams(int argc, char **argv)
 {
     if (argc != 3)
     {
-        std::cerr << "Usage: ./ircserv <port> <password>" << std::endl;
+        log_err("Usage: ./ircserv <port> <password>");
         return -1;
     }
 
@@ -149,7 +149,7 @@ int checkParams(int argc, char **argv)
 
     if (!isNumber(portStr))
     {
-        std::cerr << "Error: Port must be numeric." << std::endl;
+        log_err("Error: Port must be numeric.");
         return -1;
     }
 
@@ -157,13 +157,13 @@ int checkParams(int argc, char **argv)
 
     if (port < 1024 || port > 65535)
     {
-        std::cerr << "Error: Port must be between 1024 and 65535." << std::endl;
+        log_err("Error: Port must be between 1024 and 65535.");
         return -1;
     }
 
     if (!isValidPassword(password))
     {
-        std::cerr << "Error: Invalid password." << std::endl;
+        log_err("Error: Invalid password.");
         return -1;
     }
 

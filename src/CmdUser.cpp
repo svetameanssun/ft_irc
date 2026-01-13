@@ -14,21 +14,13 @@ void CommandHandler::cmdUser(Client *client, AParserResult *result)
 
     ParserResultUser *result2 = static_cast<ParserResultUser*>(result);
 
-    if (result2)
-    {
-        log_debug("[Command Handler] cmdUser: ");
-        result2->printResult();
-    }
-    else 
-        return log_warning("[Command Handler] cmdUser: No args");
-
     const std::string username = result2->getNickname();
     const std::string realname = result2->getRealname();
 
     client->setUser(username);
     client->setRealName(realname);
     
-    log_debug("User: %s with realname: %s and nickname: %s", username.c_str(), realname.c_str(), result2->getNickname().c_str());
+    log_debug("User with nick %s with realname: %s", username.c_str(), realname.c_str());
 
     //If already a NICK and is not registered, complete it
     if (!client->isRegistered() && !client->getNick().empty())

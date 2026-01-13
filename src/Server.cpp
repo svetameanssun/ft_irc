@@ -113,7 +113,7 @@ void Server::onClientConnected(int fd)
     Client *client = new Client(fd, "localhost"); // TODO: hostname later
     _clientManager.addClient(client);
 
-    std::cout << "[Server] New client connected: fd=" << fd << std::endl;
+    log_msg("[Server] New client connected: fd=%d,", fd);
 }
 
 void Server::onClientData(int fd)

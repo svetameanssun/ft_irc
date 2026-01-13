@@ -42,7 +42,10 @@ void NetworkManager::setupSocket()
 {
     _listenFd = socket(AF_INET, SOCK_STREAM, 0);
     if (_listenFd < 0)
-        throw std::runtime_error("socket failed");
+    {
+        log_err("socket failed");
+        return; 
+    }
 
     int opt = 1;
     if (setsockopt(_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
@@ -57,9 +60,17 @@ void NetworkManager::setupSocket()
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port = htons(_port);
 
-    if (bind(_listenFd, (sockaddr*)&addr, sizeof(addr)) < 0) { log_err("bind failed"); }
+    if (bind(_listenFd, (sockaddr*)&addr, sizeof(addr)) < 0)
+    { 
+        log_err("bind failed");
+        return; 
+    }
 
-    if (listen(_listenFd, SOMAXCONN) < 0) { log_err("listen failed"); }
+    if (listen(_listenFd, SOMAXCONN) < 0)
+    {
+        log_err("listen failed");
+        return; 
+    }
 
     struct pollfd pfd;
     pfd.fd = _listenFd;
@@ -72,7 +83,10 @@ void NetworkManager::pollOnce()
 {
     int ret = poll(&_pollFds[0], _pollFds.size(), -1);
     if (ret < 0)
-        throw std::runtime_error("poll failed");
+    {
+        log_err("poll failed");
+        return; 
+    }
 }
 
 
@@ -85,8 +99,8 @@ int NetworkManager::acceptClient()
     if (clientFd < 0)
         return -1;
     
+    //Is this necessary?
     fcntl(clientFd, F_SETFL, O_NONBLOCK);
-
 
     struct pollfd pfd;
     pfd.fd = clientFd;
