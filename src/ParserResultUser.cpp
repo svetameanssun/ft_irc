@@ -41,7 +41,7 @@ void ParserResultUser::setParams(std::vector<std::string> userCommand){
   	}
   	this->_userParamsVec = userCommand;
 	// guest 0 * :Ronnie Reagan
-	_realname.push_back('\0'); //not sure if it is needed.
+	//_realname.push_back('\0'); //not sure if it is needed.
 	this->_nickname += userCommand.at(0);
 	
 	size_t i = 1;
@@ -61,6 +61,7 @@ void ParserResultUser::setParams(std::vector<std::string> userCommand){
 	if(_realname.at(0) == ':'){
 		_realname.erase(0, 1);
 	}
+	std::cout << "=============================================" + _realname;
 	if(_realname.at(_realname.length() - 1) == ' '){
 		_realname.erase(_realname.length() - 1, 1);
 	}

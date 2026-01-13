@@ -48,6 +48,7 @@ class CommandDispatcher{
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
 		int dispatchNotice(std::vector <std::string> &messageVec);
+		void createParserResult(std:: string rawCommand);
 };
 
 

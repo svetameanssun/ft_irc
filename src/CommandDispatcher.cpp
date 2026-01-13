@@ -49,4 +49,9 @@ int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 	}
 }
 
+void CommandDispatcher::createParserResult(std:: string rawCommand){
+	
+}
+
+
 AParserResult *CommandDispatcher::getParserResult() const { return this->_parserResult; }
