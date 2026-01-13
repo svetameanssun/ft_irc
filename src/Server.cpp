@@ -54,7 +54,7 @@ const std::string &Server::getPassword() const { return _password; }
 // command handling
 void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parsingResult); }
 
-int Server::launchParsing(CommandParser &cmdParser)
+int Server::launchParsing(CommandParser *cmdParser)
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
@@ -78,16 +78,16 @@ int Server::launchParsing(CommandParser &cmdParser)
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] [POINTERS] I needed to do the CommandParser dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
-	if (!parser.splitMessage())
+	if (!cmdParser->splitMessage())
 	{
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 
-	int result = parser.commandProccess();//
-	if (!parser.getCommandDispatcher().getParserResult())
+	int result = cmdParser->commandProccess();//
+	if (!cmdParser->getCommandDispatcher().getParserResult())
 		return (result);
-	this->_parsingResult = parser.getCommandDispatcher().getParserResult();
+	this->_parsingResult = cmdParser->getCommandDispatcher().getParserResult();
 	return result;
 }
 
@@ -96,7 +96,8 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
 	//CommandParser parser(rawCommand); // <--THIS WILL NOT WORK! we need OTHER solution! 
 	client->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
-	int ret = launchParsing(client->_cmdParser); // we use launchParsing of the Server to parse the command client received.
+	std::cout << "-------------------------------------------------" + client->getCmdParser()->getMessage();
+	int ret = launchParsing(client->getCmdParser()); // we use launchParsing of the Server to parse the command client received.
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
@@ -149,7 +150,7 @@ void Server::onClientData(int fd)
 	}
 	std::string raw(buf, bytes);
     client->appendToBuffer(std::string(buf, bytes));
-
+	log_debug("Buffer: %s", client->getBuffer().c_str());
     std::vector<std::string> messages = client->extractMessages();
 
 	if (messages.size() == 0)
