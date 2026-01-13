@@ -85,13 +85,11 @@ int Server::launchParcing(std::string messageStr)
 	return result;
 }
 
-//TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
 	int ret = launchParcing(rawCommand);
 
 	//TODO: [LANA][QUIT command]: double check it
-	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parcingResult->getCommand().c_str());
 
@@ -100,14 +98,11 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 		dispatchCommand(client, this->_parcingResult->getCommand());
 		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
         //deleteParserResult();
-		//TODO: Remove this at the end of the project
-		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
-
     }
     else
 	{
-		log_warning("Wrong command. Error case not yet implemented. Return proper message");
-        //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
+		//TODO: I think we might need to do a func to answer based on the ret value
+        MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
 }
 

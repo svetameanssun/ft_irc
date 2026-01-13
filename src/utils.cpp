@@ -42,7 +42,7 @@ void log_err(const char* format, ...)
     std::cerr << std::endl << RESET;
 }
 
-//TODO: Check if there are all the possibilities
+//Verbosity for clearness
 bool isAllowed(int code)
 {
     switch (code)
@@ -111,12 +111,6 @@ bool isAllowed(int code)
             if (code >= 400) return false;
             return true;
     }
-}
-
-//TODO: is this going to be used?
-void getRetMsg(int ret)
-{
-    log_warning("Need to implement message for reply %d", ret);
 }
 
 // the suite for the check params function

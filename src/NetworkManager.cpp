@@ -39,7 +39,6 @@ void NetworkManager::run(Server &server)
 }
 
 
-//TODO: do not use throw clauses
 void NetworkManager::setupSocket()
 {
     _listenFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -60,10 +59,15 @@ void NetworkManager::setupSocket()
     addr.sin_port = htons(_port);
 
     if (bind(_listenFd, (sockaddr*)&addr, sizeof(addr)) < 0)
-        throw std::runtime_error("bind failed");
+    {
+        log_err("bind failed");
+        
+    }
 
     if (listen(_listenFd, SOMAXCONN) < 0)
-        throw std::runtime_error("listen failed");
+    {
+        log_err("listen failed");
+    }
 
     struct pollfd pfd;
     pfd.fd = _listenFd;

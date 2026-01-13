@@ -4,10 +4,8 @@
 
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
-// Entry point: dispatch commands
 void CommandHandler::execute(Client *client, const std::string &command, AParserResult *result)
 {
-    //TODO:(Optional) Change for switch, or pointers to functions :)
     if (command == "PASS")
         cmdPass(client, result);
     else if (command == "NICK")
@@ -24,8 +22,8 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
         cmdPart(client, result);
     else if (command == "QUIT")
         cmdQuit(client, result);
-    //else if (command == "PING")
-    //    cmdPing(client, result);
+    else if (command == "PING")
+        cmdPing(client, result);
     //else if (command == "PONG")
     //    cmdPong(client, result);
     else if (command == "MODE")

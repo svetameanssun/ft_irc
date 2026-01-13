@@ -24,7 +24,6 @@ void log_err(const char *format, ...);
 
 // I think this was for Reply codes :D
 bool isAllowed(int ret);
-void getRetMsg(int ret);
 
 // checking params at the beggining
 int checkParams(int argc, char **argv);
