@@ -13,7 +13,7 @@
 //applyFlag(paramsVec[i][j], paramsVec[iFlagParams])
 
 //+kol
-int applyFlag(Client *client,char flag, std::string params){
+/*int applyFlag(Client *client,char flag, std::string params){
     if (flag == 'k' ){
         // [CHECK] what message?
         msg = channelName + "key is set";
@@ -54,13 +54,13 @@ void removeFlag(Client *client,char flag, std::string params){
 //-kl
 void removeFlag(Client *client,char flag){
     
-}
+}*/
 
 void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
-    // as far as I understand, only chops can do this actions
+   /* // as far as I understand, only chops can do this actions
     //so I check whether the client has the operator status
     if (!client->isOnChannel()){
         // [CHECK] 
@@ -155,7 +155,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     //    oss << " " << paramsVec[j];
     //oss << "\r\n";
 //
-    //chan->broadcast(oss.str());
+    //chan->broadcast(oss.str());*/
 }
 
     /*const std::string firstParam = paramsVec.at(0);

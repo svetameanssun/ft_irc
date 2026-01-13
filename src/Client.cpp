@@ -19,6 +19,7 @@ bool Client::isRegistered() const { return _registered; }
 bool Client::isOperator() const { return _isOperator; }
 bool Client::getPassAccepted() const { return _passAccepted; }
 bool Client::isChanLimitReached() const { return _nbrChannelJoined; }
+CommandParser *Client::getCmdParser(){return _cmdParser; }
 
 
 //setters
@@ -33,19 +34,20 @@ void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
 //[LANA EDIT]
 void Client::createCmdParser(std::string rawStr){
     delete(this->_cmdParser);
-    this->_cmdParser = new _cmdParser(rawStr);
+    this->_cmdParser = new CommandParser(rawStr);
 }
+
 
 
 //[LANA EDIT]
 
-bool Client::isOnChannel(std::string channelName) const{
+/*bool Client::isOnChannel(std::string channelName) const{
     std::vector<std::string> channels = getChannels();
     if (std::find(channels.begin(), channels.end(), channelName) == channels.end()){
         return (false);
     }
     return (true);
-}
+}*/
 //[---------]
             
 // Buffer handling
