@@ -157,7 +157,7 @@ void Server::disconnectClient(int fd, const std::string &reason)
 
         _channelManager.broadcastToJoinedChannels(fd, quitMsg);
     }
-
+	log_msg("User with fd=%d quitting IRC server", client->getFd());
     _networkManager.closeFd(fd);
 	_channelManager.removeClientFromChannels(client);
     _clientManager.removeClient(fd);

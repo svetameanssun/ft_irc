@@ -4,10 +4,8 @@
 Channel::Channel(const std::string &name)
 : _name(name), _iMode(false), _userLimit(-1) {}
 
-Channel::~Channel()
-{
-    log_warning("[Channel] Destructor: Resources from the channel not freed, channel");
-}
+//Look at this
+Channel::~Channel() { log_warning("[Channel] Destructor: Resources from the channel not freed"); }
 
 //Getters
 const std::string &Channel::getName() const { return _name; }
@@ -49,7 +47,7 @@ bool Channel::addMember(Client *client, bool isOp)
     if (_members.find(fd) != _members.end())
     {
         log_warning("[Channel] the user is already a member");
-        return false; // already member
+        return false;
     }
     _members[fd] = client;
     client->joinChannel(this->getName());
@@ -84,7 +82,6 @@ void Channel::promoteToOp(int fd)
 
 void Channel::demoteFromOp(int fd) { _operators.erase(fd); }
 
-// Invite handling
 void Channel::invite(int fd) { _invited.insert(fd); }
 
 bool Channel::isInvited(int fd) const { return _invited.find(fd) != _invited.end(); }
@@ -97,9 +94,7 @@ void Channel::removeFromInviteList(int fd)
         _invited.erase(fd);
     }
     else
-    {
         log_warning("[Channel] removeFromInviteList: client was not in the invite list");
-    }
 }
 
 

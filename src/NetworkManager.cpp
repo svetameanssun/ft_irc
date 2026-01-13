@@ -38,7 +38,6 @@ void NetworkManager::run(Server &server)
     }
 }
 
-
 void NetworkManager::setupSocket()
 {
     _listenFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -58,16 +57,9 @@ void NetworkManager::setupSocket()
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port = htons(_port);
 
-    if (bind(_listenFd, (sockaddr*)&addr, sizeof(addr)) < 0)
-    {
-        log_err("bind failed");
-        
-    }
+    if (bind(_listenFd, (sockaddr*)&addr, sizeof(addr)) < 0) { log_err("bind failed"); }
 
-    if (listen(_listenFd, SOMAXCONN) < 0)
-    {
-        log_err("listen failed");
-    }
+    if (listen(_listenFd, SOMAXCONN) < 0) { log_err("listen failed"); }
 
     struct pollfd pfd;
     pfd.fd = _listenFd;
@@ -105,22 +97,8 @@ int NetworkManager::acceptClient()
     return clientFd;
 }
 
-//ssize_t NetworkManager::receiveFrom(int fd, std::string &out)
-//{
-//    char buffer[512];
-//    ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
-//
-//    if (bytes > 0)
-//        out.assign(buffer, bytes);
-//
-//    return bytes;
-//}
-
-
-void NetworkManager::sendTo(int fd, const std::string &msg)
-{
-    send(fd, msg.c_str(), msg.size(), 0);
-}
+//Right now it is not used
+void NetworkManager::sendTo(int fd, const std::string &msg) { send(fd, msg.c_str(), msg.size(), 0); }
 
 void NetworkManager::closeFd(int fd)
 {

@@ -4,10 +4,7 @@
 void CommandHandler::cmdUser(Client *client, AParserResult *result)
 {
     if (!client || !result)
-    {
-        log_warning("[Command Handler] cmdUser: No client or no command given");
         return;
-    }
     
     if (!client->getPassAccepted())
     {

@@ -36,5 +36,5 @@ void CommandHandler::cmdPass(Client *client, AParserResult *result)
     }
 
     client->setPassAccepted(true);
-    log_debug("PASS accepted for client fd=%d", client->getFd());
+    log_msg("PASS accepted for client fd=%d", client->getFd());
 }

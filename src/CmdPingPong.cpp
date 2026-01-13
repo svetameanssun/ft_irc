@@ -8,7 +8,8 @@ void CommandHandler::cmdPing(Client *client, AParserResult *result)
     if (!client)
         return;
 
-    std::string reply = "PING not supported\r\n";
+    std::string reply = "PING cmd not supported\r\n";
+    log_warning(reply.c_str());
     MessageSender::sendToClient(client, reply);
 }
 
