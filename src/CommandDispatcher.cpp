@@ -31,7 +31,8 @@ CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
 }
 
 CommandDispatcher::~CommandDispatcher(){
-	delete (_parserResult);
+	if (_parserResult)
+		delete (_parserResult);
 }
 
 const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& CommandDispatcher::getDispatcherMap() const {
