@@ -56,7 +56,7 @@ int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     }
     resultUser->setParams(messageVec);
     // Transfer ownership to _parserResult 
-    this->_parserResult = new ParserResultUser(resultUser);
+    this->_parserResult = new ParserResultUser(*resultUser);
     this->_parserResult->printResult();
     delete resultUser;
     std::cout << messageVec.at(0)<< std::endl;
