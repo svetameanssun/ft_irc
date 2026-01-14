@@ -1,6 +1,6 @@
 #include "CommandDispatcher.hpp"
 
-CommandDispatcher::CommandDispatcher() {
+CommandDispatcher::CommandDispatcher() : _parserResult(NULL){
     dispatcherMap["PASS"] = &CommandDispatcher::dispatchPass;
     dispatcherMap["NICK"] = &CommandDispatcher::dispatchNick;
 	dispatcherMap["USER"] = &CommandDispatcher::dispatchUser;
