@@ -12,7 +12,6 @@ CommandDispatcher::CommandDispatcher() : _parserResult(NULL){
 	dispatcherMap["KICK"] = &CommandDispatcher::dispatchKick;
 	dispatcherMap["PRIVMSG"] = &CommandDispatcher::dispatchPrivmsg;
 	dispatcherMap["PART"] = &CommandDispatcher::dispatchPart;
-	dispatcherMap["QUIT"] = &CommandDispatcher::dispatchQuit;
 	dispatcherMap["NOTICE"] = &CommandDispatcher::dispatchNotice;
 }
 
