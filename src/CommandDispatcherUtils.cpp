@@ -8,18 +8,14 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
         return ERR_NEEDMOREPARAMS;
     }
     if (messageVec.size() > 2){
-        return ERR_NEEDLESSPARAMS;
         delete(resultPass);
+        return ERR_NEEDLESSPARAMS;
     }
     resultPass->setParams(messageVec);
     // Transfer ownership into _parserResult
     this->_parserResult = new ParserResultPass(*resultPass);
     delete(resultPass);
     this->_parserResult->printResult();
-    //the command PASS sould send the reply welcome,
-    // along with 002, and 003, but I the replying to the client is not treated here, so
-    // on success returna 0;
-    // on failure returns ERR_;
     return(0);
 }
 
@@ -107,7 +103,7 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
         return ERR_NEEDLESSPARAMS;
     }
     resultMode->setParams(messageVec);
-    if(int err = 0)//resultMode->checkModeParams(messageVec))
+    if(int err == 0)//resultMode->checkModeParams(messageVec))
     {
         delete(resultMode);
         return (err);
@@ -124,7 +120,8 @@ int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
     int res = resultTopic->checkTopicParams(messageVec);
     if (res > 0){
         delete(resultTopic);
-        return  ERR_UNKNOWNCOMMAND;
+        rreturn (res);
+        //return  ERR_UNKNOWNCOMMAND;
     }
     resultTopic->setParams(messageVec);
     this->_parserResult = new ParserResultTopic(*resultTopic);
@@ -190,7 +187,7 @@ int CommandDispatcher::dispatchNotice(std::vector <std::string> &messageVec){
         return ERR_UNKNOWNCOMMAND;
     }
     resultNotice->setParams(messageVec);
-       this->_parserNotice = new ParserResultNotice(*resultNotice);
+       this->_parserResult = new ParserResultNotice(*resultNotice);
     delete (resultNotice);
     this->_parserResult->printResult();
     return(0);
@@ -201,7 +198,7 @@ int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     ParserResultQuit * resultQuit = new ParserResultQuit();
     resultQuit->collectQuitMessage(messageVec);
     resultQuit->setParams(messageVec);
-    this->_parserQuit = new ParserResultQuit(*resultQuit);
+    this->_parserResult = new ParserResultQuit(*resultQuit);
     delete (resultQuit);
     this->_parserResult->printResult();
     return(0);
