@@ -25,12 +25,10 @@ class Client
         //copy not available
         Client(const Client &other);
         Client &operator=(const Client &other);
-        
+
         public:
-        //[LANA EDIT]
-        CommandParser *_cmdParser;
-        //[---------]
-        Client();
+
+        Client(); //IMPORTANT if we want to pass CpmmandParser * _cmdParser to anyther class
         Client(int fd);
         Client(int fd, const std::string &hostname);
         ~Client();
@@ -46,7 +44,7 @@ class Client
         bool isOperator() const;
         bool getPassAccepted() const;
         bool isChanLimitReached() const;
-        CommandParser *getCmdParser();
+        
 
         //setters
         void setNick(const std::string &nick);
@@ -58,7 +56,7 @@ class Client
         void setLimitReached(bool value);
 
         //[LANA EDIT]
-        void createCmdParser(std::string rawStr);
+        
         //bool isOnChannel(std::string channelName) const;
         //[---------]
         

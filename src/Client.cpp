@@ -2,11 +2,11 @@
 #include "utils.hpp"
 #include <algorithm>
 
-Client::Client() : _fd(-1), _registered(false), _isOperator(false) {}
+Client::Client() : _fd(-1), _registered(false), _isOperator(false){}
 Client::Client(int fd) : _fd(fd), _registered(false), _isOperator(false) {}
 Client::Client(int fd, const std::string &hostname)
     : _fd(fd), _hostname(hostname), _registered(false), _isOperator(false) {}
-Client::~Client() { delete(this->_cmdParser); }
+Client::~Client() {}
 
 //getters
 int Client::getFd() const { return _fd; }
@@ -19,7 +19,7 @@ bool Client::isRegistered() const { return _registered; }
 bool Client::isOperator() const { return _isOperator; }
 bool Client::getPassAccepted() const { return _passAccepted; }
 bool Client::isChanLimitReached() const { return _nbrChannelJoined; }
-CommandParser *Client::getCmdParser(){return _cmdParser; }
+
 
 
 //setters
@@ -30,12 +30,6 @@ void Client::setRegistered(bool value) { _registered = value; }
 void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
-
-//[LANA EDIT]
-void Client::createCmdParser(std::string rawStr){
-    delete(this->_cmdParser);
-    this->_cmdParser = new CommandParser(rawStr);
-}
 
 
 

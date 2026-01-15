@@ -1,42 +1,36 @@
 #include "CommandDispatcher.hpp"
 
 int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
-    ParserResultPass *resultPass = new ParserResultPass();
     //PASS <password>
     if (messageVec.size() <= 1 ){
-        delete(resultPass);
+        //delete(_parserResult);
         return ERR_NEEDMOREPARAMS;
     }
     if (messageVec.size() > 2){
-        delete(resultPass);
+        //delete(_parserResult);
         return ERR_NEEDLESSPARAMS;
     }
-    resultPass->setParams(messageVec);
+    _parserResult->setParams(messageVec);
     // Transfer ownership into _parserResult
-    this->_parserResult = new ParserResultPass(*resultPass);
-    delete(resultPass);
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
-    ParserResultNick *resultNick = new ParserResultNick();
     if (messageVec.size() == 1){
-        delete(resultNick);
+        //delete(_parserResult);
         return ERR_NONICKNAMEGIVEN;
     }
     if (messageVec.size() > 2){
-        delete(resultNick);
+        //delete(_parserResult);
         return ERR_NEEDLESSPARAMS;
     }
-    if (!resultNick->isValidNick(messageVec.at(1))){
-        delete(resultNick);
+    if (!_parserResult->isValidNick(messageVec.at(1))){
+        //delete(_parserResult);
         return ERR_ERRONEUSNICKNAME;
     }
-    resultNick->setParams(messageVec);
+    _parserResult->setParams(messageVec);
     // Transfer ownership into _parserResult
-    this->_parserResult = new ParserResultNick(*resultNick);
-    delete(resultNick);
     this->_parserResult->printResult();
     return(0);
 }
@@ -44,162 +38,137 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
 int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
     //USER <username> <realname>
-    ParserResultUser * resultUser = new ParserResultUser();
-    int err = resultUser->checkUserParams(messageVec); 
+    int err = _parserResult->checkUserParams(messageVec);
     if(err > 0)
     {
-        delete(resultUser);
+        //delete(_parserResult);
+
         return (err);
     }
-    resultUser->setParams(messageVec);
+    _parserResult->setParams(messageVec);
     // Transfer ownership to _parserResult 
-    this->_parserResult = new ParserResultUser(*resultUser);
-    delete (resultUser);
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchJoin(std::vector<std::string> &messageVec) {
-    ParserResultJoin *resultJoin = new ParserResultJoin();
-    int res = resultJoin->checkJoinParams(messageVec);
+    int res = _parserResult->checkJoinParams(messageVec);
     if (res > 0){
-        delete(resultJoin);
+        //delete(_parserResult);
         return res;
     }
-    resultJoin->setParams(messageVec);
+    _parserResult->setParams(messageVec);
     // Transfer ownership to _parserResult
-    this->_parserResult = new ParserResultJoin(*resultJoin);
-    delete (resultJoin);
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchPart(std::vector <std::string> &messageVec){
     //trailing params
-    ParserResultPart * resultPart = new ParserResultPart();
-    int res = resultPart->checkPartParams(messageVec);
+    int res = _parserResult->checkPartParams(messageVec);
     //if checkPartParams returns anything other than 0 - the command input is wrong
     if (res > 0)
     {
-        delete resultPart;
+        //delete(_parserResult);
         return (res);
     }
-    resultPart->setParams(messageVec);
-    this->_parserResult = new ParserResultPart(*resultPart);
-    delete (resultPart);
+    _parserResult->setParams(messageVec);
     this->_parserResult->printResult();
     return(0);
 }
 
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
-    ParserResultMode * resultMode = new ParserResultMode();
     if (messageVec.size() < 3){
-        delete(resultMode);
+        //delete(_parserResult);
+
         return ERR_NEEDMOREPARAMS;
     }
     if (messageVec.size() > 4){
-        delete(resultMode);
+        //delete(_parserResult);
+
         return ERR_NEEDLESSPARAMS;
     }
-    resultMode->setParams(messageVec);
-    if(int err == 0)//resultMode->checkModeParams(messageVec))
+    _parserResult->setParams(messageVec);
+    int err = 0; //resultMode->checkModeParams(messageVec))
+    if(err == 0)//resultMode->checkModeParams(messageVec))
     {
-        delete(resultMode);
+        //delete(_parserResult);
         return (err);
     }
-    this->_parserResult = new ParserResultMode(*resultMode);
-    delete (resultMode);
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchTopic(std::vector <std::string> &messageVec){
     //trailing params
-    ParserResultTopic * resultTopic = new ParserResultTopic();
-    int res = resultTopic->checkTopicParams(messageVec);
+    int res = _parserResult->checkTopicParams(messageVec);
     if (res > 0){
-        delete(resultTopic);
-        rreturn (res);
-        //return  ERR_UNKNOWNCOMMAND;
+        //delete(_parserResult);
+        return (res);
     }
-    resultTopic->setParams(messageVec);
-    this->_parserResult = new ParserResultTopic(*resultTopic);
-    delete(resultTopic);
+    _parserResult->setParams(messageVec);
     this->_parserResult->printResult();
     return (res);
 }
 
 int CommandDispatcher::dispatchInvite(std::vector <std::string> &messageVec){
-    ParserResultInvite * resultInvite = new ParserResultInvite();
-    int res = resultInvite->checkInviteParams(messageVec);
+    int res = _parserResult->checkInviteParams(messageVec);
     if (res > 0)
     {
-        delete(resultInvite);
+        //delete(_parserResult);
         return ERR_UNKNOWNCOMMAND;
     }
-    resultInvite->setParams(messageVec);
-    this->_parserResult = new ParserResultInvite(*resultInvite);
-    delete(resultInvite);
+    _parserResult->setParams(messageVec);
     this->_parserResult->printResult();
     return(0); // in the end, server sends RPL_INVITING to the user
 }
 
 int CommandDispatcher::dispatchKick(std::vector <std::string> &messageVec){
     //trailing params
-    ParserResultKick * resultKick = new ParserResultKick();
-    int res = resultKick->checkKickParams(messageVec);
+    int res = _parserResult->checkKickParams(messageVec);
     //if checkKickParams returns anything other than 0 - the command input is wrong
     if (res > 0)
     {
-        delete (resultKick);
+        //delete(_parserResult);
         return (res);
     }
-    resultKick->setParams(messageVec);
-    this->_parserResult = new ParserResultKick(*resultKick);
-    delete (resultKick);
+    _parserResult->setParams(messageVec);
+
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchPrivmsg(std::vector <std::string> &messageVec){
     //trailing params
-    ParserResultPrivmsg * resultPrivmsg = new ParserResultPrivmsg();
-    int res = resultPrivmsg->checkPrivmsgParams(messageVec);
+    int res = _parserResult->checkPrivmsgParams(messageVec);
     if (res > 0)
     {
-        delete resultPrivmsg;
+        //delete(_parserResult);
         return (res);
     }
-    resultPrivmsg->setParams(messageVec);
-    this->_parserResult = new ParserResultPrivmsg(*resultPrivmsg);
-    delete (resultPrivmsg);
+    _parserResult->setParams(messageVec);
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchNotice(std::vector <std::string> &messageVec){
     //trailing params
-    ParserResultNotice * resultNotice = new ParserResultNotice();
-    if (!resultNotice->checkNoticeParams(messageVec))
+    int res = _parserResult->checkNoticeParams(messageVec);
+    if (res > 0)
     {
-        delete resultNotice;
+        //delete(_parserResult);
         return ERR_UNKNOWNCOMMAND;
     }
-    resultNotice->setParams(messageVec);
-       this->_parserResult = new ParserResultNotice(*resultNotice);
-    delete (resultNotice);
+    _parserResult->setParams(messageVec);
     this->_parserResult->printResult();
     return(0);
 }
 
 int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     //trailing params
-    ParserResultQuit * resultQuit = new ParserResultQuit();
-    resultQuit->collectQuitMessage(messageVec);
-    resultQuit->setParams(messageVec);
-    this->_parserResult = new ParserResultQuit(*resultQuit);
-    delete (resultQuit);
+    _parserResult->collectQuitMessage(messageVec);
+    _parserResult->setParams(messageVec);
     this->_parserResult->printResult();
     return(0);
 }

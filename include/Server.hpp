@@ -44,8 +44,18 @@ class Server
 
         Server(const Server &other);                // Copy of the server is not allowed
         Server &operator=(const Server& other);
+        //[LANA EDIT]
+        CommandParser *_cmdParser;
+        //[---------]
+        //[---------]
+        //[---------]
 
     public:
+
+        //[LANA EDIT]
+        CommandParser *getCmdParser();
+        void createCmdParser(std::string rawStr);
+        //[---------]
         Server();                                       
         Server(int port, const std::string& password);
         ~Server();                                     
@@ -72,7 +82,7 @@ class Server
         //TODO: Make a NetworkManager accesor?
 
         // command handling
-        int     launchParsing(CommandParser *parser);
+        int     launchParsing();
         void    dispatchCommand(Client *client, const std::string &cmd);
         void    executeRoutine(Client *client, std::string &rawCommand);
 

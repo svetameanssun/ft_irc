@@ -32,7 +32,9 @@ class CommandDispatcher{
 		int dispatch(std::vector <std::string> &messageVec);
 		AParserResult * getParserResult() const;
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& getDispatcherMap() const;
-	private:
+		void createParserResult(std::string &command);
+	
+		private:
 		AParserResult *_parserResult; // We have to delete it manually after pasing the data!!!
 
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> &messageVec)> dispatcherMap;

@@ -3,6 +3,8 @@
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 
+
+
 AParserResult::AParserResult(){}
 
 AParserResult::AParserResult(std::string command){
@@ -25,11 +27,20 @@ std::string AParserResult::getCommand()const{
     return (_command);
 }
 
-AParserResult::~ AParserResult() {} // "required if not using Microsoft extension" taken from https://learn.microsoft.com/en-us/cpp/cpp/abstract-classes-cpp?view=msvc-170
+
+AParserResult::~ AParserResult() {}
+
+
+
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                   IS_VALID_CHANNEL_NAME                  */
 /*----------------------------------------------------------*/
+
+/*void AParserResult::printResult() const{}
+void AParserResult::setParams(std::vector<std::string> commandMessage){}
+*/
+
 bool AParserResult::isValidChanNameChar(int c) {
     if(c == '\0')
         return (false);
