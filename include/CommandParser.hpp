@@ -29,9 +29,8 @@ class CommandParser {
     const CommandDispatcher & getCommandDispatcher()const ;
 
   private:
-    const std::string &_message;
+    const std::string &_message; //IS IT IMPORTANT THAT IT IS CONST???? do I change it???
     std::vector<std::string> _messageVec; // this is the initial vector!
-
     CommandDispatcher _cmdDisp;
 };
 /**

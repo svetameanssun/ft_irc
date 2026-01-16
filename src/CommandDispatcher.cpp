@@ -1,6 +1,6 @@
 #include "CommandDispatcher.hpp"
 
-CommandDispatcher::CommandDispatcher() {
+CommandDispatcher::CommandDispatcher() : _parserResult(NULL){
     dispatcherMap["PASS"] = &CommandDispatcher::dispatchPass;
     dispatcherMap["NICK"] = &CommandDispatcher::dispatchNick;
 	dispatcherMap["USER"] = &CommandDispatcher::dispatchUser;
@@ -12,7 +12,6 @@ CommandDispatcher::CommandDispatcher() {
 	dispatcherMap["KICK"] = &CommandDispatcher::dispatchKick;
 	dispatcherMap["PRIVMSG"] = &CommandDispatcher::dispatchPrivmsg;
 	dispatcherMap["PART"] = &CommandDispatcher::dispatchPart;
-	dispatcherMap["QUIT"] = &CommandDispatcher::dispatchQuit;
 	dispatcherMap["NOTICE"] = &CommandDispatcher::dispatchNotice;
 }
 
@@ -31,8 +30,47 @@ CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
 }
 
 CommandDispatcher::~CommandDispatcher(){
-	if (_parserResult)
-		delete (_parserResult);
+	delete (_parserResult);
+}
+
+void CommandDispatcher::createParserResult(std::string &command){
+	delete (_parserResult);
+	if (command == "PASS"){
+		this->_parserResult = new ParserResultPass();
+	}
+	if (command == "NICK"){
+		this->_parserResult = new ParserResultNick();
+	}
+	if (command == "USER"){
+		this->_parserResult = new ParserResultUser();
+	}
+	if (command == "JOIN"){
+		this->_parserResult = new ParserResultJoin();
+	}
+	if (command == "QUIT"){
+		this->_parserResult = new ParserResultQuit();
+	}
+	if (command == "MODE"){
+		this->_parserResult = new ParserResultMode();
+	}
+	if (command == "TOPIC"){
+		this->_parserResult = new ParserResultTopic();
+	}
+	if (command == "INVITE"){
+		this->_parserResult = new ParserResultInvite();
+	}
+	if (command == "KICK"){
+		this->_parserResult = new ParserResultKick();
+	}
+	if (command == "PRIVMSG"){
+		this->_parserResult = new ParserResultPrivmsg();
+	}
+	if (command == "PART"){
+		this->_parserResult = new ParserResultPart();
+	}
+	if (command == "NOTICE"){
+		this->_parserResult = new ParserResultNotice();
+	}
 }
 
 const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& CommandDispatcher::getDispatcherMap() const {
@@ -41,6 +79,7 @@ const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&
 
 int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 	std::string cmd = messageVec.at(0);
+    createParserResult(cmd);
 	if (dispatcherMap.find(cmd) != dispatcherMap.end()) {
     	return ((this->*dispatcherMap[cmd])(messageVec));
 	}

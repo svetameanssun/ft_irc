@@ -6,25 +6,34 @@
 // Default constructor
 Server::Server()
 : _serverName("irc_server"), _listenFd(-1), _port(0), _password(""),
-    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(6667) {}
+    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(6667) { _cmdParser = NULL;/* <--- [LANA EDIT]*/}
 
 // Parametrized constructor
 Server::Server(int port, const std::string &password)
 : _serverName("irc_server"), _listenFd(-1), _port(port), _password(password),
-    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(port) {}
+    _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(port) { _cmdParser = NULL; /* <--- [LANA EDIT]*/}
 
 // Destructor
 Server::~Server()
 {
-    if (_listenFd != -1)
+    if (_listenFd != -1){
         ::close(_listenFd);
-
+	}
     //free all clients & channels
 	//TODO: [POINTERS] It seems that there is a problem with a double free here
     //_clientManager.freeResources();
     //_channelManager.freeResources();
+	delete(this->_cmdParser); // <--- [LANA EDIT]
     log_msg("Hi I am the server, I am done here :)");
 }
+
+//[LANA EDIT] ==============================================
+CommandParser *Server::getCmdParser(){return _cmdParser; }
+void Server::createCmdParser(std::string rawStr){
+    delete(this->_cmdParser);
+    this->_cmdParser = new CommandParser(rawStr);
+}
+///=========================================================
 
 void Server::init(char *argv[])
 {
@@ -54,7 +63,7 @@ const std::string &Server::getPassword() const { return _password; }
 // command handling
 void Server::dispatchCommand(Client *client, const std::string &cmd) { _cmdHandler.execute(client, cmd, this->_parsingResult); }
 
-int Server::launchParsing(CommandParser *cmdParser)
+int Server::launchParsing()
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
@@ -78,16 +87,18 @@ int Server::launchParsing(CommandParser *cmdParser)
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] [POINTERS] I needed to do the CommandParser dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
-	if (!cmdParser->splitMessage())
+	if (!_cmdParser->splitMessage())
 	{
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
 
-	int result = cmdParser->commandProccess();//
-	if (!cmdParser->getCommandDispatcher().getParserResult())
+	int result = _cmdParser->commandProccess();//
+	//if (!_cmdParser->getCommandDispatcher().getParserResult())
+	if (result != 0){
 		return (result);
-	this->_parsingResult = cmdParser->getCommandDispatcher().getParserResult();
+	}
+	this->_parsingResult = _cmdParser->getCommandDispatcher().getParserResult();
 	return result;
 }
 
@@ -95,9 +106,9 @@ int Server::launchParsing(CommandParser *cmdParser)
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
 	//CommandParser parser(rawCommand); // <--THIS WILL NOT WORK! we need OTHER solution! 
-	client->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
-	std::cout << "-------------------------------------------------" + client->getCmdParser()->getMessage();
-	int ret = launchParsing(client->getCmdParser()); // we use launchParsing of the Server to parse the command client received.
+	this->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
+	std::cout << "-------------------------------------------------" + getCmdParser()->getMessage();
+	int ret = launchParsing(); // we use launchParsing of the Server to parse the command client received.
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
