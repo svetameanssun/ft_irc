@@ -4,14 +4,25 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
     //PASS <password>
     if (messageVec.size() <= 1 ){
         //delete(_parserResult);
+        std::cout << "=============================================================================";
+        std::cout << "PRINT ONE";
+        std::cout << "=============================================================================";
+
         return ERR_NEEDMOREPARAMS;
     }
     if (messageVec.size() > 2){
         //delete(_parserResult);
+        std::cout << "=============================================================================";
+        std::cout << "PRINT TWO";
+        std::cout << "=============================================================================";
         return ERR_NEEDLESSPARAMS;
     }
     _parserResult->setParams(messageVec);
     // Transfer ownership into _parserResult
+    std::cout << "=============================================================================";
+    std::cout << "PRINT THREE";
+    std::cout << "=============================================================================";
+
     this->_parserResult->printResult();
     return(0);
 }

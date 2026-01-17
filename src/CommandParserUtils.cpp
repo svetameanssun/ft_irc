@@ -2,6 +2,7 @@
 
 bool CommandParser::splitMessage(void){
 	// common message characteristics check
+	_messageVec.clear();
 	if (_message.length() > 512){
 		return(0);
 	}
@@ -15,8 +16,15 @@ bool CommandParser::splitMessage(void){
 }
 
 int CommandParser::commandProccess(void){
+	std::cout << "=============================================================================";
+  	std::cout << "PRINT SIX";
+  	std::cout << "=============================================================================";
+	if (_messageVec.empty()){
+    	return ERR_UNKNOWNCOMMAND;
+	}
 	std::string cmd = getMessageVec().at(0);
 	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
 	this->_messageVec.at(0) = cmd;
-	return (_cmdDisp.dispatch(_messageVec));
+	int res = _cmdDisp.dispatch(_messageVec);
+	return (res);
 }

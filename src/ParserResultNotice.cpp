@@ -31,7 +31,7 @@ ParserResultNotice::~ParserResultNotice(){}
 /*----------------------------------------------------------*/
 
 void ParserResultNotice::setParams(std::vector<std::string> noticeCommand) {
-  if (!noticeCommand.empty()) {
+  if (!noticeCommand.empty() && noticeCommand.size() > 1) {
     noticeCommand.erase(noticeCommand.begin());  // drop the first element, which is the command
   }
   this->_noticeParamsVec = noticeCommand;

@@ -29,7 +29,7 @@ ParserResultPass::~ParserResultPass() {}
 /*----------------------------------------------------------*/
 
 void ParserResultPass::setParams(std::vector<std::string> passCommand) {
-  if (!passCommand.empty()) {
+  if (!passCommand.empty() && passCommand.size() > 1) {
     passCommand.erase(passCommand.begin());  // drop the first element, which is the command
   }
   this->_passParamsVec = passCommand;
@@ -44,6 +44,9 @@ const std::vector<std::string> ParserResultPass::getPassParams(void) const {
 /*----------------------------------------------------------*/
 
 void ParserResultPass::printResult() const{
+  std::cout << "=============================================================================";
+  std::cout << "PRINT FOUR";
+  std::cout << "=============================================================================";
 
     std::cout << "VECTOR:\n";
     for (std::vector<std::string>::const_iterator itVec = this->_passParamsVec.begin();

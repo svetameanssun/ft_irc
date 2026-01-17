@@ -30,8 +30,10 @@ Server::~Server()
 //[LANA EDIT] ==============================================
 CommandParser *Server::getCmdParser(){return _cmdParser; }
 void Server::createCmdParser(std::string rawStr){
-    delete(this->_cmdParser);
-    this->_cmdParser = new CommandParser(rawStr);
+	if (this->_cmdParser){
+    	delete(this->_cmdParser);
+	}
+	this->_cmdParser = new CommandParser(rawStr);
 }
 ///=========================================================
 
@@ -92,6 +94,9 @@ int Server::launchParsing()
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
+	std::cout << "=============================================================================";
+  	std::cout << "PRINT SEVEN";
+  	std::cout << "=============================================================================";
 
 	int result = _cmdParser->commandProccess();//
 	//if (!_cmdParser->getCommandDispatcher().getParserResult())
@@ -105,10 +110,21 @@ int Server::launchParsing()
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
+	std::cout << "=============================================================================\n";
+  	std::cout << rawCommand << std::endl;
+  	std::cout << "=============================================================================\n";
+
 	//CommandParser parser(rawCommand); // <--THIS WILL NOT WORK! we need OTHER solution! 
 	this->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
-	std::cout << "-------------------------------------------------" + getCmdParser()->getMessage();
+	std::cout << "=============================================================================\n";
+	std::cout << "---------------------" + getCmdParser()->getMessage() ;
+  	std::cout << "=============================================================================\n";
+	
 	int ret = launchParsing(); // we use launchParsing of the Server to parse the command client received.
+	if (ret != 0 || !_parsingResult) {
+    	log_warning("Parsing failed");
+    	return;
+	}
 
 	//TODO: [LANA][QUIT command]: double check it
 	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?

@@ -26,8 +26,7 @@
 class CommandDispatcher{
 	public:
 		CommandDispatcher();
-		CommandDispatcher(const CommandDispatcher &other);
-		CommandDispatcher&operator=(const CommandDispatcher &other);
+		
 		~CommandDispatcher();
 		int dispatch(std::vector <std::string> &messageVec);
 		AParserResult * getParserResult() const;
@@ -35,6 +34,8 @@ class CommandDispatcher{
 		void createParserResult(std::string &command);
 	
 		private:
+		CommandDispatcher(const CommandDispatcher &other);
+		CommandDispatcher&operator=(const CommandDispatcher &other);
 		AParserResult *_parserResult; // We have to delete it manually after pasing the data!!!
 
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> &messageVec)> dispatcherMap;

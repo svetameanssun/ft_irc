@@ -5,7 +5,7 @@
 
 
 
-AParserResult::AParserResult(){}
+AParserResult::AParserResult() : _command("") {}
 
 AParserResult::AParserResult(std::string command){
     this->_command = command;

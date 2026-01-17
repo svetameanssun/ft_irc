@@ -30,7 +30,7 @@ ParserResultPrivmsg::~ParserResultPrivmsg(){}
 /*----------------------------------------------------------*/
 
 void ParserResultPrivmsg::setParams(std::vector<std::string> privmsgCommand) {
-  if (!privmsgCommand.empty()) {
+  if (!privmsgCommand.empty() && privmsgCommand.size() > 1) {
     privmsgCommand.erase(privmsgCommand.begin());  // drop the first element, which is the command
   }
   this->_privmsgParamsVec = privmsgCommand;

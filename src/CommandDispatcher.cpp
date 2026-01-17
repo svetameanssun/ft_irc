@@ -16,7 +16,7 @@ CommandDispatcher::CommandDispatcher() : _parserResult(NULL){
 }
 
 
-CommandDispatcher::CommandDispatcher(const CommandDispatcher &other){
+/*CommandDispatcher::CommandDispatcher(const CommandDispatcher &other){
 	this->dispatcherMap = other.dispatcherMap;
 	this->_parserResult = other._parserResult;
 }
@@ -27,7 +27,7 @@ CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
 		this->_parserResult = other._parserResult;
 	}
 	return (*this);
-}
+}*/
 
 CommandDispatcher::~CommandDispatcher(){
 	delete (_parserResult);
@@ -78,14 +78,34 @@ const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&
 }
 
 int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
+	if (messageVec.empty()){
+		return (ERR_UNKNOWNCOMMAND);
+	}
 	std::string cmd = messageVec.at(0);
+	
+  	std::cout << "=============================================================================";
+  	std::cout << "PRINT FIVE";
+	std::cout << cmd << std::endl;
+  	std::cout << "=============================================================================";
+
     createParserResult(cmd);
+	std::cout << "=============================================================================\n";
+  	std::cout << "PRINT FIVE AND A HALF\n";
+	std::cout << cmd << std::endl;
+  	std::cout << "=============================================================================\n";
+
+	if (!_parserResult){
+    	return ERR_UNKNOWNCOMMAND;
+	}
 	if (dispatcherMap.find(cmd) != dispatcherMap.end()) {
     	return ((this->*dispatcherMap[cmd])(messageVec));
 	}
 	else {
     	std::cerr << "Unknown command: " << cmd << std::endl;
-    return (ERR_UNKNOWNCOMMAND);
+		std::cout << "=============================================================================\n";
+  		std::cout << "ALMOST SIX\n";
+  		std::cout << "=============================================================================\n";
+    	return (ERR_UNKNOWNCOMMAND);
 	}
 }
 

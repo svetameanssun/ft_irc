@@ -29,7 +29,7 @@ ParserResultTopic::~ParserResultTopic(){}
 /*----------------------------------------------------------*/
 
 void ParserResultTopic::setParams(std::vector<std::string> topicCommand) {
-  if (!topicCommand.empty()) {
+  if (!topicCommand.empty() && topicCommand.size() > 1) {
     topicCommand.erase(topicCommand.begin());  // drop the first element, which is the command
   }
   this->_topicParamsVec = topicCommand;

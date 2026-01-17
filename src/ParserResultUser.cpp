@@ -36,7 +36,7 @@ ParserResultUser::~ParserResultUser(){}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 void ParserResultUser::setParams(std::vector<std::string> userCommand){
-	if (!userCommand.empty()) {
+  	if (!userCommand.empty() && userCommand.size() > 1) {
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
   	}
   	this->_userParamsVec = userCommand;

@@ -17,7 +17,7 @@
 
 class CommandParser {
   public:
-    CommandParser(const std::string &message): _message(message) {};
+    CommandParser(const std::string &message);
     CommandParser(const CommandParser&other);
     CommandParser&operator=(const CommandParser&other);
     ~CommandParser();
@@ -29,7 +29,7 @@ class CommandParser {
     const CommandDispatcher & getCommandDispatcher()const ;
 
   private:
-    const std::string &_message; //IS IT IMPORTANT THAT IT IS CONST???? do I change it???
+    const std::string _message; // owns the message safely
     std::vector<std::string> _messageVec; // this is the initial vector!
     CommandDispatcher _cmdDisp;
 };
