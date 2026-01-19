@@ -36,13 +36,18 @@ ParserResultUser::~ParserResultUser(){}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 void ParserResultUser::setParams(std::vector<std::string> userCommand){
+	this->_userParamsVec.clear(); //[SVETA] does it work?
+    this->_realname.clear();
+    this->_nickname.clear();
   	if (!userCommand.empty() && userCommand.size() > 1) {
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
   	}
   	this->_userParamsVec = userCommand;
+
 	// guest 0 * :Ronnie Reagan
 	//_realname.push_back('\0'); //not sure if it is needed.
-	this->_nickname += userCommand.at(0);
+	if (!_userParamsVec.empty())
+    	this->_nickname = _userParamsVec[0];
 	
 	size_t i = 1;
 	if (userCommand.size() >= 4 && userCommand.at(1) == "0" && userCommand.at(2) == "*"){
@@ -61,7 +66,6 @@ void ParserResultUser::setParams(std::vector<std::string> userCommand){
 	if(_realname.at(0) == ':'){
 		_realname.erase(0, 1);
 	}
-	std::cout << "=============================================" + _realname;
 	if(_realname.at(_realname.length() - 1) == ' '){
 		_realname.erase(_realname.length() - 1, 1);
 	}
@@ -96,8 +100,8 @@ bool ParserResultUser::isAllowedChar(char c){
 }
 
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
-	//TODO: [LANA]: It seems like the parser does not get correctly the real name
-	// my parser has to accept this:
+	//TODO: [LANA]: check test cases on USER command
+	// [CHECK]
 	
 	if (messageVec.size() > 15){
 		return (ERR_NEEDLESSPARAMS);
@@ -105,8 +109,14 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	if (messageVec.size() < 3){
 		return (ERR_NEEDMOREPARAMS);
 	}
-	size_t i = 2;
-	
+
+	//chars should be checked only on the username can be only in user name:
+	for(size_t i = 0; i < messageVec[1].length(); i++){
+		if (!isAllowedChar(messageVec.at(i)[j])){
+				return (ERR_WRONGINPUT);
+		}
+	}
+	/*size_t i = 2;
 	if (messageVec.size() >= 5 && messageVec.at(2) == "0" && messageVec.at(3) == "*"){
 		i = 4;
 	}
@@ -116,7 +126,8 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 			if (!isAllowedChar(messageVec.at(i)[j]))
 				return (ERR_WRONGINPUT);
 		}
-	}
+	}*/
+	
 	return (0);
 }
 
