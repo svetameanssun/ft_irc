@@ -66,11 +66,12 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         return (ERR_NOSUCHCHANNEL);
     }
     if (messageVector.size() == 2){
-        std::cout << this->getTopicMessage(); //I have to send the message to the client from here!!!
+        std::cout << this->getTopicMessage(); //WE have to send the message to the client from here!!!
+        this->setTopicQuery(1); // TOPIC #chanName
         return (0);
     }
     if (messageVector[2].empty()){
-        this->setTopicQuery(1);//query the topic
+        this->setTopicQuery(1);// TOPIC
     }
     else{
         if (messageVector[2] == ":"){
@@ -86,7 +87,6 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         for (size_t i = 2; i < messageVector.size(); i++){
             this->_topicMessage+= messageVector[i];
             this->_topicMessage+= " ";
-    
         }
         this->_topicMessage.erase(_topicMessage.size()-1,1);
     }
