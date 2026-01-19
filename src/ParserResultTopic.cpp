@@ -3,7 +3,7 @@
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 ParserResultTopic::ParserResultTopic()
-    : AParserResult(){
+    : AParserResult(), _topicQuery(false){
         _command = "TOPIC";
 }
 
@@ -66,7 +66,8 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         return (ERR_NOSUCHCHANNEL);
     }
     if (messageVector.size() == 2){
-        std::cout << this->getTopicMessage(); //WE have to send the message to the client from here!!!
+        //[RUBEN] do we send this to the clien?
+        //std::cout << this->getTopicMessage(); //WE have to send the message to the client from here!!! REMOVE
         this->setTopicQuery(1); // TOPIC #chanName
         return (0);
     }
@@ -75,6 +76,7 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
     }
     else{
         if (messageVector[2] == ":"){
+            this->setTopic("");  // TOPIC #chan :   command to clear the topic
             this->setTopicQuery(0);
             return (0);
         }
