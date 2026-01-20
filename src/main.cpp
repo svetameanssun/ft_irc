@@ -3,9 +3,8 @@
 
 int main(int argc, char *argv[])
 {
-    (void) argc; 
-    
-    Server srv;
+    (void) argc;
 
+    Server srv;
     srv.init(argv);
 }

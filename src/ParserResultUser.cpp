@@ -66,8 +66,6 @@ const std::string ParserResultUser::getUsername(void) const{
 	return (this->_username);
 }
 
-
-
 /*==========================================================*/
 /*----------------------------------------------------------*/
 /*                      CHECK COMMAND                       */

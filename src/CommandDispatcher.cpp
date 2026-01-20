@@ -82,17 +82,7 @@ int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 		return (ERR_UNKNOWNCOMMAND);
 	}
 	std::string cmd = messageVec.at(0);
-	
-  	std::cout << "=============================================================================";
-  	std::cout << "PRINT FIVE";
-	std::cout << cmd << std::endl;
-  	std::cout << "=============================================================================";
-
     createParserResult(cmd);
-	std::cout << "=============================================================================\n";
-  	std::cout << "PRINT FIVE AND A HALF\n";
-	std::cout << cmd << std::endl;
-  	std::cout << "=============================================================================\n";
 
 	if (!_parserResult){
     	return ERR_UNKNOWNCOMMAND;
@@ -102,9 +92,6 @@ int CommandDispatcher::dispatch(std::vector <std::string> &messageVec){
 	}
 	else {
     	std::cerr << "Unknown command: " << cmd << std::endl;
-		std::cout << "=============================================================================\n";
-  		std::cout << "ALMOST SIX\n";
-  		std::cout << "=============================================================================\n";
     	return (ERR_UNKNOWNCOMMAND);
 	}
 }

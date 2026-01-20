@@ -19,7 +19,9 @@
 #include "MessageSender.hpp"
 #include "utils.hpp"
 #include <sstream>
+#include <csignal>
 
+volatile std::sig_atomic_t gSignalStatus;
 
 class Client;   // forward declaration
 class Channel;  // forward declaration
@@ -93,4 +95,7 @@ class Server
         void    onClientConnected(int fd);
         void    onClientData(int fd);
         void    disconnectClient(int fd);
+
+        //signal
+        void signalHandler(int sig);
 };

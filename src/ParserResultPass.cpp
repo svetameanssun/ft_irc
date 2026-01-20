@@ -44,10 +44,6 @@ const std::vector<std::string> ParserResultPass::getPassParams(void) const {
 /*----------------------------------------------------------*/
 
 void ParserResultPass::printResult() const{
-  std::cout << "=============================================================================";
-  std::cout << "PRINT FOUR";
-  std::cout << "=============================================================================";
-
     std::cout << "VECTOR:\n";
     for (std::vector<std::string>::const_iterator itVec = this->_passParamsVec.begin();
          itVec != this->_passParamsVec.end(); ++itVec) {

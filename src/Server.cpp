@@ -41,6 +41,10 @@ void Server::init(char *argv[])
 {
     //TODO:: check for input - password and port number
     //And remove the password
+
+	std::signal(SIGINT, signalHandler);
+	//std::raise(SIGINT)
+    //-----------------------------------
     setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
 
@@ -94,9 +98,6 @@ int Server::launchParsing()
 		std::cout << "THIS";
 		return (ERR_WRONGINPUT);// CHECK what ERR_VARIANT I can apply here! 
 	}
-	std::cout << "=============================================================================";
-  	std::cout << "PRINT SEVEN";
-  	std::cout << "=============================================================================";
 
 	int result = _cmdParser->commandProccess();//
 	//if (!_cmdParser->getCommandDispatcher().getParserResult())
@@ -110,15 +111,8 @@ int Server::launchParsing()
 //TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
-	std::cout << "=============================================================================\n";
-  	std::cout << rawCommand << std::endl;
-  	std::cout << "=============================================================================\n";
-
 	//CommandParser parser(rawCommand); // <--THIS WILL NOT WORK! we need OTHER solution! 
 	this->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
-	std::cout << "=============================================================================\n";
-	std::cout << "---------------------" + getCmdParser()->getMessage() ;
-  	std::cout << "=============================================================================\n";
 	
 	int ret = launchParsing(); // we use launchParsing of the Server to parse the command client received.
 	if (ret != 0 || !_parsingResult) {
@@ -202,5 +196,13 @@ void Server::disconnectClient(int fd)
     _clientManager.removeClient(fd);
 }
 
+void Server::signalHandler(int sig){
+
+	std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
+	for (size_t i = 0; i < fdVec.size(); i++)
+	{	disconnectClient(fdVec[i].fd);
+	}
+	gSignalStatus = sig;
+}
 
 void    Server::deleteParserResult() { delete _parsingResult; }

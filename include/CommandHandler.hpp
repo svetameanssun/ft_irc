@@ -34,6 +34,7 @@ class CommandHandler
         void cmdTopic(Client *client, AParserResult *result);
         void cmdKick(Client *client, AParserResult *result);
         void cmdInvite(Client *client, AParserResult *result);
+        bool flagNeedsParam(char c, bool adding);
 
 
         // Disallow copying (orthodox canonical form, non-copyable)

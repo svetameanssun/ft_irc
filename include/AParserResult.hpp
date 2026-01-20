@@ -24,6 +24,8 @@ class AParserResult {
     // Virtual methods to be implemented in derived classes
     virtual void printResult() const = 0;
     virtual void setParams(std::vector<std::string> commandMessage) = 0;
+    virtual const std::vector<std::string> getModeParams(void) const {
+          std::vector<std::string> myVec; return (myVec);};
     // default-check hooks used by CommandDispatcher; overridden where needed
     virtual int checkUserParams(std::vector<std::string> /*messageVec*/) { return 0; }
     virtual int checkJoinParams(std::vector<std::string> /*messageVec*/) { return 0; }

@@ -60,6 +60,159 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
     if (!client || !result)
         return;
+
+    ParserResultMode *result2 = static_cast<ParserResultMode*>(result);
+    const std::vector<std::string> &paramsVec = result2->getModeParams();
+
+    if (paramsVec.size() < 1)
+        return;
+
+    const std::string &channelName = paramsVec[0];
+
+    // ===== Channel existence =====
+    Channel *chan = _server.getChannelManager().findChannel(channelName);
+    if (!chan)
+    {
+        MessageSender::sendNumeric(_server.getServerName(), client,
+                                   ERR_NOSUCHCHANNEL,
+                                   channelName + " :No such channel");
+        return;
+    }
+
+    // ===== MODE query =====
+    if (paramsVec.size() == 1)
+    {
+        std::string modes = "+";
+        if (chan->isInviteOnly()) modes += "i";
+        if (chan->isTopicLocked()) modes += "t";
+        if (chan->hasKey()) modes += "k";
+        if (chan->hasLimit() > 0) modes += "l";
+
+        MessageSender::sendNumeric(_server.getServerName(), client,
+                                   RPL_CHANNELMODEIS,
+                                   channelName + " " + modes);
+        return;
+    }
+
+    // ===== Permission checks =====
+    if (!chan->isMember(client->getFd()))
+    {
+        MessageSender::sendNumeric(_server.getServerName(), client,
+                                   ERR_NOTONCHANNEL,
+                                   channelName + " :You're not on that channel");
+        return;
+    }
+
+    if (!chan->isOperator(client->getFd()))
+    {
+        MessageSender::sendNumeric(_server.getServerName(), client,
+                                   ERR_CHANOPRIVSNEEDED,
+                                   channelName + " :You're not channel operator");
+        return;
+    }
+
+    // ===== Flatten mode strings =====
+    std::string modeStr;
+    for (size_t i = 1; i < paramsVec.size(); i++)
+    {
+        if (!paramsVec[i].empty() &&
+            (paramsVec[i][0] == '+' || paramsVec[i][0] == '-'))
+        {
+            modeStr += paramsVec[i];
+        }
+    }
+
+    bool adding = true;
+    size_t argIndex = 2;
+
+    std::string appliedModes;
+    std::vector<std::string> appliedParams;
+
+    // ===== Parse flags =====
+    for (size_t i = 0; i < modeStr.size(); i++)
+    {
+        char c = modeStr[i];
+
+        if (c == '+') { adding = true; continue; }
+        if (c == '-') { adding = false; continue; }
+
+        std::string param;
+
+        if (flagNeedsParam(c, adding))
+        {
+            if (argIndex >= paramsVec.size())
+            {
+                MessageSender::sendNumeric(_server.getServerName(), client,
+                                           ERR_NEEDMOREPARAMS,
+                                           "MODE :Not enough parameters");
+                break;
+            }
+            param = paramsVec[argIndex++];
+        }
+
+        switch (c)
+        {
+            case 'i':
+                chan->setInviteOnly(adding);
+                break;
+
+            case 't':
+                chan->setTMode(adding);
+                break;
+
+            case 'k':
+                if (adding) chan->setKey(param);
+                else chan->setKey("");
+                break;
+
+            case 'l':
+                if (adding) chan->setUserLimit(std::atoi(param.c_str()));
+                else chan->setUserLimit(0);
+                break;
+
+            case 'o':
+            {
+                Client *target = _server.getClientManager().findByNick(param);
+                if (!target || !chan->isMember(target->getFd()))
+                {
+                    MessageSender::sendNumeric(_server.getServerName(), client,
+                                               ERR_USERNOTINCHANNEL,
+                                               param + " " + channelName +
+                                               " :They aren't on that channel");
+                    continue;
+                }
+                if (adding) chan->promoteToOp(target->getFd());
+                else chan->demoteFromOp(target->getFd());
+                break;
+            }
+
+            default:
+                MessageSender::sendNumeric(_server.getServerName(), client,
+                                           ERR_UNKNOWNMODE,
+                                           std::string(1, c) +
+                                           " :is unknown mode char to me");
+                continue;
+        }
+
+        appliedModes += c;
+        if (!param.empty())
+            appliedParams.push_back(param);
+    }
+
+    // ===== Broadcast MODE change =====
+    if (!appliedModes.empty())
+    {
+        std::string msg = ":" + client->getNick() + " MODE " +
+                          channelName + " " +
+                          (adding ? "+" : "-") + appliedModes;
+
+        for (size_t i = 0; i < appliedParams.size(); i++)
+            msg += " " + appliedParams[i];
+
+        chan->broadcast(msg);
+    }
+}
+
    /* // as far as I understand, only chops can do this actions
     //so I check whether the client has the operator status
     if (!client->isOnChannel()){
@@ -156,7 +309,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     //oss << "\r\n";
 //
     //chan->broadcast(oss.str());*/
-}
+/*}*/
 
     /*const std::string firstParam = paramsVec.at(0);
     // ===============================================

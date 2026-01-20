@@ -35,6 +35,10 @@ void ParserResultTopic::setParams(std::vector<std::string> topicCommand) {
   this->_topicParamsVec = topicCommand;
 }
 
+void ParserResultTopic::setTopic(std::string topic){
+    this->_topicMessage = topic;
+}
+
 void ParserResultTopic::setTopicQuery(bool flag) {
     this->_topicQuery = flag;
 }
