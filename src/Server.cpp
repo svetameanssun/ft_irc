@@ -1,4 +1,6 @@
 #include "Server.hpp"
+
+volatile std::sig_atomic_t gSignalStatus = 0;
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
 //TODO [RUBEN] Check client and channel classes to find bugs
 //TODO: Change the default constructor, it should always have a specified port
@@ -41,9 +43,15 @@ void Server::init(char *argv[])
 {
     //TODO:: check for input - password and port number
     //And remove the password
-
+	// signal handling
 	std::signal(SIGINT, signalHandler);
-	//std::raise(SIGINT)
+	if (gSignalStatus == 2){
+		std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
+		for (size_t i = 0; i < fdVec.size(); i++){
+			disconnectClient(fdVec[i].fd);
+		}
+	}
+	std::raise(SIGINT);
     //-----------------------------------
     setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
@@ -194,15 +202,6 @@ void Server::disconnectClient(int fd)
 
     _networkManager.closeFd(fd);
     _clientManager.removeClient(fd);
-}
-
-void Server::signalHandler(int sig){
-
-	std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
-	for (size_t i = 0; i < fdVec.size(); i++)
-	{	disconnectClient(fdVec[i].fd);
-	}
-	gSignalStatus = sig;
 }
 
 void    Server::deleteParserResult() { delete _parsingResult; }

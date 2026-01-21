@@ -32,6 +32,7 @@ INC_FILES =		Server.hpp \
 				Replies.hpp \
 				cmdtests.hpp \
 				utils.hpp \
+				signals.hpp
 
 INCLUDE  = $(addprefix $(INC_DIR), $(INC_FILES))
 
@@ -75,7 +76,8 @@ FILES    = 	main.cpp \
 			ParserResultPart.cpp \
 			ParserResultQuit.cpp \
 			cmdtests.cpp \
-			utils.cpp
+			utils.cpp \
+			signals.cpp
 
 FILES_TEST	=	Server.cpp \
 				Client.cpp \
@@ -99,7 +101,8 @@ FILES_TEST	=	Server.cpp \
 				ParserResultPrivmsg.cpp \
 				ParserResultUser.cpp \
 				ParserResultKick.cpp \
-				utils.cpp
+				utils.cpp \
+				signals.cpp
 
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))
 SRCS_TEST = $(addprefix $(SRC_DIR), $(FILES_TEST))
