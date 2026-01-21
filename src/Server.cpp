@@ -1,6 +1,5 @@
 #include "Server.hpp"
 
-volatile std::sig_atomic_t gSignalStatus = 0;
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
 //TODO [RUBEN] Check client and channel classes to find bugs
 //TODO: Change the default constructor, it should always have a specified port
@@ -45,13 +44,6 @@ void Server::init(char *argv[])
     //And remove the password
 	// signal handling
 	std::signal(SIGINT, signalHandler);
-	if (gSignalStatus == 2){
-		std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
-		for (size_t i = 0; i < fdVec.size(); i++){
-			disconnectClient(fdVec[i].fd);
-		}
-	}
-	std::raise(SIGINT);
     //-----------------------------------
     setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
@@ -64,6 +56,14 @@ void Server::init(char *argv[])
 }
 
 void Server::run() { _networkManager.run(*this); }
+
+void Server::stop(){
+	_running = false;
+	std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
+	for (size_t i = 0; i < fdVec.size(); i++){
+			disconnectClient(fdVec[i].fd);
+		}
+}
 
 //setters
 void Server::setPort(int port) { _port = port; }
@@ -81,23 +81,6 @@ int Server::launchParsing()
 {
 	// string OUTSIDE the functions.
 	//std::string messageStr;
-
-
-	//messageStr = "JOIN        sveta       :42  gggg  fff 			\r\n";
-	//messageStr = "JOIN        chan1,chan2,chan3,chan4       11,22,33,11  ";
-	//messageStr = "JOIN newChannel";
-	//messageStr = "JOIN #newChannel";
-	//messageStr = "JOIN #newChannel,&anotherChannel,#wonderfulChannel,&a,&b 1234,9999,0000";
-	//messageStr = "JOIN #newChannel,&anotherChannel,#wonderfulChannel,&a,&b 1234,9999,0000,8,9,7,6,5,4";
-	//messageStr = "Join newChan"; // does not start with & or #
-	//messageStr = "Join &newChan"; // OK
-	//messageStr = "NICK newNick";
-	//messageStr = "NICK newNickname"; //  nickname no longer than 9 chars (?)
-	//messageStr = "NICK 1392r"; //  nickname cannotstart with digit
-	//messageStr = "user newNickname"; // not enough parameters
-	//messageStr = "user newNickname  dddd dddd"; // wrong input
-	//messageStr = "user newNickname  dddd:dddd"; // wrong input
-	//messageStr = "USER n@ewNickname :Hello world"; // wrong input 
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
 	//TODO:[LANA] [POINTERS] I needed to do the CommandParser dynamic, because the way it is implemented, it does not work at the memory level. 
 	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
