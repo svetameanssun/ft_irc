@@ -19,7 +19,6 @@ class ParserResultUser : public AParserResult {
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> userCommand);
     void setRealname(std::string name);
-    void setRealname(std::string name);
     const std::vector<std::string> getUserParams(void) const;
     const std::string getRealname(void) const;
     const std::string getUsername(void) const;
