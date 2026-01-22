@@ -35,7 +35,7 @@ ParserResultJoin::~ParserResultJoin() {
 /*----------------------------------------------------------*/
 
 void ParserResultJoin::setParams(std::vector<std::string> joinCommand) {
-    if (!joinCommand.empty()) {
+    if (!joinCommand.empty() && joinCommand.size() > 1) {
         joinCommand.erase(joinCommand.begin());  // drop the first element, which is the command itself
     }
     this->_joinParamsVec = joinCommand;

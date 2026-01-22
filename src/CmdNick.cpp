@@ -14,6 +14,7 @@ void CommandHandler::cmdNick(Client *client, AParserResult *result)
     ParserResultNick *result2 = static_cast<ParserResultNick*>(result);
 
     const std::string newNick = result2->getNickname();
+    
 
     Client *other = _server.getClientManager().findByNick(newNick);
 

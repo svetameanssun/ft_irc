@@ -1,84 +1,90 @@
-#include "ParserResultMode.hpp"
+#include "ParcerResultMode.hpp"
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
-ParserResultMode::ParserResultMode()
-    : AParserResult(){
+ParcerResultMode::ParcerResultMode()
+    : AParcerResult(){
         _command = "MODE";
 }
 
-ParserResultMode::ParserResultMode(const ParserResultMode &other): AParserResult(){
+ParcerResultMode::ParcerResultMode(const ParcerResultMode &other){
     this->_command = other._command;
-    this->_modeFlagsStr = other._modeFlagsStr;
     this->_modeParamsVec = other._modeParamsVec;
+    this->_modeParamsMap = other._modeParamsMap;
 }
 
-ParserResultMode& ParserResultMode::operator=(const ParserResultMode& other){
+ParcerResultMode& ParcerResultMode::operator=(const ParcerResultMode& other){
     if(this != &other) {
         this->_modeParamsVec = other._modeParamsVec;
-        this->_modeFlagsStr = other._modeFlagsStr;
+        this->_modeParamsMap = other._modeParamsMap;
         this->_command = other._command;
     }
     return (*this);
 }
 
-ParserResultMode::~ParserResultMode(){}
+ParcerResultMode::~ParcerResultMode(){}
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
-void ParserResultMode::setParams(std::vector<std::string> modeCommand){
+
+void ParcerResultMode::initModeMap(){
+    _modeParamsMap["k"] = "NULL";
+    _modeParamsMap["o"] = "NULL";
+    _modeParamsMap["l"] = "NULL";
+    _modeParamsMap["i"] = "NULL";
+    _modeParamsMap["t"] = "NULL";
+
+}
+
+/*bool ParcerResultMode::isValidCommandElement(std::string element){
+    if 
+}*/
+
+
+
+void ParcerResultMode::setParams(std::vector<std::string> modeCommand){
     if (!modeCommand.empty()) {
         modeCommand.erase(modeCommand.begin());  // drop the first element, which is the command itself
     }
     this->_modeParamsVec = modeCommand;
-    //I start with i = 1, becase I do not need channel name in my string;
-    for (size_t i = 1; i < modeCommand.size(); i++){
-        this->_modeFlagsStr += modeCommand.at(i);
-        this->_modeFlagsStr += " ";
-    }
-    if(_modeFlagsStr.at(_modeFlagsStr.length() - 1) == ' '){
-		_modeFlagsStr.erase(_modeFlagsStr.length() - 1, 1);
-	}
 
 }
 
-const std::vector<std::string> ParserResultMode::getModeParams(void) const{
+const std::vector<std::string> ParcerResultMode::getModeParams(void) const{
     return (this->_modeParamsVec);
 }
-
-const std::string ParserResultMode::getModeFlagsStr(void) const{
-    return (this->_modeFlagsStr);
-}
-
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                       IS_VALID...                        */
 /*----------------------------------------------------------*/
 
-/*bool ParserResultMode::isValidChanNameChar(int c) {
+bool ParcerResultMode::isValidChanNameChar(int c) {
     if(c == '\0')
-        return (false);
+    return (false);
     else if(c == '\a')
-        return (false);
+    return (false);
     else if(c == '\r')
-        return (false);
+    return (false);
     else if(c == '\n')
-        return (false);
+    return (false);
     else if(c == ' ')
-        return (false);
+    return (false);
     else if(c == ',')
-        return (false);
+    return (false);
     else if(c == ':')
-        return (false);
+    return (false);
     else {
         return (true);
     }
-}*/
+}
 
-/*bool ParserResultMode::isValidChanName(std::string channelName) {
+
+
+
+bool ParcerResultMode::isValidChanName(std::string channelName) {
     size_t i = 0;
     if(channelName.empty()) {
         // NOT FORGET EVERYWHERE!
@@ -98,41 +104,74 @@ const std::string ParserResultMode::getModeFlagsStr(void) const{
         }
     }
     return (true);
-}*/
+}
 
-/*bool ParserResultMode::checkFlagCombin(int c, std::vector <std::string> messageVec){
 
-    std::string noParamsFlags = "it\0";
-    std::string withParamsFlags = "kol\0";
-    if ((withParamsFlags.find(c)) )
-    if (c == 'k'  && messageVec.size() != 4){
-        return (false);
+bool isFlag(std::string str){
+    if (str.at(0) != '+' && str.at(0) != '-'){
+        return(false);
     }
-    if (c == 'o' && messageVec.size() != 4){
-        return (false);
-    }
-    if (c == 'l' && messageVec.size() != 4){
-        return (false);
-    }
-}*/
-
-bool ParserResultMode::isChanFlag(char channelFlag){
-    std::string flags = "kolit";
-    for (size_t i = 0; i < flags.length() ; i++){
-        if (flags.find(channelFlag) == std::string::npos){
-            return(false);
-        }
+    std::string flagChars;
+    flagChars.push_back('\0');
+    flagChars += "kolit";
+    for (int i = 1; i < str.length(); i++){
+        if (flagChars.find(str[i]) == std::string::npos)
+            return (false);
     }
     return (true);
 }
 
-bool ParserResultMode::hasPlusMinus(std::string channelFlags){
-    for (size_t i = 0; i < channelFlags.length() ; i++){
-        if (channelFlags.find('+') == std::string::npos && channelFlags.find('-') == std::string::npos){
-            return(false);
+int isIt(std::string str){
+    if (str.at(0) != '+' && str.at(0) != '-'){
+        return(false);
+    }
+    std::string flagChars;
+    flagChars.push_back('\0');
+    flagChars += "it";
+    for (int i = 1; i < str.length(); i++){
+        if (flagChars.find(str[i]) == std::string::npos)
+            return (0);
+    }
+    if (str.at(0) == '+')
+        return ('+'); // 43
+    if (str.at(0) == '-')
+        return ('-'); // 45
+    return (0);
+}
+
+int ParcerResultMode::fillInModeMap(){
+    if (!isFlag(_modeParamsVec.at(1))){
+        return (ERR_NOCHANMODES);
+    } 
+    for (size_t i = 1; i < this->_modeParamsVec.size() - 1; i++){
+        if (isFlag(_modeParamsVec.at(i))){
+            if (int itRes = isIt(_modeParamsVec.at(i)) && (i == _modeParamsVec.size() - 1 || !isFlag(_modeParamsVec.at(i)))){
+                if (itRes == 43)
+                _modeParamsMap["i"]
+            }
+
+
+
+         if (&& !isFlag(_modeParamsVec.at(i + 1))){
+            checkFlagParamPair(_modeParamsVec.at(i), _modeParamsVec.at(i + 1)){
+
+            }
         }
     }
-    return (true);
+}
+}
+
+
+
+int ParcerResultMode::checkModeParams(std::vector<std::string> messageVec){
+    initModeMap();
+    if (!isValidChanName(messageVec.at(1))){
+        return (ERR_NOSUCHCHANNEL);
+    }
+        // #channame +k wewew -k dsdsds
+    int res = fillInModeMap();
+
+    return (res);
 }
 
 /*Valid combinations of flags (with no parameters)
@@ -157,29 +196,18 @@ bool ParserResultMode::hasPlusMinus(std::string channelFlags){
 +itk <key>
 +itol <nick> <limit>
 
-(Any order is allowed, as long as parameters follow the same order.)*/
 
 
-/*bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
-     MODE #channame -flag params 
-        0       1       2    3
-        itkol
-        NO PARAMS:
-            i t 
-        WITH PARAMS:
-            k o l
+
+    //  MODE #channame -flag params 
+    //     0       1       2    3
+    //     itkol
+    //     NO PARAMS:
+    //         i t 
+    //     WITH PARAMS:
+    //         k o l
     
-    if (messageVec.at(2).length() > 3){
-        return (false);
-    }
-    std::string flags = messageVec.at(2);
-    for (int i = 0; i < flags.length(); ++i){
-       if (!checkFlagCombin(flags[i], messageVec))
-            return(false);
-    }
-    //TODO
-    return (true);
-}*/
+  */  
 
 /* itkol
 ---------------------------------------------------------------------
@@ -212,25 +240,13 @@ bool ParserResultMode::hasPlusMinus(std::string channelFlags){
 
 */
 
-/*int ParserResultMode::checkModeParams(std::vector<std::string> messageVec){
-    if (!isValidChanName(messageVec.at(1))){
-        return (ERR_NOSUCHCHANNEL);
-    }
-    if(!isValidChanFlag(messageVec.at(2))){
-        return (ERR_UNKNOWNMODE);
-    }
-    if(!isValidChanParams(messageVec)){
-        return (ERR_UNKNOWNCOMMAND);
-    }
-    return (0);
-}
-*/
+
 /*==========================================================*/
 
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/
-void ParserResultMode::printResult() const{
+void ParcerResultMode::printResult() const{
     std::cout << "VECTOR:\n";
     for(std::vector<std::string>::const_iterator itVec = this->_modeParamsVec.begin();
             itVec != this->_modeParamsVec.end(); ++itVec) {
@@ -266,4 +282,3 @@ void ParserResultMode::printResult() const{
 
 /* MODE #channel
             the server will return the current modes of that channel: */
-

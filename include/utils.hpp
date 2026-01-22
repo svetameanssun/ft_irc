@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <cstdarg>
+#include <cstdio>
 #include <cstdlib>
 #include <cctype>
 

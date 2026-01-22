@@ -23,12 +23,13 @@ public:
     ~ClientManager();
 
     // Management
-    void addClient(Client *client); // Add the hostname if ever needed, const std::string &hostname);
+    void addClient(Client *client);// Add the hostname if ever needed, const std::string &hostname);
     void removeClient(int fd);
     bool clientExists(int fd);
     Client *findByFd(int fd);
     Client *findByNick(const std::string &nick);
 
+    void disconnectAll(void); //[LANA] maybe we need it
     // Utility
     void broadcast(const std::string &msg, int excludeFd = -1);
 

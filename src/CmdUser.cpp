@@ -14,7 +14,15 @@ void CommandHandler::cmdUser(Client *client, AParserResult *result)
 
     ParserResultUser *result2 = static_cast<ParserResultUser*>(result);
 
-    const std::string username = result2->getNickname();
+    if (result2)
+    {
+        log_debug("[Command Handler] cmdUser: ");
+        result2->printResult();
+    }
+    else 
+        return log_warning("[Command Handler] cmdUser: No args");
+
+    const std::string username = result2->getUsername(); //[RUBEN] I (sveta) have changed _nickname to _username changed this
     const std::string realname = result2->getRealname();
 
     client->setUser(username);

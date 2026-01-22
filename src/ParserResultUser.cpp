@@ -1,7 +1,8 @@
 #include "ParserResultUser.hpp"
 
-//TODO: [LANA]: It seems like the parser does not get correctly the real name
-// my parser has to accept this:
+// [RUBEN] - changed _nickname to _username here, because it is how it should be !
+// change in your code not to mix up  _nickname that we set with the command NICK
+// and this _username (which for SOME REASON i also wrongly named _nickname, now here it is _username
 // USER guest 0 * :Ronnie Reagan
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
@@ -14,7 +15,7 @@ ParserResultUser::ParserResultUser(const ParserResultUser &other): AParserResult
 	this->_userParamsVec = other._userParamsVec;
 	this->_command = other._command;
 	this->_realname = other._realname;
-	this->_nickname = other._nickname;
+	this->_username = other._username;
 }
 
 ParserResultUser& ParserResultUser::operator=(const ParserResultUser& other){
@@ -23,7 +24,7 @@ ParserResultUser& ParserResultUser::operator=(const ParserResultUser& other){
 		this->_userParamsVec = other._userParamsVec;
 		this->_command = other._command;
 		this->_realname = other._realname;
-		this->_nickname = other._nickname;
+		this->_username = other._username;
 	}
 	return (*this);
 }
@@ -36,30 +37,21 @@ ParserResultUser::~ParserResultUser(){}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 void ParserResultUser::setParams(std::vector<std::string> userCommand){
-	if (!userCommand.empty()) {
+	this->_userParamsVec.clear(); //[SVETA] does it work?
+    this->_realname.clear();
+    this->_username.clear();
+  	if (!userCommand.empty() && userCommand.size() > 1) {
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
   	}
-  	this->_userParamsVec = userCommand;
-	// guest 0 * :Ronnie Reagan
-	_realname.push_back('\0'); //not sure if it is needed.
-	this->_nickname += userCommand.at(0);
+	if (!userCommand.empty()){
+  		this->_userParamsVec = userCommand;
+		this->_username = userCommand[0];
+	}
 	
-	size_t i = 1;
-	if (userCommand.size() >= 4 && userCommand.at(1) == "0" && userCommand.at(2) == "*"){
-		i = 3;
-	}
+}
 
-	if (userCommand.at(i)[0]!= ':'){
-		_realname+=userCommand.at(i);
-	}
-	else{
-		for (; i < userCommand.size(); i++){
-			_realname += userCommand.at(i);
-		}
-	}
-	if(_realname.at(0) == ':'){
-		_realname.erase(0, 1);
-	}
+void ParserResultUser::setRealname(std::string name){
+	this->_realname = name;
 }
 
 const std::vector<std::string> ParserResultUser::getUserParams(void) const{
@@ -70,8 +62,8 @@ const std::string ParserResultUser::getRealname(void) const{
 	return (this->_realname);
 }
 
-const std::string ParserResultUser::getNickname(void) const{
-	return (this->_nickname);
+const std::string ParserResultUser::getUsername(void) const{
+	return (this->_username);
 }
 
 /*==========================================================*/
@@ -91,27 +83,41 @@ bool ParserResultUser::isAllowedChar(char c){
 }
 
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
-	//TODO: [LANA]: It seems like the parser does not get correctly the real name
-	// my parser has to accept this:
-	
-	if (messageVec.size() > 15){
-		return (ERR_NEEDLESSPARAMS);
-	}
-	if (messageVec.size() < 3){
-		return (ERR_NEEDMOREPARAMS);
-	}
-	size_t i = 2;
-	
-	if (messageVec.size() >= 5 && messageVec.at(2) == "0" && messageVec.at(3) == "*"){
-		i = 4;
-	}
-	//NUL, CR, LF, space
-	for (; i < messageVec.size(); i++){
-		for (size_t j = 0; j  < messageVec.at(i).length(); j++){
-			if (!isAllowedChar(messageVec.at(i)[j]))
+	for(size_t i = 0; i < messageVec[1].length(); i++){
+		if (!isAllowedChar(messageVec[1][i])){
 				return (ERR_WRONGINPUT);
 		}
 	}
+	// USER guest   0       *     :Ronnie Reagan
+	// USER guest :Ronnie Reagan
+	//  0    1        2      3      4       5
+	std::string name = "";
+	size_t i = 2;
+	if (messageVec.size() <= 2){
+		return (ERR_NEEDMOREPARAMS);
+	}
+	if (messageVec.at(2) == "0" && messageVec.at(3) == "*"){
+		if (messageVec.size() < 5){
+			return (ERR_NEEDMOREPARAMS);
+		}
+		i = 4;
+	}
+	if (messageVec[i][0]!= ':'){
+		name+=messageVec.at(i);
+	}
+	else{
+		for (; i < messageVec.size(); i++){
+			name += messageVec.at(i);
+			name += " ";
+		}
+	}
+	if(!name.empty() && name[0] == ':'){
+		name.erase(0, 1);
+	}
+	if(!name.empty() && name.at(name.length() - 1) == ' '){
+		name.erase(name.length() - 1, 1);
+	}
+	setRealname(name);
 	return (0);
 }
 
@@ -120,6 +126,6 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 /*----------------------------------------------------------*/
 
 void ParserResultUser::printResult() const{
-	std::cout << this->_nickname << "'s real name is" << std::endl;
+	std::cout << this->_username << "'s real name is" << std::endl;
     std::cout << this->_realname << std::endl;
 }
