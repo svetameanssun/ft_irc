@@ -1,8 +1,6 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-//TODO: It is a copy of "Notice" but responding to errors; if we modify "Notice", we need to modify this
-
 void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 {
     if (!client || !result)

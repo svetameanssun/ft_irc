@@ -43,13 +43,14 @@ void NetworkManager::run(Server &server)
     }
 }
 
-
-//TODO: do not use throw clauses
 void NetworkManager::setupSocket()
 {
     _listenFd = socket(AF_INET, SOCK_STREAM, 0);
     if (_listenFd < 0)
-        throw std::runtime_error("socket failed");
+    {
+        log_err("socket failed");
+        return; 
+    }
 
     int opt = 1;
     if (setsockopt(_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
@@ -65,10 +66,16 @@ void NetworkManager::setupSocket()
     addr.sin_port = htons(_port);
 
     if (bind(_listenFd, (sockaddr*)&addr, sizeof(addr)) < 0)
-        throw std::runtime_error("bind failed");
+    { 
+        log_err("bind failed");
+        return; 
+    }
 
     if (listen(_listenFd, SOMAXCONN) < 0)
-        throw std::runtime_error("listen failed");
+    {
+        log_err("listen failed");
+        return; 
+    }
 
     struct pollfd pfd;
     pfd.fd = _listenFd;
@@ -81,7 +88,10 @@ void NetworkManager::pollOnce()
 {
     int ret = poll(&_pollFds[0], _pollFds.size(), -1);
     if (ret < 0)
-        throw std::runtime_error("poll failed");
+    {
+        log_err("poll failed");
+        return; 
+    }
 }
 
 
@@ -94,8 +104,8 @@ int NetworkManager::acceptClient()
     if (clientFd < 0)
         return -1;
     
+    //Is this necessary?
     fcntl(clientFd, F_SETFL, O_NONBLOCK);
-
 
     struct pollfd pfd;
     pfd.fd = clientFd;
@@ -106,23 +116,8 @@ int NetworkManager::acceptClient()
     return clientFd;
 }
 
-//TODO: Right now the data is handled on the server side
-//ssize_t NetworkManager::receiveFrom(int fd, std::string &out)
-//{
-//    char buffer[512];
-//    ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
-//
-//    if (bytes > 0)
-//        out.assign(buffer, bytes);
-//
-//    return bytes;
-//}
-
-
-void NetworkManager::sendTo(int fd, const std::string &msg)
-{
-    send(fd, msg.c_str(), msg.size(), 0);
-}
+//Right now it is not used
+void NetworkManager::sendTo(int fd, const std::string &msg) { send(fd, msg.c_str(), msg.size(), 0); }
 
 void NetworkManager::closeFd(int fd)
 {

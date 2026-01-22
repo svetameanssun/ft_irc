@@ -17,12 +17,11 @@ void CommandHandler::cmdPass(Client *client, AParserResult *result)
         client->setPassAccepted(false);
         log_warning("Password is not correct, user cannot register");
 
-        //TODO: decide where we handle the return message, here or in the disconnectClient func
         MessageSender::sendNumeric(_server.getServerName(),
                                     client, ERR_PASSWDMISMATCH,
                                     ":Password incorrect");
         
-        _server.disconnectClient(client->getFd());
+        _server.disconnectClient(client->getFd(), "Bad password");
 
         return;
     }
@@ -37,5 +36,5 @@ void CommandHandler::cmdPass(Client *client, AParserResult *result)
     }
 
     client->setPassAccepted(true);
-    log_debug("PASS accepted for client fd=%d", client->getFd());
+    log_msg("PASS accepted for client fd=%d", client->getFd());
 }

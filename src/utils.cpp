@@ -42,6 +42,7 @@ void log_err(const char* format, ...)
     std::cerr << std::endl << RESET;
 }
 
+//Verbosity for clearness
 bool isAllowed(int code)
 {
     switch (code)
@@ -112,8 +113,59 @@ bool isAllowed(int code)
     }
 }
 
-
-void getRetMsg(int ret)
+// the suite for the check params function
+static bool isNumber(const std::string &s)
 {
-    log_warning("Need to implement message for reply %d", ret);
+    if (s.empty()) return false;
+    for (size_t i = 0; i < s.size(); i++)
+        if (!std::isdigit(s[i]))
+            return false;
+    return true;
+}
+
+static bool isValidPassword(const std::string &pass)
+{
+    if (pass.empty())
+        return false;
+
+    for (size_t i = 0; i < pass.size(); i++)
+    {
+        if (std::isspace(pass[i]) || !std::isprint(pass[i]))
+            return false;
+    }
+    return true;
+}
+
+int checkParams(int argc, char **argv)
+{
+    if (argc != 3)
+    {
+        log_err("Usage: ./ircserv <port> <password>");
+        return -1;
+    }
+
+    std::string portStr = argv[1];
+    std::string password = argv[2];
+
+    if (!isNumber(portStr))
+    {
+        log_err("Error: Port must be numeric.");
+        return -1;
+    }
+
+    int port = std::atoi(portStr.c_str());
+
+    if (port < 1024 || port > 65535)
+    {
+        log_err("Error: Port must be between 1024 and 65535.");
+        return -1;
+    }
+
+    if (!isValidPassword(password))
+    {
+        log_err("Error: Invalid password.");
+        return -1;
+    }
+
+    return 0;
 }

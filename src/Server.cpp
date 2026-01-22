@@ -1,8 +1,7 @@
 #include "Server.hpp"
 
 //TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
-//TODO [RUBEN] Check client and channel classes to find bugs
-//TODO: Change the default constructor, it should always have a specified port
+//TODO: [RUBEN] Check client and channel classes to find bugs
 //TODO: [END] S I G N A L S
 // Default constructor
 Server::Server()
@@ -38,19 +37,14 @@ void Server::createCmdParser(std::string rawStr){
 }
 ///=========================================================
 
-void Server::init(char *argv[])
+void Server::init()
 {
-    //TODO:: check for input - password and port number
     //And remove the password
 	// signal handling
 	std::signal(SIGINT, signalHandler);
     //-----------------------------------
-    setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
-
-    setPort(atoi(argv[1]));
     log_debug("[Server] Server listening in port number: %d", getPort());
-
 	log_debug("[Server] Running routine: ");
 	run();
 }
@@ -61,7 +55,7 @@ void Server::stop(){
 	_running = false;
 	std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
 	for (size_t i = 0; i < fdVec.size(); i++){
-			disconnectClient(fdVec[i].fd);
+			disconnectClient(fdVec[i].fd, "connection closed");
 		}
 }
 
@@ -99,7 +93,6 @@ int Server::launchParsing()
 	return result;
 }
 
-//TODO: put the return message correctly
 void Server::executeRoutine(Client *client, std::string &rawCommand)
 {
 	//CommandParser parser(rawCommand); // <--THIS WILL NOT WORK! we need OTHER solution! 
@@ -112,7 +105,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 	}
 
 	//TODO: [LANA][QUIT command]: double check it
-	//TODO: [LANA][PING command]: I do not see the PING command, is it mandatory or not really?
     log_debug("return value is: %d", ret);
 	log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
 
@@ -121,14 +113,11 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 		dispatchCommand(client, this->_parsingResult->getCommand());
 		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
         //deleteParserResult();
-		//TODO: Remove this at the end of the project
-		std::cout << "<<==== Routine executed successfully =====>>" << std::endl;
-
     }
     else
 	{
-		log_warning("Wrong command. Error case not yet implemented. Return proper message");
-        //MessageSender::sendNumeric("irc_server", client, ret, "not yet implemented");
+		//TODO: I think we might need to do a func to answer based on the ret value
+        MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
 }
 
@@ -136,13 +125,13 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 
 void Server::onClientConnected(int fd)
 {
-    Client *client = new Client(fd, "localhost"); // TODO: hostname later
+	// TODO: hostname later
+    Client *client = new Client(fd, "localhost"); 
     _clientManager.addClient(client);
 
-    std::cout << "[Server] New client connected: fd=" << fd << std::endl;
+    log_msg("[Server] New client connected: fd=%d,", fd);
 }
 
-//TODO: The recv func should be in the network layer I believe
 void Server::onClientData(int fd)
 {
     char buf[512];
@@ -150,7 +139,7 @@ void Server::onClientData(int fd)
 
     if (bytes <= 0)
     {
-        disconnectClient(fd);
+        disconnectClient(fd, "Connection lost");
         return;
     }
 
@@ -172,18 +161,21 @@ void Server::onClientData(int fd)
         executeRoutine(client, messages[i]);
 }
 
-void Server::disconnectClient(int fd)
+void Server::disconnectClient(int fd, const std::string &reason)
 {
     Client *client = _clientManager.findByFd(fd);
 
-    if (client)
-	{
-		log_debug("[Disconnect client]: bye bye baby");
-	}
-		//TODO: I guess it is just to send a message to the client
-        //_commandHandler.handleQuit(client, "Connection closed");
+	if (!client) return;
+	if (client->isRegistered())
+    {
+        std::string quitMsg = ":" + client->getPrefix() +
+                              " QUIT :" + reason + "\r\n";
 
+        _channelManager.broadcastToJoinedChannels(fd, quitMsg);
+    }
+	log_msg("User with fd=%d quitting IRC server", client->getFd());
     _networkManager.closeFd(fd);
+	_channelManager.removeClientFromChannels(client);
     _clientManager.removeClient(fd);
 }
 
