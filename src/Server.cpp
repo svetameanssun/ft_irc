@@ -37,14 +37,12 @@ void Server::createCmdParser(std::string rawStr){
 }
 ///=========================================================
 
-void Server::init(char *argv[])
+void Server::init()
 {
-    //TODO:: check for input - password and port number
     //And remove the password
 	// signal handling
 	std::signal(SIGINT, signalHandler);
     //-----------------------------------
-    setPassword(argv[2]);
     log_debug("[Server] Password: %s", getPassword().c_str());
     log_debug("[Server] Server listening in port number: %d", getPort());
 	log_debug("[Server] Running routine: ");
@@ -57,7 +55,7 @@ void Server::stop(){
 	_running = false;
 	std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
 	for (size_t i = 0; i < fdVec.size(); i++){
-			disconnectClient(fdVec[i].fd);
+			disconnectClient(fdVec[i].fd, "connection closed");
 		}
 }
 

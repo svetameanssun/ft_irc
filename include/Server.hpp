@@ -57,7 +57,6 @@ class Server
         CommandParser *getCmdParser();
         void createCmdParser(std::string rawStr);
         //[---------]
-        Server();                                       
         Server(int port, const std::string& password);
         ~Server();                                     
 
