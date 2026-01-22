@@ -27,6 +27,7 @@ Server::~Server()
 
 void Server::init()
 {
+	//TODO: [END] Remove these logs
     log_debug("[Server] Password: %s", getPassword().c_str());
     log_debug("[Server] Server listening in port number: %d", getPort());
 	log_debug("[Server] Running routine: ");
@@ -110,7 +111,8 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 
 void Server::onClientConnected(int fd)
 {
-    Client *client = new Client(fd, "localhost"); // TODO: hostname later
+	// TODO: hostname later
+    Client *client = new Client(fd, "localhost"); 
     _clientManager.addClient(client);
 
     log_msg("[Server] New client connected: fd=%d,", fd);

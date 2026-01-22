@@ -56,7 +56,7 @@ Client *ClientManager::findByNick(const std::string &nick)
             return it->second;
         }
     }
-    log_warning("[Client Manager]: User not found");
+    log_msg("[Client Manager]: User not found in the Client list");
     return NULL;
 }
 
