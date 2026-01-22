@@ -3,6 +3,7 @@
 
 ClientManager::ClientManager() {}
 
+//Not needed for the moment
 //ClientManager::ClientManager(Server &server) : _server(server) {}
 
 ClientManager::~ClientManager()
@@ -12,13 +13,10 @@ ClientManager::~ClientManager()
     //    delete it->second;
 }
 
-void ClientManager::addClient(Client *client)//Add hostname if needed; maybe override, const std::string &hostname)
+void ClientManager::addClient(Client *client)
 {
-    // TODO: resolve actual hostname with getpeername() maybe??
     _clients[client->getFd()] = client;
-    log_warning("[Client Manager] addClient: Connection not established yet");
-
-    log_msg("[ClientManager] Added client fd=%d", client->getFd());
+    log_msg("[ClientManager] Added client with fd=%d", client->getFd());
 }
 
 void ClientManager::removeClient(int fd)
@@ -50,29 +48,25 @@ Client *ClientManager::findByNick(const std::string &nick)
         log_warning("[Client Manager]: Nick is empty, returning...");
         return NULL;
     }
-    this->printClients();
     for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++)
     {
         if (it->second->getNick() == nick)
         {
             std::cout << nick << std::endl;
-            log_msg("[Client Manager]: Found nickname: %s", it->second->getNick().c_str());
             return it->second;
         }
     }
-    log_msg("[Client Manager]: User not found");
+    log_msg("[Client Manager]: User not found in the Client list");
     return NULL;
 }
 
 void ClientManager::broadcast(const std::string &msg, int excludeFd)
 {
-    log_msg("[Client Mamanger]: Broadcasting to all the clients: ");
+    log_msg("[Client Manager]: Broadcasting to all the clients: ");
     for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
     {
         if (it->first == excludeFd) continue;
-        //TODO: [END] [NETWORKING] verify this
         MessageSender::sendToClient(it->second, msg);
-        std::cout << "[Broadcast] " << msg << std::endl;
     }
 }
 
@@ -88,5 +82,5 @@ void ClientManager::freeResources()
     //for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
     //    delete it->second;
     //_clients.clear();
-    log_warning("[Client Manager]: resources not freed");
+    log_warning("[Client Manager]: resources not freed yet");
 }

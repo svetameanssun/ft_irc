@@ -1,8 +1,7 @@
 SERVER:
-    - Implement checking for password and port, and decide where
     - (At the end) Implement signals 
 
-CLIENT:
-    - Check how to handle the buffer of the messages received
 
-Remove all the log messages 
+- Remove all the log messages 
+- Remove the test files (cpp and scripts)
+
