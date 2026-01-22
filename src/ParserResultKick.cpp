@@ -36,7 +36,7 @@ ParserResultKick::~ParserResultKick() {}
 /*----------------------------------------------------------*/
 
 void ParserResultKick::setParams(std::vector<std::string> kickCommand) {
-    if(!kickCommand.empty()) {
+    if(!kickCommand.empty() && kickCommand.size() > 1) {
         kickCommand.erase(kickCommand.begin());  // drop the first element, which is the kick command
     }
     this->_kickParamsVec = kickCommand;

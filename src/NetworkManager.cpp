@@ -21,6 +21,11 @@ void NetworkManager::run(Server &server)
 
     while (true)
     {
+        if (gSignalStatus == SIGINT){
+		    log_msg("SIGINT received, shutting down...");
+		    server.stop();
+            break;
+	    }
         log_debug("[Network manager] Inside the loop..");
         poll(_pollFds.data(), _pollFds.size(), -1);
 

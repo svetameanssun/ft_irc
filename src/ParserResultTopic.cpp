@@ -3,7 +3,7 @@
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
 ParserResultTopic::ParserResultTopic()
-    : AParserResult(){
+    : AParserResult(), _topicQuery(false){
         _command = "TOPIC";
 }
 
@@ -29,10 +29,14 @@ ParserResultTopic::~ParserResultTopic(){}
 /*----------------------------------------------------------*/
 
 void ParserResultTopic::setParams(std::vector<std::string> topicCommand) {
-  if (!topicCommand.empty()) {
+  if (!topicCommand.empty() && topicCommand.size() > 1) {
     topicCommand.erase(topicCommand.begin());  // drop the first element, which is the command
   }
   this->_topicParamsVec = topicCommand;
+}
+
+void ParserResultTopic::setTopic(std::string topic){
+    this->_topicMessage = topic;
 }
 
 void ParserResultTopic::setTopicQuery(bool flag) {
@@ -66,14 +70,17 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         return (ERR_NOSUCHCHANNEL);
     }
     if (messageVector.size() == 2){
-        std::cout << this->getTopicMessage(); //I have to send the message to the client from here!!!
+        //[RUBEN] do we send this to the clien?
+        //std::cout << this->getTopicMessage(); //WE have to send the message to the client from here!!! REMOVE
+        this->setTopicQuery(1); // TOPIC #chanName
         return (0);
     }
     if (messageVector[2].empty()){
-        this->setTopicQuery(1);//query the topic
+        this->setTopicQuery(1);// TOPIC
     }
     else{
         if (messageVector[2] == ":"){
+            this->setTopic("");  // TOPIC #chan :   command to clear the topic
             this->setTopicQuery(0);
             return (0);
         }
@@ -86,7 +93,6 @@ int ParserResultTopic::checkTopicParams(std::vector <std::string> messageVector)
         for (size_t i = 2; i < messageVector.size(); i++){
             this->_topicMessage+= messageVector[i];
             this->_topicMessage+= " ";
-    
         }
         this->_topicMessage.erase(_topicMessage.size()-1,1);
     }

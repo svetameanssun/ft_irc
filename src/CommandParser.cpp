@@ -1,6 +1,9 @@
 #include "CommandParser.hpp"
 
 // MORE IDIOMATIC WAY:
+CommandParser::CommandParser(const std::string &message)
+    : _message(message) {}
+
 CommandParser::CommandParser(const CommandParser& other) : _message(other._message) {
 	(void)other;
 }

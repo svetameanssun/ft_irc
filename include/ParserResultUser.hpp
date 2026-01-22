@@ -22,6 +22,7 @@ class ParserResultUser : public AParserResult {
     const std::vector<std::string> getUserParams(void) const;
     const std::string getRealname(void) const;
     const std::string getUsername(void) const;
+    
 
     /*================= COMMAND CHECKING ================*/
     bool isAllowedChar(char realnameChar);

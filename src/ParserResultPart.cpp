@@ -32,7 +32,7 @@ ParserResultPart::~ParserResultPart() {}
 /*----------------------------------------------------------*/
 
 void ParserResultPart::setParams(std::vector<std::string> partMessage) {
-    if(!partMessage.empty()) {
+    if(!partMessage.empty() && partMessage.size() > 1){
         partMessage.erase(partMessage.begin());  // drop the first element (word "PART")
     }
     this->_partParamsVec = partMessage;

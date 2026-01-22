@@ -25,13 +25,13 @@ void CommandHandler::cmdUser(Client *client, AParserResult *result)
     else 
         return log_warning("[Command Handler] cmdUser: No args");
 
-    const std::string username = result2->getNickname();
+    const std::string username = result2->getUsername(); //[RUBEN] I (sveta) have changed _nickname to _username changed this
     const std::string realname = result2->getRealname();
 
     client->setUser(username);
     client->setRealName(realname);
     
-    log_debug("User: %s with realname: %s and nickname: %s", username.c_str(), realname.c_str(), result2->getNickname().c_str());
+    log_debug("User: %s with realname: %s and nickname: %s", username.c_str(), realname.c_str(), result2->getUsername().c_str());
 
     //If already a NICK and is not registered, complete it
     if (!client->isRegistered() && !client->getNick().empty())

@@ -4,6 +4,25 @@
 
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
+//       MODE #channame -flag params 
+//        0       1       2    3
+//       itkol
+//          NO PARAMS:
+//            i t 
+//          WITH PARAMS:
+//            k o l
+
+bool CommandHandler::flagNeedsParam(char c, bool adding){
+    if(!adding && c == 'o'){
+        return (true);
+    }
+    if (adding && (c == 'k' || c == 'o' || c == 'l')){
+        return (true);
+    }
+    else
+        return (false);
+}
+
 // Entry point: dispatch commands
 void CommandHandler::execute(Client *client, const std::string &command, AParserResult *result)
 {

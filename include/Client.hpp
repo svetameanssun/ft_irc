@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <netinet/in.h>     //for sockaddr_in, look if if there is another way
+#include "CommandParser.hpp"
 
 #define MAX_CHANNELS_JOINED 15
 
@@ -21,13 +22,13 @@ class Client
         std::string _buffer;        //partial data received, until newline
         std::vector<std::string> _channels; // list of joined channels    <<---- check if this is the best design
         int         _nbrChannelJoined; //keep the count of the channels to see if it reachs the limit
-
         //copy not available
         Client(const Client &other);
         Client &operator=(const Client &other);
-    
-    public:
-        Client();
+
+        public:
+
+        Client(); //IMPORTANT if we want to pass CpmmandParser * _cmdParser to anyther class
         Client(int fd);
         Client(int fd, const std::string &hostname);
         ~Client();
@@ -43,6 +44,7 @@ class Client
         bool isOperator() const;
         bool getPassAccepted() const;
         bool isChanLimitReached() const;
+        
 
         //setters
         void setNick(const std::string &nick);
@@ -53,6 +55,12 @@ class Client
         void setPassAccepted(bool value);
         void setLimitReached(bool value);
 
+        //[LANA EDIT]
+        
+        //bool isOnChannel(std::string channelName) const;
+        //[---------]
+        
+
         //buffer handling, do it when we know how to handle data
         void appendToBuffer(const std::string &data);
         const std::string &getBuffer();
@@ -61,6 +69,6 @@ class Client
         //channel handling; look if it is really necessary to get the channels
         void joinChannel(const std::string &name);
         void leaveChannel(const std::string &name);
-        const std::vector<std::string> &getChannels() const;
+        const std::vector<std::string> &getChannels() const; // [LANA] I will use this one! 
 };
 

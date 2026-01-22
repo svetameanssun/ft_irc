@@ -31,7 +31,7 @@ ParserResultNotice::~ParserResultNotice(){}
 /*----------------------------------------------------------*/
 
 void ParserResultNotice::setParams(std::vector<std::string> noticeCommand) {
-  if (!noticeCommand.empty()) {
+  if (!noticeCommand.empty() && noticeCommand.size() > 1) {
     noticeCommand.erase(noticeCommand.begin());  // drop the first element, which is the command
   }
   this->_noticeParamsVec = noticeCommand;
@@ -71,7 +71,7 @@ const std::vector<std::string> ParserResultNotice::stringToVec(std::string str, 
 int ParserResultNotice::checkNoticeTarget(std::string noticeTarget){
     std::vector <std::string> targetVec;
     targetVec = stringToVec(noticeTarget, ',');
-    for (size_t i = 0; targetVec.size(); i++){
+    for (size_t i = 0; i < targetVec.size(); i++){
         if (!isValidChanName(targetVec[i]) && !isValidNick(targetVec[i])){
             return (ERR_WRONGINPUT);
         }
