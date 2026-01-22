@@ -29,7 +29,7 @@ ParserResultInvite::~ParserResultInvite() {}
 /*----------------------------------------------------------*/
 
 void ParserResultInvite::setParams(std::vector<std::string> inviteCommand) {
-    if(!inviteCommand.empty()) {
+    if(!inviteCommand.empty()&& inviteCommand.size() > 1) {
         inviteCommand.erase(inviteCommand.begin());  // drop the first element, wich is the Invite command
     }
     this->_inviteParamsVec = inviteCommand;

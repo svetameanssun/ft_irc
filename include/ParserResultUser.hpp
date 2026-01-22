@@ -18,9 +18,11 @@ class ParserResultUser : public AParserResult {
 
     /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> userCommand);
+    void setRealname(std::string name);
     const std::vector<std::string> getUserParams(void) const;
     const std::string getRealname(void) const;
-    const std::string getNickname(void) const;
+    const std::string getUsername(void) const;
+    
 
     /*================= COMMAND CHECKING ================*/
     bool isAllowedChar(char realnameChar);
@@ -31,7 +33,7 @@ class ParserResultUser : public AParserResult {
   private:
     std::vector <std::string> _userParamsVec;
     std::string _realname;
-    std::string _nickname;
+    std::string _username;
 };
 
 #endif

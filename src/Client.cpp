@@ -2,7 +2,7 @@
 #include "utils.hpp"
 #include <algorithm>
 
-Client::Client() : _fd(-1), _registered(false), _isOperator(false) {}
+Client::Client() : _fd(-1), _registered(false), _isOperator(false){}
 Client::Client(int fd) : _fd(fd), _registered(false), _isOperator(false) {}
 Client::Client(int fd, const std::string &hostname)
     : _fd(fd), _hostname(hostname), _registered(false), _isOperator(false) {}
@@ -21,6 +21,7 @@ bool Client::getPassAccepted() const { return _passAccepted; }
 bool Client::isChanLimitReached() const { return _nbrChannelJoined; }
 
 
+
 //setters
 void Client::setNick(const std::string &nick) { _nickname = nick; }
 void Client::setUser(const std::string &user) { _username = user; }
@@ -29,6 +30,20 @@ void Client::setRegistered(bool value) { _registered = value; }
 void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
+
+
+
+//[LANA EDIT]
+
+/*bool Client::isOnChannel(std::string channelName) const{
+    std::vector<std::string> channels = getChannels();
+    if (std::find(channels.begin(), channels.end(), channelName) == channels.end()){
+        return (false);
+    }
+    return (true);
+}*/
+//[---------]
+            
 // Buffer handling
 void Client::appendToBuffer(const std::string &data) { _buffer += data; }
 const std::string &Client::getBuffer() { return _buffer; }  
@@ -48,13 +63,14 @@ std::vector<std::string> Client::extractMessages()
     return messages;
 }
 
+//TODO: see if channel manager does its thing
 // Channel handling; of course we will need to call the proper procedures to 
 // ask the server->ChannelManager to do it 
 void Client::joinChannel(const std::string &name)
 {
-    log_debug("[Client] I want to join a channel :D");
     if (std::find(_channels.begin(), _channels.end(), name) == _channels.end())
     {
+        log_msg("[Client] Joins the channel %s", name.c_str());
         _channels.push_back(name);
         _nbrChannelJoined++;
     }
@@ -62,11 +78,11 @@ void Client::joinChannel(const std::string &name)
 
 void Client::leaveChannel(const std::string &name)
 {
-    log_debug("[Client] I want to leave a channel :(");
     std::vector<std::string>::iterator it =
         std::find(_channels.begin(), _channels.end(), name);
     if (it != _channels.end())
     {
+        log_msg("[Client] Leaves channel");
         _channels.erase(it);
         _nbrChannelJoined--;
     }

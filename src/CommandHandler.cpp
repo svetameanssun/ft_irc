@@ -4,10 +4,27 @@
 
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
-// Entry point: dispatch commands
+//       MODE #channame -flag params 
+//        0       1       2    3
+//       itkol
+//          NO PARAMS:
+//            i t 
+//          WITH PARAMS:
+//            k o l
+
+bool CommandHandler::flagNeedsParam(char c, bool adding){
+    if(!adding && c == 'o'){
+        return (true);
+    }
+    if (adding && (c == 'k' || c == 'o' || c == 'l')){
+        return (true);
+    }
+    else
+        return (false);
+}
+
 void CommandHandler::execute(Client *client, const std::string &command, AParserResult *result)
 {
-    //TODO:(Optional) Change for switch, or pointers to functions :)
     if (command == "PASS")
         cmdPass(client, result);
     else if (command == "NICK")
@@ -24,8 +41,8 @@ void CommandHandler::execute(Client *client, const std::string &command, AParser
         cmdPart(client, result);
     else if (command == "QUIT")
         cmdQuit(client, result);
-    //else if (command == "PING")
-    //    cmdPing(client, result);
+    else if (command == "PING")
+        cmdPing(client, result);
     //else if (command == "PONG")
     //    cmdPong(client, result);
     else if (command == "MODE")

@@ -7,10 +7,7 @@ void MessageSender::sendToClient(Client *client, const std::string &msg)
     if (!client)
         return;
 
-    // For now, write to std::cout instead of socket
-    std::cout << "Sending to " << client->getNick() << ": " << msg;
-    //log_msg("");
-    log_debug("MessageSender: sending to client");
+    log_debug("MessageSender: sending to client: %s", client->getNick().c_str());
     ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 

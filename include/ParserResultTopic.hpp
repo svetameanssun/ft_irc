@@ -19,10 +19,12 @@ class ParserResultTopic : public AParserResult {
   /*================= SETTERS / GETTERS ===============*/
     void setParams(std::vector<std::string> topicCommand);
     void setTopicQuery(bool flag);
+    void setTopic(std::string topic);
 
     const std::vector<std::string> getTopicParams(void) const;
     const std::string getTopicMessage(void) const;
     bool isTopicQuery(void);
+
 
     /*================= COMMAND CHECKING ================*/
     int checkTopicParams(std::vector<std::string> messageVec);

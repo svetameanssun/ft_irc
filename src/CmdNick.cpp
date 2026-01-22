@@ -4,10 +4,8 @@
 void CommandHandler::cmdNick(Client *client, AParserResult *result)
 {
     if (!client || !result)
-    {
-        log_warning("[Command Handler] cmdNick: No client or no command given");
         return;
-    }
+        
     if (!client->getPassAccepted())
     {
         log_warning("[Command Handler] cmdNick: Pass is not accepted. Client cannot do any action");
@@ -16,6 +14,7 @@ void CommandHandler::cmdNick(Client *client, AParserResult *result)
     ParserResultNick *result2 = static_cast<ParserResultNick*>(result);
 
     const std::string newNick = result2->getNickname();
+    
 
     Client *other = _server.getClientManager().findByNick(newNick);
 
@@ -29,7 +28,7 @@ void CommandHandler::cmdNick(Client *client, AParserResult *result)
 
     std::string oldNick = client->getNick();
     client->setNick(newNick);
-    log_debug("[Command Handler] client with fd %d has nickname: %s", client->getFd(), client->getNick().c_str());
+    log_msg("[Command Handler] client with fd %d has new nickname: %s", client->getFd(), client->getNick().c_str());
 
     // If the user already had a nick (a rename), broadcast NICK change to channels
     if (!oldNick.empty())
