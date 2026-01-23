@@ -32,6 +32,7 @@ class CommandDispatcher{
 		AParserResult * getParserResult() const;
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& getDispatcherMap() const;
 		void createParserResult(std::string &command);
+		int flagMal;
 	
 		private:
 		CommandDispatcher(const CommandDispatcher &other);

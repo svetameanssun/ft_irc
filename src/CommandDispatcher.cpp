@@ -38,38 +38,42 @@ void CommandDispatcher::createParserResult(std::string &command){
 	if (command == "PASS"){
 		this->_parserResult = new ParserResultPass();
 	}
-	if (command == "NICK"){
+	else if (command == "NICK"){
 		this->_parserResult = new ParserResultNick();
 	}
-	if (command == "USER"){
+	else if (command == "USER"){
 		this->_parserResult = new ParserResultUser();
 	}
-	if (command == "JOIN"){
+	else if (command == "JOIN"){
 		this->_parserResult = new ParserResultJoin();
 	}
-	if (command == "QUIT"){
+	else if (command == "QUIT"){
 		this->_parserResult = new ParserResultQuit();
 	}
-	if (command == "MODE"){
+	else if (command == "MODE"){
 		this->_parserResult = new ParserResultMode();
 	}
-	if (command == "TOPIC"){
+	else if (command == "TOPIC"){
 		this->_parserResult = new ParserResultTopic();
 	}
-	if (command == "INVITE"){
+	else if (command == "INVITE"){
 		this->_parserResult = new ParserResultInvite();
 	}
-	if (command == "KICK"){
+	else if (command == "KICK"){
 		this->_parserResult = new ParserResultKick();
 	}
-	if (command == "PRIVMSG"){
+	else if (command == "PRIVMSG"){
 		this->_parserResult = new ParserResultPrivmsg();
 	}
-	if (command == "PART"){
+	else if (command == "PART"){
 		this->_parserResult = new ParserResultPart();
 	}
-	if (command == "NOTICE"){
+	else if (command == "NOTICE"){
 		this->_parserResult = new ParserResultNotice();
+	}
+	else
+	{
+		this->flagMal = 1;
 	}
 }
 

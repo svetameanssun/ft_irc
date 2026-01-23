@@ -99,7 +99,8 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
     //	return;
 	//}
 	//TODO: I've changed this to check something
-	if (!_parsingResult)
+	//if (this->_cmdParser->flagMal)
+	if(!_parsingResult)
 	{
 		log_warning("Parsing failed");
 		return;
@@ -111,15 +112,17 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 	if (_parsingResult)
 		log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
 
-    if (isAllowed(ret))
+    if (isAllowed(ret) && _parsingResult)
 		dispatchCommand(client, this->_parsingResult->getCommand());
     else
 	{
 		//TODO: [RUBEN] I think we might need to do a func to answer based on the ret value
         MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
+
 	//TODO: [POINTERS] We still do not handle properly pointers
-	//deleteParserResult();
+	//if (_parsingResult)
+	//	deleteParserResult();
 
 }
 

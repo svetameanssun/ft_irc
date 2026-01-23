@@ -10,15 +10,11 @@ SERVER:
 [EVALUATION]
     - Check everything without address sanitizer, then with it
     - Right now there is a weird behavior when using the IRSSI client
-    - PRIVMSG is not sending the message to the users, check why
-    - I do not know why (macOS thing I suppose)
-        I cannot send raw commands using nc 
-    - "Verify that private messages (PRIVMSG)
-        are fully functional with various parameters."
 
     - Suspend a client (^-Z) connected to a channel. Then flood the channel with another client. This
 should not freeze. When the client is active again, all stored commands should be processed normally; check
 for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
+    - Check for operations from a regular user and operator user
     
     - Once done everything, we need to check into the cluster computer
         to check with valgrind :D 
