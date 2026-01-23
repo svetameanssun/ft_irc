@@ -1,7 +1,7 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-//TODO: [OPTIONAL] Refactor for code beauty :)
+//TODO: [END] [OPTIONAL] Refactor for code beauty :)
 void CommandHandler::cmdJoin(Client *client, AParserResult *result)
 {
     if (!client || !result)

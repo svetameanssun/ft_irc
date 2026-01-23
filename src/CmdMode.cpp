@@ -298,7 +298,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
 
         }
     }
-    //TODO: [RUBEN] I guess this is needed at the end of the command
+    //TODO: [END] MODE should be fine, check it
     //// Broadcast the final mode change to the channel
     //std::ostringstream oss;
     //oss << ":" << client->getNick() << "!" << client->getUser() << "@" << client->getHost()

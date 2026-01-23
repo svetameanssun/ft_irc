@@ -4,8 +4,7 @@
 Channel::Channel(const std::string &name)
 : _name(name), _iMode(false), _userLimit(-1) {}
 
-//Look at this
-Channel::~Channel() { log_warning("[Channel] Destructor: Resources from the channel not freed"); }
+Channel::~Channel() {}
 
 //Getters
 const std::string &Channel::getName() const { return _name; }
@@ -24,7 +23,6 @@ bool Channel::userExists(int fd) const
 }
 
 const std::map<int, Client *> Channel::getChannelMembers() const { return _members; }
-
 
 // Mutators
 void Channel::setTopic(const std::string &topic) { _topic = topic; }
@@ -94,7 +92,7 @@ void Channel::removeFromInviteList(int fd)
         _invited.erase(fd);
     }
     else
-        log_warning("[Channel] removeFromInviteList: client was not in the invite list");
+        log_msg("[Channel] removeFromInviteList: client was not in the invite list");
 }
 
 

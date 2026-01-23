@@ -5,17 +5,16 @@
 #include <netinet/in.h>     //for sockaddr_in, look if if there is another way
 #include "CommandParser.hpp"
 
-#define MAX_CHANNELS_JOINED 15
+#define MAX_CHANNELS_JOINED 10
 
 class Client
 {
-    //TODO: A max limit of joined channels must be set; the implementation depends on the server, but for us, 10 should be just fine
     private:
         int         _fd;            //for the socket
         bool        _passAccepted;  //The client provided the good password
         std::string _nickname;      //9 chars max, need to specifiy it 
         std::string _username;      //USER
-        std::string _realname;      //Real name (from USER command)  <<---- check if there are this many fields
+        std::string _realname;      //Real name (from USER command)
         std::string _hostname;      //Hostname (or IP string)
         bool        _registered;    //true if fully registered (NICK+USER)
         bool        _isOperator;    //operator attribute <<---- should be under channel attrs

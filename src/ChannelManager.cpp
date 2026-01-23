@@ -2,12 +2,7 @@
 
 ChannelManager::ChannelManager() {}
 
-ChannelManager::~ChannelManager()
-{
-    for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
-        delete it->second;
-    log_msg("All channels have been deleted by the Channel Manager");
-}
+ChannelManager::~ChannelManager() { freeResources(); }
 
 Channel *ChannelManager::addChannel(const std::string &name)
 {
@@ -98,4 +93,6 @@ void ChannelManager::freeResources()
     for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
         delete it->second;
     _channels.clear();
+    
+    log_msg("All channels have been deleted by the Channel Manager");
 }
