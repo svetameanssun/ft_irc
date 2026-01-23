@@ -15,11 +15,11 @@ class ClientManager
 {
 private:
     std::map<int, Client*> _clients; // fd -> Client*       
-    //Server &_server;                                      //TODO: Check if reference to server is needed
+    //Server &_server; // Right now we do not need a reference to a client   
+    //ClientManager(Server &server);
 
 public:
     ClientManager();
-    //ClientManager(Server &server);
     ~ClientManager();
 
     // Management

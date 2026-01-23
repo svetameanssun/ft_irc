@@ -18,9 +18,13 @@ std::string Client::getPrefix() const { return getNick() + "!" + getUser() + "@"
 bool Client::isRegistered() const { return _registered; }
 bool Client::isOperator() const { return _isOperator; }
 bool Client::getPassAccepted() const { return _passAccepted; }
-bool Client::isChanLimitReached() const { return _nbrChannelJoined; }
-
-
+bool Client::isChanLimitReached() const
+{
+    if (_nbrChannelJoined < MAX_CHANNELS_JOINED)
+        return false;
+    else 
+        return true;
+}
 
 //setters
 void Client::setNick(const std::string &nick) { _nickname = nick; }
@@ -63,9 +67,6 @@ std::vector<std::string> Client::extractMessages()
     return messages;
 }
 
-//TODO: see if channel manager does its thing
-// Channel handling; of course we will need to call the proper procedures to 
-// ask the server->ChannelManager to do it 
 void Client::joinChannel(const std::string &name)
 {
     if (std::find(_channels.begin(), _channels.end(), name) == _channels.end())

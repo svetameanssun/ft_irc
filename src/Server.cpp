@@ -1,35 +1,28 @@
 #include "Server.hpp"
 
-//TODO: [RUBEN] Handle proper channel management for users when adding or removing them, it gives segfault in the Client manager
-//TODO: [RUBEN] Check client and channel classes to find bugs
-//TODO: [END] S I G N A L S
 // Default constructor
 Server::Server()
-: _serverName("irc_server"), _listenFd(-1), _port(0), _password(""),
+: _serverName("irc_server"), _port(0), _password(""),
     _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(6667) { _cmdParser = NULL;/* <--- [LANA EDIT]*/}
 
 // Parametrized constructor
 Server::Server(int port, const std::string &password)
-: _serverName("irc_server"), _listenFd(-1), _port(port), _password(password),
+: _serverName("irc_server"), _port(port), _password(password),
     _running(false), _cmdHandler(*this), _clientManager(), _channelManager(), _networkManager(port) { _cmdParser = NULL; /* <--- [LANA EDIT]*/}
 
 // Destructor
 Server::~Server()
 {
-    if (_listenFd != -1){
-        ::close(_listenFd);
-	}
-    //free all clients & channels
-	//TODO: [POINTERS] It seems that there is a problem with a double free here
-    //_clientManager.freeResources();
-    //_channelManager.freeResources();
-	delete(this->_cmdParser); // <--- [LANA EDIT]
-    log_msg("Hi I am the server, I am done here :)");
+	if (this->_cmdParser)
+		delete(this->_cmdParser); // <--- [LANA EDIT]
+    log_msg("[Server] closing...");
 }
 
 //[LANA EDIT] ==============================================
-CommandParser *Server::getCmdParser(){return _cmdParser; }
-void Server::createCmdParser(std::string rawStr){
+CommandParser *Server::getCmdParser() { return _cmdParser; }
+
+void Server::createCmdParser(std::string rawStr)
+{
 	if (this->_cmdParser){
     	delete(this->_cmdParser);
 	}
@@ -39,10 +32,10 @@ void Server::createCmdParser(std::string rawStr){
 
 void Server::init()
 {
-    //And remove the password
 	// signal handling
 	std::signal(SIGINT, signalHandler);
     //-----------------------------------
+	//TODO: [END] remove the debug messages
     log_debug("[Server] Password: %s", getPassword().c_str());
     log_debug("[Server] Server listening in port number: %d", getPort());
 	log_debug("[Server] Running routine: ");
@@ -51,12 +44,14 @@ void Server::init()
 
 void Server::run() { _networkManager.run(*this); }
 
-void Server::stop(){
+void Server::stop()
+{
 	_running = false;
 	std::vector<struct pollfd> fdVec = _networkManager.getPollFds();
-	for (size_t i = 0; i < fdVec.size(); i++){
-			disconnectClient(fdVec[i].fd, "connection closed");
-		}
+	for (size_t i = 0; i < fdVec.size(); i++)
+	{
+		disconnectClient(fdVec[i].fd, "connection closed");
+	}
 }
 
 //setters
@@ -76,8 +71,6 @@ int Server::launchParsing()
 	// string OUTSIDE the functions.
 	//std::string messageStr;
 	//messageStr = "USeR $newNickname :My Full NAME 37R98YWEE409WRUSC[-fp;t9E";
-	//TODO:[LANA] [POINTERS] I needed to do the CommandParser dynamic, because the way it is implemented, it does not work at the memory level. 
-	//TODO:[LANA] [POINTERS] We need to change the way the pointer of the parsed structure is delivered, because it is removed before arriving to the server structure
 	if (!_cmdParser->splitMessage())
 	{
 		std::cout << "THIS";
@@ -89,6 +82,7 @@ int Server::launchParsing()
 	if (result != 0){
 		return (result);
 	}
+	//TODO: [POINTERS] Check this with Lana, important for free properly
 	this->_parsingResult = _cmdParser->getCommandDispatcher().getParserResult();
 	return result;
 }
@@ -99,33 +93,40 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 	this->createCmdParser(rawCommand); // We initiate _cmdParser of the Client class with the rawCommand in it
 	
 	int ret = launchParsing(); // we use launchParsing of the Server to parse the command client received.
-	if (ret != 0 || !_parsingResult) {
-    	log_warning("Parsing failed");
-    	return;
+	//if (ret != 0 || !_parsingResult)
+	//{
+    //	log_warning("Parsing failed");
+    //	return;
+	//}
+	//TODO: I've changed this to check something
+	if (!_parsingResult)
+	{
+		log_warning("Parsing failed");
+		return;
 	}
+
 
 	//TODO: [LANA][QUIT command]: double check it
     log_debug("return value is: %d", ret);
-	log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
+	if (_parsingResult)
+		log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
 
     if (isAllowed(ret))
-    {
 		dispatchCommand(client, this->_parsingResult->getCommand());
-		//TODO:[LANA] [POINTERS] We need to verify how to free the resources
-        //deleteParserResult();
-    }
     else
 	{
-		//TODO: I think we might need to do a func to answer based on the ret value
+		//TODO: [RUBEN] I think we might need to do a func to answer based on the ret value
         MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
+	//TODO: [POINTERS] We still do not handle properly pointers
+	//deleteParserResult();
+
 }
 
 // communication with network layer
-
 void Server::onClientConnected(int fd)
 {
-	// TODO: hostname later
+	// TODO: [END] hostname (necessary?)
     Client *client = new Client(fd, "localhost"); 
     _clientManager.addClient(client);
 

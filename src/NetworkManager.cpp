@@ -11,7 +11,11 @@
 NetworkManager::NetworkManager(int port)
     : _listenFd(-1), _port(port) {}
 
-NetworkManager::~NetworkManager() {  }
+NetworkManager::~NetworkManager()
+{
+    if (_listenFd != -1)
+        this->closeFd(_listenFd);
+}
 
 void NetworkManager::init() { setupSocket(); }
 
@@ -27,7 +31,11 @@ void NetworkManager::run(Server &server)
             break;
 	    }
         log_debug("[Network manager] Inside the loop..");
-        poll(_pollFds.data(), _pollFds.size(), -1);
+        if (poll(_pollFds.data(), _pollFds.size(), -1) < 0)
+        {
+            log_err("Poll error, returning...");
+            break;
+        }
 
         for (size_t i = 0; i < _pollFds.size(); i++)
         {
@@ -84,40 +92,25 @@ void NetworkManager::setupSocket()
     _pollFds.push_back(pfd);
 }
 
-void NetworkManager::pollOnce()
-{
-    int ret = poll(&_pollFds[0], _pollFds.size(), -1);
-    if (ret < 0)
-    {
-        log_err("poll failed");
-        return; 
-    }
-}
-
-
 int NetworkManager::acceptClient()
 {
     sockaddr_in clientAddr;
     socklen_t len = sizeof(clientAddr);
 
-    int clientFd = accept(_listenFd, (sockaddr*)&clientAddr, &len);
-    if (clientFd < 0)
+    int fd = accept(_listenFd, (sockaddr*)&clientAddr, &len);
+    if (fd < 0)
         return -1;
     
-    //Is this necessary?
-    fcntl(clientFd, F_SETFL, O_NONBLOCK);
+    fcntl(fd, F_SETFL, O_NONBLOCK);
 
     struct pollfd pfd;
-    pfd.fd = clientFd;
+    pfd.fd = fd;
     pfd.events = POLLIN;
     pfd.revents = 0;
     _pollFds.push_back(pfd);
 
-    return clientFd;
+    return fd;
 }
-
-//Right now it is not used
-void NetworkManager::sendTo(int fd, const std::string &msg) { send(fd, msg.c_str(), msg.size(), 0); }
 
 void NetworkManager::closeFd(int fd)
 {

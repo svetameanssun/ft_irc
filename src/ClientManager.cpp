@@ -6,12 +6,7 @@ ClientManager::ClientManager() {}
 //Not needed for the moment
 //ClientManager::ClientManager(Server &server) : _server(server) {}
 
-ClientManager::~ClientManager()
-{
-    //TODO:[POINTERS] there are problems with doble free here. Check what happens
-    //for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-    //    delete it->second;
-}
+ClientManager::~ClientManager() { freeResources(); }
 
 void ClientManager::addClient(Client *client)
 {
@@ -22,9 +17,10 @@ void ClientManager::addClient(Client *client)
 void ClientManager::removeClient(int fd)
 {
     std::map<int, Client*>::iterator it = _clients.find(fd);
-    if (it != _clients.end()) {
-        //TODO: [POINTERS]Right now clients are declared on stack, not valid deletion
-        //delete it->second;
+    if (it != _clients.end())
+    {
+        //TODO: Check if this works as intended
+        delete it->second;
         _clients.erase(it);
         std::cout << "[ClientManager] Removed client fd=" << fd << std::endl;
     }
@@ -79,8 +75,8 @@ void ClientManager::printClients() const
 
 void ClientManager::freeResources()
 {
-    //for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-    //    delete it->second;
-    //_clients.clear();
-    log_warning("[Client Manager]: resources not freed yet");
+    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+        delete it->second;
+    _clients.clear();
+    log_msg("All clients have been deleted by the Client Manager");
 }

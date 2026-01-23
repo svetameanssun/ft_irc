@@ -29,7 +29,6 @@ class Server
 {
     private:
         const std::string           _serverName;    // Name of the server
-        int                         _listenFd;      // listening socket
         int                         _port;          // port number
         std::string                 _password;      // optional server password
         std::vector<struct pollfd>  _pollFds;       // list of poll fds
@@ -40,16 +39,14 @@ class Server
         ClientManager               _clientManager;
         ChannelManager              _channelManager;
         NetworkManager              _networkManager;
-
+        //[LANA EDIT]
+        CommandParser               *_cmdParser;
+        //[---------]
 
         Server();                                   // We do not want a server without port   
         Server(const Server &other);                // Copy of the server is not allowed
         Server &operator=(const Server& other);
-        //[LANA EDIT]
-        CommandParser *_cmdParser;
-        //[---------]
-        //[---------]
-        //[---------]
+        
 
     public:
 

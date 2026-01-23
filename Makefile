@@ -1,6 +1,5 @@
 NAME     = ircserv
-TEST	 = test
-CC       = c++ #-g -fsanitize=address
+CC       = c++ -g -fsanitize=address
 CFLAGS   = -Wall -Wextra -Werror -std=c++98
 SRC_DIR  = src/
 INC_DIR  = include/
@@ -30,7 +29,6 @@ INC_FILES =		Server.hpp \
 				ParserResultPart.hpp \
 				ParserResultQuit.hpp \
 				Replies.hpp \
-				cmdtests.hpp \
 				utils.hpp \
 				signals.hpp
 
@@ -75,34 +73,8 @@ FILES    = 	main.cpp \
 			ParserResultNotice.cpp \
 			ParserResultPart.cpp \
 			ParserResultQuit.cpp \
-			cmdtests.cpp \
 			utils.cpp \
 			signals.cpp
-
-FILES_TEST	=	Server.cpp \
-				Client.cpp \
-				Channel.cpp \
-				ClientManager.cpp \
-				ChannelManager.cpp \
-				MessageSender.cpp \
-				CommandHandler.cpp \
-				CmdPass.cpp \
-				AParserResult.cpp \
-				CommandDispatcher.cpp \
-				CommandDispatcherUtils.cpp \
-				CommandParser.cpp \
-				CommandParserUtils.cpp \
-				ParserResultJoin.cpp \
-				ParserResultNick.cpp \
-				ParserResultPass.cpp \
-				ParserResultTopic.cpp \
-				ParserResultInvite.cpp \
-				ParserResultMode.cpp \
-				ParserResultPrivmsg.cpp \
-				ParserResultUser.cpp \
-				ParserResultKick.cpp \
-				utils.cpp \
-				signals.cpp
 
 SRCS     = $(addprefix $(SRC_DIR), $(FILES))
 SRCS_TEST = $(addprefix $(SRC_DIR), $(FILES_TEST))
@@ -135,7 +107,6 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
-	@if [ -n "$(TEST)" ]; then rm -rf $(TEST); fi
 	@echo "$(GREEN) Removal completed :D $(RESET)"
 
 re: fclean all
@@ -143,11 +114,4 @@ re: fclean all
 run: 
 	@./$(NAME) 6667 irc2026
 
-test:
-	@if [ ! -f "$(TEST)" ]; then \
-    	$(CC) $(CFLAGS) -I $(INC_DIR) $(SRCS_TEST) \
-									cmdtests.cpp test.cpp -o $(TEST); \
-	fi
-	@./$(TEST)
-
-.PHONY: all clean fclean re run test
+.PHONY: all clean fclean re run
