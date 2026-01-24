@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <stdlib.h>
+#include <cctype>
 #include "AParserResult.hpp"
 
 
