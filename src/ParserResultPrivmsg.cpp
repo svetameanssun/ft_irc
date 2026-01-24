@@ -114,9 +114,13 @@ int ParserResultPrivmsg::checkPrivmsgParams(std::vector <std::string> messageVec
 
 
 void ParserResultPrivmsg::printResult()const {
-   
-  std::cout << std::endl;
-
+    std::cout << "target(s):\n";
+    for(size_t i = 0; i < this->_targetVec.size(); i++){
+        std::cout << "       " << _targetVec[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "message:\n";
+    std::cout << "       " << _privmsgMessage << std::endl;
 }
 
 /*
