@@ -29,6 +29,7 @@ class ParserResultUser : public AParserResult {
 
     /*================= COMMAND CHECKING ================*/
     bool isAllowedChar(char realnameChar);
+    bool isAllowedNumber(std::string number);
     int checkUserParams(std::vector<std::string> messageVec);
 
     /*================= DEBUG / OUTPUT ==================*/
