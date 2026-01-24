@@ -2,9 +2,9 @@
 
 // MORE IDIOMATIC WAY:
 CommandParser::CommandParser(const std::string &message)
-    : _message(message) {}
+    : _message(message), _wrongInput(false) {}
 
-CommandParser::CommandParser(const CommandParser& other) : _message(other._message) {
+CommandParser::CommandParser(const CommandParser& other) : _message(other._message), _wrongInput(false) {
 	(void)other;
 }
 
@@ -22,6 +22,10 @@ const std::vector<std::string> &CommandParser::getMessageVec(void) const{
 }
 
 const CommandDispatcher &CommandParser::getCommandDispatcher() const { return this->_cmdDisp; }
+
+bool CommandParser::getWrongInput() const{
+	return (this->_wrongInput);
+}
 
 CommandParser::~CommandParser(){}
 

@@ -32,12 +32,13 @@ class CommandDispatcher{
 		AParserResult * getParserResult() const;
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& getDispatcherMap() const;
 		void createParserResult(std::string &command);
+		bool getFlagMal() const;
 	
 		private:
 		CommandDispatcher(const CommandDispatcher &other);
 		CommandDispatcher&operator=(const CommandDispatcher &other);
 		AParserResult *_parserResult; // We have to delete it manually after pasing the data!!!
-
+		bool _flagMal;
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> &messageVec)> dispatcherMap;
 		int dispatchPass(std::vector <std::string> &messageVec);
 		int dispatchNick(std::vector <std::string> &messageVec);

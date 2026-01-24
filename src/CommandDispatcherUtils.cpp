@@ -38,6 +38,7 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
 int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
     //USER <username> <realname>
+    std::cout << _parserResult << std::endl;
     int err = _parserResult->checkUserParams(messageVec);
     if(err > 0)
     {

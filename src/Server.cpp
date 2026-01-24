@@ -99,16 +99,18 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
     //	return;
 	//}
 	//TODO: I've changed this to check something
-	if (!_parsingResult)
+	
+	//if (!_parsingResult)
+	if (_cmdParser->getWrongInput() == true)
 	{
 		log_warning("Parsing failed");
 		return;
 	}
 
-
 	//TODO: [LANA][QUIT command]: double check it
     log_debug("return value is: %d", ret);
-	if (_parsingResult)
+	//if (_parsingResult)
+	if (_cmdParser->getWrongInput()== 0)
 		log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
 
     if (isAllowed(ret))
@@ -120,6 +122,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 	}
 	//TODO: [POINTERS] We still do not handle properly pointers
 	//deleteParserResult();
+	
 
 }
 
