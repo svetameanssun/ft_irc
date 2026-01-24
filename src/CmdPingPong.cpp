@@ -1,26 +1,18 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-void CommandHandler::cmdPing(Client *client, AParserResult *result)
+/*void CommandHandler::cmdPing(Client *client, AParserResult *result)
 {
-    (void) result;
-    
-    if (!client)
+    if (!client || !result)
         return;
 
-    std::string reply = "PING cmd not supported\r\n";
-    log_warning(reply.c_str());
-    MessageSender::sendToClient(client, reply);
+    ParserResultPing *res = static_cast<ParserResultPing*>(result);
+
+    //No need to be registered
+    
+    std::string pong = ":" + _server.getServerName() +
+                       " PONG :" + token + "\r\n";
+
+    MessageSender::sendToClient(client, pong);
 }
-
-//Not necessary for the project
-/*void CommandHandler::cmdPong(Client *client, AParserResult *result)
-{
-    (void) result;
-
-    if (!client) return;
-
-    // You could log it or update a timestamp to track idle clients
-    log_debug("[DEBUG] PONG received from %s (fd=%d)",
-                client->getNick().c_str(), client->getFd());
-}*/
+*/

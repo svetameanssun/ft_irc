@@ -4,12 +4,13 @@ SERVER:
     - Right now the JOIN command manages the addition to channels,
         it does not go through the channel manager, 
         not a good design but functional
-    - PING / PONG necessary, because if not, irssi disconnects
 
 
 [EVALUATION]
     - Check everything without address sanitizer, then with it
     - Right now there is a weird behavior when using the IRSSI client
+        * irssi sends "CAP LS 302" + NICK + USER + MODE without interaction <<--- can be ignored
+        * When connected, it sends PING, that must be replied with a PONG (MANDATORY)
 
     - Suspend a client (^-Z) connected to a channel. Then flood the channel with another client. This
 should not freeze. When the client is active again, all stored commands should be processed normally; check
