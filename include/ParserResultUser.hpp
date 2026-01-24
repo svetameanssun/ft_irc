@@ -5,7 +5,9 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <stdlib.h>
 #include "AParserResult.hpp"
+
 
 
 class ParserResultUser : public AParserResult {
