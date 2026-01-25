@@ -82,7 +82,6 @@ int Server::launchParsing()
 	if (result != 0){
 		return (result);
 	}
-	//TODO: [POINTERS] Check this with Lana, important for free properly
 	this->_parsingResult = _cmdParser->getCommandDispatcher().getParserResult();
 	return result;
 }
@@ -120,10 +119,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 		//TODO: [RUBEN] I think we might need to do a func to answer based on the ret value
         MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
-	//TODO: [POINTERS] We still do not handle properly pointers
-	//deleteParserResult();
-	
-
 }
 
 // communication with network layer

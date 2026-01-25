@@ -19,7 +19,6 @@ void ClientManager::removeClient(int fd)
     std::map<int, Client*>::iterator it = _clients.find(fd);
     if (it != _clients.end())
     {
-        //TODO: Check if this works as intended
         delete it->second;
         _clients.erase(it);
         std::cout << "[ClientManager] Removed client fd=" << fd << std::endl;
