@@ -17,6 +17,7 @@
 #include "Channel.hpp"
 #include "CommandParser.hpp"
 #include "MessageSender.hpp"
+#include "ErrorReplies.hpp"
 #include "utils.hpp"
 #include <sstream>
 #include <csignal>
@@ -84,6 +85,7 @@ class Server
         void    executeRoutine(Client *client, std::string &rawCommand);
 
         // aux
+        AParserResult *getParsingResult() { return _parsingResult; }
         void    deleteParserResult(); 
 
         // handle client data 

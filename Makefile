@@ -12,6 +12,7 @@ INC_FILES =		Server.hpp \
 				ClientManager.hpp \
 				ChannelManager.hpp \
 				MessageSender.hpp \
+				ErrorReplies.hpp \
 				CommandHandler.hpp \
 				AParserResult.hpp \
 				CommandDispatcher.hpp \
@@ -43,6 +44,7 @@ FILES    = 	main.cpp \
 			ChannelManager.cpp \
 			NetworkManager.cpp \
 			MessageSender.cpp \
+			ErrorReplies.cpp \
 			CommandHandler.cpp \
 			CmdPass.cpp \
 			CmdJoin.cpp \
