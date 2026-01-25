@@ -111,7 +111,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 	//if (_parsingResult)
 	//std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << this->_parsingResult->getCommand() << std::endl;
 	if (_cmdParser->getWrongInput() == false){
-		log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
+		log_debug("Command in execute: %s", rawCommand.c_str());
 	}
 	if (isAllowed(ret))
 		dispatchCommand(client, this->_parsingResult->getCommand());
@@ -135,7 +135,7 @@ void Server::onClientConnected(int fd)
 
 void Server::onClientData(int fd)
 {
-    char buf[512];
+    char buf[1024];
     ssize_t bytes = recv(fd, buf, sizeof(buf), 0);
 
     if (bytes <= 0)
@@ -154,12 +154,13 @@ void Server::onClientData(int fd)
     client->appendToBuffer(std::string(buf, bytes));
 	log_debug("Buffer: %s", client->getBuffer().c_str());
     std::vector<std::string> messages = client->extractMessages();
-
-	if (messages.size() == 0)
+	usleep(125000);
+	if (messages.size() == 0){
 		log_warning("No messages");
-
-    for (size_t i = 0; i < messages.size(); i++)
+	}
+    for (size_t i = 0; i < messages.size(); i++){
         executeRoutine(client, messages[i]);
+	}
 }
 
 void Server::disconnectClient(int fd, const std::string &reason)

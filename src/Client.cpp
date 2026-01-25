@@ -57,11 +57,13 @@ std::vector<std::string> Client::extractMessages()
     std::vector<std::string> messages;
     std::string::size_type pos;
 
-    while ((pos = _buffer.find("\r\n")) != std::string::npos)
+    while ((pos = _buffer.find('\n')) != std::string::npos)
     {
         std::string msg = _buffer.substr(0, pos);
+        if (!msg.empty() && msg[msg.size() - 1] == '\r')
+            msg.resize(msg.size() - 1);
         messages.push_back(msg);
-        _buffer.erase(0, pos + 2); // remove processed message
+        _buffer.erase(0, pos + 1); // remove processed message (including '\n')
     }
 
     return messages;

@@ -10,7 +10,7 @@ void CommandHandler::cmdPing(Client *client, AParserResult *result)
 
     //No need to be registered
     std::string token = res->getPingMessage();
-    
+
     std::string pong = ":" + _server.getServerName() +
                        " PONG :" + token + "\r\n";
 
