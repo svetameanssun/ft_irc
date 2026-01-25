@@ -8,13 +8,12 @@ SERVER:
 
 [EVALUATION]
     - Check everything without address sanitizer, then with it
-    - Right now there is a weird behavior when using the IRSSI client
-        * irssi sends "CAP LS 302" + NICK + USER + MODE without interaction <<--- can be ignored
         * When connected, it sends PING, that must be replied with a PONG (MANDATORY)
 
     - Suspend a client (^-Z) connected to a channel. Then flood the channel with another client. This
 should not freeze. When the client is active again, all stored commands should be processed normally; check
 for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
+
     - Check for operations from a regular user and operator user
     
     - Once done everything, we need to check into the cluster computer

@@ -9,7 +9,7 @@
     ParserResultPing *res = static_cast<ParserResultPing*>(result);
 
     //No need to be registered
-    
+
     std::string pong = ":" + _server.getServerName() +
                        " PONG :" + token + "\r\n";
 
