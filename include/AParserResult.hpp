@@ -35,6 +35,7 @@ class AParserResult {
     virtual int checkKickParams(std::vector<std::string> /*messageVec*/) { return 0; }
     virtual int checkPrivmsgParams(std::vector<std::string> /*messageVec*/) { return 0; }
     virtual int checkNoticeParams(std::vector<std::string> /*messageVec*/) { return 0; }
+    virtual int checkPingParams(std::vector<std::string> /*messageVec*/) { return 0; }
     virtual void collectQuitMessage(std::vector<std::string> &/*messageVec*/) {}
 
     

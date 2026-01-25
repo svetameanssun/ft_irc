@@ -38,6 +38,7 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
 int CommandDispatcher::dispatchUser(std::vector <std::string> &messageVec){
     //trailing params
     //USER <username> <realname>
+    std::cout << _parserResult << std::endl;
     int err = _parserResult->checkUserParams(messageVec);
     if(err > 0)
     {
@@ -172,3 +173,18 @@ int CommandDispatcher::dispatchQuit(std::vector <std::string> &messageVec){
     this->_parserResult->printResult();
     return(0);
 }
+
+int CommandDispatcher::dispatchPing(std::vector <std::string> &messageVec){
+    //trailing params
+    int res = _parserResult->checkPingParams(messageVec);
+    if (res > 0)
+    {
+        //delete(_parserResult);
+        return (res);
+    }
+    _parserResult->setParams(messageVec);
+    this->_parserResult->printResult();
+    return(0);
+}
+
+

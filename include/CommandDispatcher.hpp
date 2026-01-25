@@ -21,6 +21,7 @@
 #include "ParserResultPart.hpp"
 #include "ParserResultQuit.hpp"
 #include "ParserResultNotice.hpp"
+#include "ParserResultPing.hpp"
 
 
 class CommandDispatcher{
@@ -32,13 +33,13 @@ class CommandDispatcher{
 		AParserResult * getParserResult() const;
 		const std::map<std::string, int (CommandDispatcher::*)(std::vector<std::string>&)>& getDispatcherMap() const;
 		void createParserResult(std::string &command);
-		int flagMal;
+		bool getFlagMal() const;
 	
 		private:
 		CommandDispatcher(const CommandDispatcher &other);
 		CommandDispatcher&operator=(const CommandDispatcher &other);
 		AParserResult *_parserResult; // We have to delete it manually after pasing the data!!!
-
+		bool _flagMal;
 		std::map<std::string, int (CommandDispatcher::*)(std::vector <std::string> &messageVec)> dispatcherMap;
 		int dispatchPass(std::vector <std::string> &messageVec);
 		int dispatchNick(std::vector <std::string> &messageVec);
@@ -52,6 +53,7 @@ class CommandDispatcher{
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
 		int dispatchNotice(std::vector <std::string> &messageVec);
+		int dispatchPing(std::vector <std::string> &messageVec);
 };
 
 

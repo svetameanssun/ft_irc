@@ -1,6 +1,6 @@
 #include "CommandDispatcher.hpp"
 
-CommandDispatcher::CommandDispatcher() : _parserResult(NULL){
+CommandDispatcher::CommandDispatcher() : _parserResult(NULL), _flagMal(false){
     dispatcherMap["PASS"] = &CommandDispatcher::dispatchPass;
     dispatcherMap["NICK"] = &CommandDispatcher::dispatchNick;
 	dispatcherMap["USER"] = &CommandDispatcher::dispatchUser;
@@ -13,6 +13,7 @@ CommandDispatcher::CommandDispatcher() : _parserResult(NULL){
 	dispatcherMap["PRIVMSG"] = &CommandDispatcher::dispatchPrivmsg;
 	dispatcherMap["PART"] = &CommandDispatcher::dispatchPart;
 	dispatcherMap["NOTICE"] = &CommandDispatcher::dispatchNotice;
+	dispatcherMap["PING"] = &CommandDispatcher::dispatchNotice;
 }
 
 
@@ -31,6 +32,10 @@ CommandDispatcher&CommandDispatcher::operator=(const CommandDispatcher &other){
 
 CommandDispatcher::~CommandDispatcher(){
 	delete (_parserResult);
+}
+
+bool CommandDispatcher::getFlagMal() const{
+	return (_flagMal);
 }
 
 void CommandDispatcher::createParserResult(std::string &command){
@@ -71,9 +76,11 @@ void CommandDispatcher::createParserResult(std::string &command){
 	else if (command == "NOTICE"){
 		this->_parserResult = new ParserResultNotice();
 	}
-	else
-	{
-		this->flagMal = 1;
+	else if (command == "PING"){
+		this->_parserResult = new ParserResultPing();
+	}
+	else{
+		_flagMal = true;
 	}
 }
 

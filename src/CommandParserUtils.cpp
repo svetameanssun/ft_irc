@@ -16,9 +16,7 @@ bool CommandParser::splitMessage(void){
 }
 
 int CommandParser::commandProccess(void){
-	std::cout << "=============================================================================";
-  	std::cout << "PRINT SIX";
-  	std::cout << "=============================================================================";
+
 	if (_messageVec.empty()){
     	return ERR_UNKNOWNCOMMAND;
 	}
@@ -26,5 +24,6 @@ int CommandParser::commandProccess(void){
 	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
 	this->_messageVec.at(0) = cmd;
 	int res = _cmdDisp.dispatch(_messageVec);
+	this->_wrongInput = _cmdDisp.getFlagMal();
 	return (res);
 }

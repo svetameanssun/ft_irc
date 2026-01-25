@@ -5,7 +5,10 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <stdlib.h>
+#include <cctype>
 #include "AParserResult.hpp"
+
 
 
 class ParserResultUser : public AParserResult {
@@ -26,6 +29,7 @@ class ParserResultUser : public AParserResult {
 
     /*================= COMMAND CHECKING ================*/
     bool isAllowedChar(char realnameChar);
+    bool isAllowedNumber(std::string number);
     int checkUserParams(std::vector<std::string> messageVec);
 
     /*================= DEBUG / OUTPUT ==================*/

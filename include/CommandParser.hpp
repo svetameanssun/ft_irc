@@ -27,11 +27,13 @@ class CommandParser {
     const std::string &getMessage(void) const;
     const std::vector<std::string> &getMessageVec(void) const;
     const CommandDispatcher & getCommandDispatcher()const ;
+    bool getWrongInput() const;
 
   private:
     const std::string _message; // owns the message safely
     std::vector<std::string> _messageVec; // this is the initial vector!
     CommandDispatcher _cmdDisp;
+    bool _wrongInput;
 };
 /**
  * @brief parses and analizes the command and its params.
