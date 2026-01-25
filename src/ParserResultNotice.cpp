@@ -96,12 +96,13 @@ int ParserResultNotice::checkNoticeParams(std::vector <std::string> messageVecto
         for (size_t i = 2; i < messageVector.size(); ++i){
             this->_noticeMessage += messageVector[i];
             this->_noticeMessage += " ";
-
         }
-        this->_noticeMessage.erase(0, 1); // It removes the 1st char
-                                            // (which in this case is ':')
-        this->_noticeMessage.erase(_noticeMessage.size()-1, 1);                              
-        
+        if (this->_noticeMessage[0] == ':'){
+            this->_noticeMessage.erase(0, 1); // It removes the 1st char
+        }                                    // (which in this case is ':')
+        if (this->_noticeMessage[_noticeMessage.length()-1] == ' '){
+            this->_noticeMessage.erase(_noticeMessage.length()-1, 1);
+        }
     }
     int res = checkNoticeTarget(messageVector[1]);
     if (res > 0){
@@ -113,7 +114,12 @@ int ParserResultNotice::checkNoticeParams(std::vector <std::string> messageVecto
 /*==========================================================*/
 
 void ParserResultNotice::printResult()const {
-   
-  std::cout << std::endl;
+    std::cout << "target(s):\n";
+    for(size_t i = 0; i < this->_targetVec.size(); i++){
+        std::cout << "       " << _targetVec[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "message:\n";
+    std::cout << "       " << _noticeMessage << std::endl;
 
 }

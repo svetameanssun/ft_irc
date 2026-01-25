@@ -81,6 +81,25 @@ bool ParserResultUser::isAllowedChar(char c){
     return (false);
 }
 
+bool ParserResultUser::isAllowedNumber(std::string number){
+	size_t i = 0;
+	while(number[i] && number[i]== '+'){
+		i++;
+	}
+	if(!number[i]){
+		return (false);
+	}
+	if (number[i] == '-'){
+		return (false);
+	}
+	for(;i < number.length(); i++){
+		if(!std::isdigit(number[i])){
+			return (false);
+		}
+	}
+	return (true);
+}
+
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	
 	//check username
@@ -99,11 +118,14 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	if (messageVec.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
 	}
-	if (messageVec.at(2) == "0" && messageVec.at(3) == "*"){
+	if (isAllowedNumber(messageVec.at(2)) && messageVec.at(3) == "*"){
 		if (messageVec.size() < 5){
 			return (ERR_NEEDMOREPARAMS);
 		}
 		i = 4;
+	}
+	else{
+		return (ERR_WRONGINPUT);
 	}
 	if (messageVec[i][0]!= ':'){
 		name+=messageVec.at(i);
