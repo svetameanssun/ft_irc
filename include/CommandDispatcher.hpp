@@ -21,6 +21,7 @@
 #include "ParserResultPart.hpp"
 #include "ParserResultQuit.hpp"
 #include "ParserResultNotice.hpp"
+#include "ParserResultPing.hpp"
 
 
 class CommandDispatcher{
@@ -52,6 +53,7 @@ class CommandDispatcher{
 		int dispatchKick(std::vector <std::string> &messageVec);
 		int dispatchPrivmsg(std::vector <std::string> &messageVec);
 		int dispatchNotice(std::vector <std::string> &messageVec);
+		int dispatchPing(std::vector <std::string> &messageVec);
 };
 
 

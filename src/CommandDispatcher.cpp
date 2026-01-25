@@ -13,6 +13,7 @@ CommandDispatcher::CommandDispatcher() : _parserResult(NULL), _flagMal(false){
 	dispatcherMap["PRIVMSG"] = &CommandDispatcher::dispatchPrivmsg;
 	dispatcherMap["PART"] = &CommandDispatcher::dispatchPart;
 	dispatcherMap["NOTICE"] = &CommandDispatcher::dispatchNotice;
+	dispatcherMap["PING"] = &CommandDispatcher::dispatchNotice;
 }
 
 
@@ -74,6 +75,9 @@ void CommandDispatcher::createParserResult(std::string &command){
 	}
 	else if (command == "NOTICE"){
 		this->_parserResult = new ParserResultNotice();
+	}
+	else if (command == "PING"){
+		this->_parserResult = new ParserResultPing();
 	}
 	else{
 		_flagMal = true;

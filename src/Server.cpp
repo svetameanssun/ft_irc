@@ -106,14 +106,14 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 		log_warning("Parsing failed");
 		return;
 	}
-
 	//TODO: [LANA][QUIT command]: double check it
     log_debug("return value is: %d", ret);
 	//if (_parsingResult)
-	if (_cmdParser->getWrongInput()== 0)
+	//std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << this->_parsingResult->getCommand() << std::endl;
+	if (_cmdParser->getWrongInput() == false){
 		log_debug("Command in execute: %s", this->_parsingResult->getCommand().c_str());
-
-    if (isAllowed(ret))
+	}
+	if (isAllowed(ret))
 		dispatchCommand(client, this->_parsingResult->getCommand());
     else
 	{

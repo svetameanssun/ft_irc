@@ -28,6 +28,7 @@ INC_FILES =		Server.hpp \
 				ParserResultNotice.hpp \
 				ParserResultPart.hpp \
 				ParserResultQuit.hpp \
+				ParserResultPing.hpp \
 				Replies.hpp \
 				utils.hpp \
 				signals.hpp
@@ -73,6 +74,7 @@ FILES    = 	main.cpp \
 			ParserResultNotice.cpp \
 			ParserResultPart.cpp \
 			ParserResultQuit.cpp \
+			ParserResultPing.cpp \
 			utils.cpp \
 			signals.cpp
 
