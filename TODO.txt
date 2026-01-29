@@ -1,4 +1,8 @@
-SERVER:
+SERVER
+
+    - Ruben: I've added 2 files (hpp and cpp) to reply with proper error messages depending on the 
+        non-valid ret that I receive from you. I would need to know exactly which error rets I can
+        get so I can cover all the cases ;D 
 
 
 
