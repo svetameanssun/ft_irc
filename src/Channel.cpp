@@ -2,7 +2,7 @@
 
 //Constructor 
 Channel::Channel(const std::string &name)
-: _name(name), _iMode(false), _userLimit(-1) {}
+: _name(name), _iMode(false),_tMode(true), _kMode(false), _lMode(false), _userLimit(-1) {}
 
 Channel::~Channel() {}
 
@@ -57,15 +57,15 @@ bool Channel::addMember(Client *client, bool isOp)
     return true;
 }
 
-void Channel::removeMember(Client *client)
-{
-    int fd = client->getFd();
-    _members.erase(fd);
-    _operators.erase(fd);
-    _invited.erase(fd);
-    client->leaveChannel(this->getName());
-    log_msg("[Channel]: The member has been deleted from the channel");
-}
+    void Channel::removeMember(Client *client)
+    {
+        int fd = client->getFd();
+        _members.erase(fd);
+        _operators.erase(fd);
+        _invited.erase(fd);
+        client->leaveChannel(this->getName());
+        log_msg("[Channel]: The member has been deleted from the channel");
+    }
 
 bool Channel::isMember(int fd) const { return _members.find(fd) != _members.end(); }
 
@@ -108,6 +108,7 @@ void Channel::broadcast(const std::string &message) const
         if (fd == excludeFd) continue; // skip excluded fd
         // send raw message to each member
         MessageSender::sendToClient(c, message);
+        log_msg("MessageSender: sending to client: %s", c->getNick().c_str());
     }
 }
 

@@ -7,7 +7,6 @@ void MessageSender::sendToClient(Client *client, const std::string &msg)
     if (!client)
         return;
 
-    log_msg("MessageSender: sending to client: %s", client->getNick().c_str());
     ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 

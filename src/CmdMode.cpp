@@ -161,8 +161,14 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                 break;
 
             case 'k':
-                if (adding) chan->setKey(param);
-                else chan->setKey("");
+                if (adding) {
+                    chan->setKey(param);
+                    chan->setKMode(true);
+                }
+                else {
+                    chan->setKey("");
+                    chan->setKMode(false);
+                }
                 break;
 
             case 'l':
