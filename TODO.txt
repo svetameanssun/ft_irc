@@ -8,8 +8,6 @@ SERVER:
 should not freeze. When the client is active again, all stored commands should be processed normally; check
 for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
 
-    - With nc, When attempting with a bad command and then using a good one, it loops twice
-    (first does not recognize the command)
 
     - Once done everything, we need to check into the cluster computer
         to check with valgrind :D 
