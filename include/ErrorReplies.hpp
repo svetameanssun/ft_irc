@@ -13,6 +13,7 @@ class ErrorReplies
         static void notRegistered(Server &server, Client *client);
         static void alreadyRegistered(Server &server, Client *client);
         static void passwdMismatch(Server &server, Client *client);
+        static void wrongInput(Server &server, Client *client);
 
         static void chooseError(Server &server, Client *client, int ret);
 };

@@ -1,5 +1,8 @@
 #include "ErrorReplies.hpp"
 
+//ERR_NORECIPIENT
+//ERR_NOTEXTTOSEND
+
 void ErrorReplies::needMoreParams(Server &server, Client *client, const std::string &cmd)
 {
     MessageSender::sendNumeric(
@@ -70,6 +73,16 @@ void ErrorReplies::passwdMismatch(Server &server, Client *client)
     );
 }
 
+void ErrorReplies::wrongInput(Server &server, Client *client)
+{
+    MessageSender::sendNumeric(
+        server.getServerName(),
+        client,
+        666, // Custom WRONGINPUT
+        ":Wrong input"
+    );
+}
+
 void ErrorReplies::chooseError(Server &server, Client *client, int ret)
 {
     switch (ret)
@@ -86,6 +99,26 @@ void ErrorReplies::chooseError(Server &server, Client *client, int ret)
             ErrorReplies::notRegistered(server, client);
             break;
 
+        case ERR_NOSUCHNICK:
+            ErrorReplies::noSuchNick(server, client, server.getParsingResult()->getParams()[0]);
+            break;
+
+        case ERR_NOSUCHCHANNEL:
+            ErrorReplies::noSuchChannel(server, client, server.getParsingResult()->getParams()[0]);
+            break;
+
+        case ERR_ALREADYREGISTRED:
+            ErrorReplies::alreadyRegistered(server, client);
+            break;
+
+        case ERR_PASSWDMISMATCH:
+            ErrorReplies::passwdMismatch(server, client);
+            break;
+        
+        case 666: // Custom WRONGINPUT
+            ErrorReplies::wrongInput(server, client);
+            break;
+
         default:
             MessageSender::sendNumeric(
                 server.getServerName(),
@@ -94,5 +127,4 @@ void ErrorReplies::chooseError(Server &server, Client *client, int ret)
                 ":Unknown error"
             );
     }
-
 }
