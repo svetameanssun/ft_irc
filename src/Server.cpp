@@ -116,8 +116,8 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 		dispatchCommand(client, this->_parsingResult->getCommand());
     else
 	{
-		//TODO: [RUBEN] I think we might need to do a func to answer based on the ret value
-        MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
+		ErrorReplies::chooseError(*this, client, ret);
+		//MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
 }
 

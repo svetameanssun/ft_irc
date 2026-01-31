@@ -1,7 +1,6 @@
 SERVER
 
-    - Ruben: I've added 2 files (hpp and cpp) to reply with proper error messages depending on the 
-        non-valid ret that I receive from you. Need to be merged
+    - [IN PROGRESS] Error replies -> 2 need to be implemented; 2 need to be corrected
 
 
 
@@ -17,7 +16,9 @@ for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
 
     - I do not know why file descriptors appear as open again;
         we solved this but it seems like we did not
-
+    - Check the mode command to fix the bug that Sveta said
+    - [DONE] [NEED CHECKING] When only one guy in the channel, mandatory to be operator
+    
 
 TEST CASES:
 1)    user sveta 9 *

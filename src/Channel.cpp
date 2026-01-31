@@ -65,6 +65,13 @@ bool Channel::addMember(Client *client, bool isOp)
         _invited.erase(fd);
         client->leaveChannel(this->getName());
         log_msg("[Channel]: The member has been deleted from the channel");
+        if (this->getUserCount() == 1)
+        {
+            log_msg("[Channel]: Only one member on the channel %s", this->getName().c_str());
+            std::map<int, Client *>::iterator it = _members.begin();
+            int fd = it->first;
+            promoteToOp(fd);
+        }
     }
 
 bool Channel::isMember(int fd) const { return _members.find(fd) != _members.end(); }

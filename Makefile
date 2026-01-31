@@ -30,6 +30,7 @@ INC_FILES =		Server.hpp \
 				ParserResultQuit.hpp \
 				ParserResultPing.hpp \
 				Replies.hpp \
+				ErrorReplies.hpp \
 				utils.hpp \
 				signals.hpp
 
@@ -75,6 +76,7 @@ FILES    = 	main.cpp \
 			ParserResultPart.cpp \
 			ParserResultQuit.cpp \
 			ParserResultPing.cpp \
+			ErrorReplies.cpp \
 			utils.cpp \
 			signals.cpp
 
@@ -121,6 +123,6 @@ valgrind:
 
 eval: 
 	./ft_irc_eval/eval_ft_irc.sh
-	@echo "$(GREEN) Evaluation completed! Check /tmp/irc_log.txt for results.
+	@echo "$(GREEN) Evaluation completed! Check /tmp/irc_log.txt for results."
 
 .PHONY: all clean fclean re run eval
