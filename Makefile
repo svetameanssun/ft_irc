@@ -117,7 +117,7 @@ run:
 	@./$(NAME) 6667 irc2026
 
 valgrind:
-	@valgrind --track-fds=yes ./$(NAME) 6667 irc2026
+	@valgrind --track-fds=yes ./$(NAME) 6667 irc2026 > /tmp/irc_logs.txt 2>&1
 
 eval: 
 	./ft_irc_eval/eval_ft_irc.sh
