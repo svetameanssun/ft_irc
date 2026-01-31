@@ -6,10 +6,10 @@ int CommandDispatcher::dispatchPass(std::vector<std::string> &messageVec) {
         //delete(_parserResult);
         return ERR_NEEDMOREPARAMS;
     }
-    if (messageVec.size() > 2){
+    /*if (messageVec.size() > 2){
         //delete(_parserResult);
         return ERR_NEEDLESSPARAMS;
-    }
+    }*/
     _parserResult->setParams(messageVec);
     // Transfer ownership into _parserResult
     this->_parserResult->printResult();
@@ -21,10 +21,10 @@ int CommandDispatcher::dispatchNick(std::vector<std::string> &messageVec) {
         //delete(_parserResult);
         return (ERR_NONICKNAMEGIVEN);
     }
-    if (messageVec.size() > 2){
+    /*if (messageVec.size() > 2){
         //delete(_parserResult);
         return ERR_NEEDLESSPARAMS;
-    }
+    }*/
     if (!_parserResult->isValidNick(messageVec.at(1))){
         //delete(_parserResult);
         return ERR_ERRONEUSNICKNAME;
@@ -85,11 +85,11 @@ int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
 
         return ERR_NEEDMOREPARAMS;
     }
-    if (messageVec.size() > 4){
+    /*if (messageVec.size() > 4){
         //delete(_parserResult);
 
         return ERR_NEEDLESSPARAMS;
-    }
+    }*/
     _parserResult->setParams(messageVec);
     int err = 0; //resultMode->checkModeParams(messageVec))
     if(err == 0)//resultMode->checkModeParams(messageVec))

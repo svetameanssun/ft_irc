@@ -47,9 +47,9 @@ int ParserResultInvite::checkInviteParams(std::vector<std::string> messageVec){
 	if (messageVec.size() < 3){
 		return (ERR_NEEDMOREPARAMS);
 	}
-	if (messageVec.size() > 3){
+	/*if (messageVec.size() > 3){
 		return (ERR_NEEDLESSPARAMS);
-	}
+	}*/
 	if (!isValidNick(messageVec[1])){
 		return (ERR_NOSUCHNICK);
 	}

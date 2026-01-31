@@ -117,9 +117,9 @@ int ParserResultKick::fillKickParams(std::vector<std::string> messageVector){
 	else{
 		_kickUsersVec.push_back(messageVector[2]);
 	}
-	if (_kickChannelsVec.size() != 1 && _kickChannelsVec.size() != _kickUsersVec.size()){
+	/*if (_kickChannelsVec.size() != 1 && _kickChannelsVec.size() != _kickUsersVec.size()){
 		return (ERR_NEEDLESSPARAMS);
-	}
+	}*/
 	for (size_t i = 0; i < _kickUsersVec.size(); i++){
 		if (!isValidNick(_kickUsersVec[i])){
 			return (ERR_UNKNOWNCOMMAND);

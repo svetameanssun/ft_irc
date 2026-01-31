@@ -74,10 +74,10 @@ int ParserResultJoin::checkJoinParams(std::vector <std::string> messageVector) {
     if (messageVector.size() < 2){
         return ERR_NEEDMOREPARAMS;
     }
-    if (messageVector.size() > 3){
+    /*if (messageVector.size() > 3){
 
         return ERR_NEEDLESSPARAMS;
-    }
+    }*/
     if (messageVector.size() == 2 && messageVector.at(1) == "0"){
         this->_leaveAllChans = true;
         return (0);
