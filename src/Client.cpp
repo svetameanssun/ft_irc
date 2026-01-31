@@ -2,10 +2,10 @@
 #include "utils.hpp"
 #include <algorithm>
 
-Client::Client() : _fd(-1), _registered(false), _isOperator(false){}
-Client::Client(int fd) : _fd(fd), _registered(false), _isOperator(false) {}
+Client::Client() : _fd(-1), _registered(false), _isOperator(false), _nbrChannelJoined(0) {}
+Client::Client(int fd) : _fd(fd), _registered(false), _isOperator(false), _nbrChannelJoined(0) {}
 Client::Client(int fd, const std::string &hostname)
-    : _fd(fd), _hostname(hostname), _registered(false), _isOperator(false) {}
+    : _fd(fd), _hostname(hostname), _registered(false), _isOperator(false), _nbrChannelJoined(0) {}
 Client::~Client() {}
 
 //getters

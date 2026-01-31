@@ -116,4 +116,11 @@ re: fclean all
 run: 
 	@./$(NAME) 6667 irc2026
 
-.PHONY: all clean fclean re run
+valgrind:
+	@valgrind --track-fds=yes ./$(NAME) 6667 irc2026
+
+eval: 
+	./ft_irc_eval/eval_ft_irc.sh > /tmp/irc_log.txt 2>&1
+	@echo "$(GREEN) Evaluation completed! Check /tmp/irc_log.txt for results.
+
+.PHONY: all clean fclean re run eval
