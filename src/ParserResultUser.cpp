@@ -103,6 +103,9 @@ bool ParserResultUser::isAllowedNumber(std::string number){
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	
 	//check username
+	if (messageVec.size() <= 3){
+		return (ERR_NEEDMOREPARAMS);
+	}
 	for(size_t i = 0; i < messageVec[1].length(); i++){
 		if (!isAllowedChar(messageVec[1][i])){
 				return (ERR_WRONGINPUT);
@@ -115,9 +118,7 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	//  0    1        2      3      4       5
 	std::string name;
 	size_t i = 2;
-	if (messageVec.size() <= 2){
-		return (ERR_NEEDMOREPARAMS);
-	}
+
 	if (isAllowedNumber(messageVec.at(2))){
 		if (messageVec.at(3) != "*"){
 			return (ERR_WRONGINPUT);
