@@ -69,6 +69,15 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
 
     const std::string &channelName = paramsVec[0];
 
+    if (channelName[0] != '#')
+    {
+        // ===== User MODEs (not implemented) =====
+        MessageSender::sendNumeric(_server.getServerName(), client,
+                                   ERR_UNKNOWNMODE,
+                                   " :User modes are not supported");
+        return;
+    }
+    
     // ===== Channel existence =====
     Channel *chan = _server.getChannelManager().findChannel(channelName);
     if (!chan)
