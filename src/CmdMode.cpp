@@ -69,9 +69,9 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
 
     const std::string &channelName = paramsVec[0];
 
+    // ===== User MODEs (not implemented) =====
     if (channelName[0] != '#')
     {
-        // ===== User MODEs (not implemented) =====
         MessageSender::sendNumeric(_server.getServerName(), client,
                                    ERR_UNKNOWNMODE,
                                    " :User modes are not supported");
@@ -132,7 +132,14 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     }
 
     bool adding = true;
-    size_t argIndex = 2;
+    size_t argIndex = 1;
+    //Calulate the humber of flag params and start immediately after
+    while (argIndex < paramsVec.size() &&
+           !paramsVec[argIndex].empty() &&
+           (paramsVec[argIndex][0] == '+' || paramsVec[argIndex][0] == '-'))
+    {
+        argIndex++;
+    }
 
     std::string appliedModes;
     std::vector<std::string> appliedParams;

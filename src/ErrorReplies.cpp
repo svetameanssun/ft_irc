@@ -1,9 +1,5 @@
 #include "ErrorReplies.hpp"
 
-
-//ERR_NORECIPIENT
-//ERR_NOTEXTTOSEND
-
 void ErrorReplies::needMoreParams(Server &server, Client *client, const std::string &cmd)
 {
     MessageSender::sendNumeric(
@@ -84,6 +80,26 @@ void ErrorReplies::wrongInput(Server &server, Client *client)
     );
 }
 
+void ErrorReplies::noRecipient(Server &server, Client *client, const std::string &cmd)
+{
+    MessageSender::sendNumeric(
+        server.getServerName(),
+        client,
+        ERR_NORECIPIENT,
+        cmd + " :No recipient given"
+    );
+}
+
+void ErrorReplies::noTextToSend(Server &server, Client *client)
+{
+    MessageSender::sendNumeric(
+        server.getServerName(),
+        client,
+        ERR_NOTEXTTOSEND,
+        ":No text to send"
+    );
+}
+
 void ErrorReplies::chooseError(Server &server, Client *client, int ret)
 {
     switch (ret)
@@ -116,6 +132,14 @@ void ErrorReplies::chooseError(Server &server, Client *client, int ret)
             ErrorReplies::passwdMismatch(server, client);
             break;
         
+        case ERR_NORECIPIENT:
+            ErrorReplies::noRecipient(server, client, server.getParsingResult()->getCommand());
+            break;
+
+        case ERR_NOTEXTTOSEND:
+            ErrorReplies::noTextToSend(server, client);
+            break;
+
         case 666: // Custom WRONGINPUT
             ErrorReplies::wrongInput(server, client);
             break;
