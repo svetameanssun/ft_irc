@@ -1,8 +1,7 @@
 SERVER
 
     - Ruben: I've added 2 files (hpp and cpp) to reply with proper error messages depending on the 
-        non-valid ret that I receive from you. I would need to know exactly which error rets I can
-        get so I can cover all the cases ;D 
+        non-valid ret that I receive from you. Need to be merged
 
 
 
@@ -16,6 +15,8 @@ for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
     - Once done everything, we need to check into the cluster computer
         to check with valgrind :D 
 
+    - I do not know why file descriptors appear as open again;
+        we solved this but it seems like we did not
 
 
 TEST CASES:
