@@ -13,6 +13,7 @@ for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
 
     - I do not know why file descriptors appear as open again;
         we solved this but it seems like we did not
+    - I think there is something in the "QUIT" command, sometimes it gives error
     
     - [DONE] [NEED CHECKING] Check the mode command to fix the bug that Sveta said <<--- Changes on line 136 and later
     - [DONE] [NEED CHECKING] When only one guy in the channel, mandatory to be operator <--- Changes made in channel class
