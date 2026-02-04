@@ -119,10 +119,13 @@ run:
 	@./$(NAME) 6667 irc2026
 
 valgrind:
-	@valgrind --track-fds=yes ./$(NAME) 6667 irc2026 > /tmp/irc_logs.txt 2>&1
+	@valgrind --leak-check=full --track-fds=yes ./$(NAME) 6667 irc2026
+#> /tmp/irc_logs.txt 2>&1
+
+valgrind_logs:
+	@valgrind --leak-check=full --track-fds=yes ./$(NAME) 6667 irc2026 --show-logs=yes
 
 eval: 
 	./ft_irc_eval/eval_ft_irc.sh
-	@echo "$(GREEN) Evaluation completed! Check /tmp/irc_log.txt for results."
 
-.PHONY: all clean fclean re run eval
+.PHONY: all clean fclean re run eval valgrind valgrind_logs

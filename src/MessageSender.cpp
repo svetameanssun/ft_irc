@@ -24,6 +24,5 @@ void MessageSender::sendNumeric(const std::string &serverName, Client *client,
     << " " << client->getNick()
     << " " << msg << "\r\n";
 
-
     sendToClient(client, oss.str());
 }

@@ -16,6 +16,7 @@ Server::~Server()
 	if (this->_cmdParser)
 		delete(this->_cmdParser); // <--- [LANA EDIT]
     log_msg("[Server] closing...");
+	stop();	
 }
 
 //[LANA EDIT] ==============================================

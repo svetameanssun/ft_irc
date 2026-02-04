@@ -2,6 +2,8 @@ SERVER
 
     - [DONE] [NEED CHECKING] Error replies -> 2 that are left, are done in the server logic
             --> NOSUCHNICK and NOSUCHCHANNEL (why Sveta has it?)
+    - Error replies --> There are some that need access to the AParserResult, and sometimes they give a memory problem
+                        Dont know how to handle it 
 
 
 
@@ -11,12 +13,13 @@ SERVER
 should not freeze. When the client is active again, all stored commands should be processed normally; check
 for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
 
-    - I do not know why file descriptors appear as open again;
-        we solved this but it seems like we did not
+    - [DONE] File descriptors --> It seems like it has been corrected
     - I think there is something in the "QUIT" command, sometimes it gives error
     
-    - [DONE] [NEED CHECKING] Check the mode command to fix the bug that Sveta said <<--- Changes on line 136 and later
-    - [DONE] [NEED CHECKING] When only one guy in the channel, mandatory to be operator <--- Changes made in channel class
+    - [DONE] Check the mode command to fix the bug that Sveta said <<--- Changes on line 136 and later
+        ---> it works BUT because we store 2 'o's (+o and -o), the reply contain both,
+            and it is not very pretty
+    - [DONE] When only one guy in the channel, mandatory to be operator <--- Changes made in channel class
     
 
 TEST CASES:

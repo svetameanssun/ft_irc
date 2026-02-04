@@ -18,6 +18,8 @@
 #define RED     "\033[0;31m"
 #define RESET   "\033[0m"
 
+extern bool gShowLogs;
+
 // log helpers
 void log_msg(const char *format, ...);
 void log_debug(const char *format, ...);

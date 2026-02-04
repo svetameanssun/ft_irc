@@ -1,8 +1,14 @@
 #include "utils.hpp"
 #include "Replies.hpp"
+#include <string>
+
+bool gShowLogs = false;
 
 void log_msg(const char* format, ...)
 {
+    if (!gShowLogs)
+        return;
+    
     va_list args;
     va_start(args, format);
     std::cout << GREEN << "[LOG]: ";
@@ -13,6 +19,9 @@ void log_msg(const char* format, ...)
 
 void log_debug(const char* format, ...)
 {
+    if (!gShowLogs)
+        return;
+
     va_list args;
     va_start(args, format);
     std::cout << YELLOW << "[DEBUG]: ";
@@ -23,6 +32,9 @@ void log_debug(const char* format, ...)
 
 void log_warning(const char *format, ...)
 {
+    if (!gShowLogs)
+        return;
+
     va_list args;
     va_start(args, format);
     std::cout << ORANGE << "[WARNING]: ";
@@ -34,6 +46,9 @@ void log_warning(const char *format, ...)
 
 void log_err(const char* format, ...)
 {
+    if (!gShowLogs)
+        return;
+
     va_list args;
     va_start(args, format);
     std::cerr << RED << "[ERROR]: ";
@@ -136,36 +151,50 @@ static bool isValidPassword(const std::string &pass)
     return true;
 }
 
-int checkParams(int argc, char **argv)
+int checkParams(int argc, char *argv[])
 {
-    if (argc != 3)
+    if (argc < 3 || argc > 4)
     {
-        log_err("Usage: ./ircserv <port> <password>");
+        std::cerr << "Usage: ./ircserv <port> <password> [--show-logs=yes]\n";
         return -1;
     }
 
-    std::string portStr = argv[1];
-    std::string password = argv[2];
-
-    if (!isNumber(portStr))
+    // Validate port
+    if (!isNumber(std::string(argv[1])))
     {
-        log_err("Error: Port must be numeric.");
+        std::cerr << "Port must be a number\n";
+        return -1;
+    }
+    int port = atoi(argv[1]);
+    if (port <= 0 || port > 65535)
+    {
+        std::cerr << "Invalid port\n";
         return -1;
     }
 
-    int port = std::atoi(portStr.c_str());
-
-    if (port < 1024 || port > 65535)
+    // Validate password
+    std::string password(argv[2]);
+    if (isValidPassword(password) == false)
     {
-        log_err("Error: Port must be between 1024 and 65535.");
+        std::cerr << "Invalid password\n";
         return -1;
     }
 
-    if (!isValidPassword(password))
+    // Optional flag
+    if (argc == 4)
     {
-        log_err("Error: Invalid password.");
-        return -1;
+        std::string flag(argv[3]);
+        if (flag == "--show-logs=yes")
+            gShowLogs = true;
+        else if (flag == "--show-logs=no")
+            gShowLogs = false;
+        else
+        {
+            std::cerr << "Unknown option: " << flag << "\n";
+            return -1;
+        }
     }
 
     return 0;
 }
+
