@@ -21,7 +21,7 @@ void ClientManager::removeClient(int fd)
     {
         delete it->second;
         _clients.erase(it);
-        std::cout << "[ClientManager] Removed client fd=" << fd << std::endl;
+        log_msg("[ClientManager] Removed client fd=%d", fd);
     }
     close(fd);
 }
@@ -67,9 +67,9 @@ void ClientManager::broadcast(const std::string &msg, int excludeFd)
 
 void ClientManager::printClients() const
 {
-    std::cout << "Active clients:" << std::endl;
+    log_debug("Active clients:");
     for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); it++)
-        std::cout << " - FD: " << it->first << " Nick: " << it->second->getNick() << std::endl;
+        log_debug(" - FD: %d - Nick: %s", it->first, it->second->getNick().c_str());
 }
 
 void ClientManager::freeResources()
