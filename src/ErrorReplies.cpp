@@ -1,22 +1,24 @@
 #include "ErrorReplies.hpp"
 
-void ErrorReplies::needMoreParams(Server &server, Client *client, const std::string &cmd)
+void ErrorReplies::needMoreParams(Server &server, Client *client) //, const std::string &cmd)
 {
     MessageSender::sendNumeric(
         server.getServerName(),
         client,
         ERR_NEEDMOREPARAMS,
-        cmd + " :Not enough parameters"
+        //cmd + 
+        " :Not enough parameters"
     );
 }
 
-void ErrorReplies::unknownCommand(Server &server, Client *client, const std::string &cmd)
+void ErrorReplies::unknownCommand(Server &server, Client *client) //, const std::string &cmd)
 {
     MessageSender::sendNumeric(
         server.getServerName(),
         client,
         ERR_UNKNOWNCOMMAND,
-        cmd + " :Unknown command"
+        //cmd + 
+        " :Unknown command"
     );
 }
 
@@ -80,13 +82,14 @@ void ErrorReplies::wrongInput(Server &server, Client *client)
     );
 }
 
-void ErrorReplies::noRecipient(Server &server, Client *client, const std::string &cmd)
+void ErrorReplies::noRecipient(Server &server, Client *client) //, const std::string &cmd)
 {
     MessageSender::sendNumeric(
         server.getServerName(),
         client,
         ERR_NORECIPIENT,
-        cmd + " :No recipient given"
+        //cmd + 
+        " :No recipient given"
     );
 }
 
@@ -105,11 +108,11 @@ void ErrorReplies::chooseError(Server &server, Client *client, int ret)
     switch (ret)
     {
         case ERR_UNKNOWNCOMMAND:
-            ErrorReplies::unknownCommand(server, client, server.getParsingResult()->getCommand());
+            ErrorReplies::unknownCommand(server, client); //, server.getParsingResult()->getCommand());
             break;
 
         case ERR_NEEDMOREPARAMS:
-            ErrorReplies::needMoreParams(server, client, server.getParsingResult()->getCommand());
+            ErrorReplies::needMoreParams(server, client); //, server.getParsingResult()->getCommand());
             break;
 
         case ERR_NOTREGISTERED:
@@ -133,7 +136,7 @@ void ErrorReplies::chooseError(Server &server, Client *client, int ret)
             break;
         
         case ERR_NORECIPIENT:
-            ErrorReplies::noRecipient(server, client, server.getParsingResult()->getCommand());
+            ErrorReplies::noRecipient(server, client); //, server.getParsingResult()->getCommand());
             break;
 
         case ERR_NOTEXTTOSEND:
