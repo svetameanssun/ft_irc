@@ -126,6 +126,7 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 void Server::onClientConnected(int fd)
 {
 	// TODO: [END] hostname (necessary?)
+	// FIXME: Need to check if we need this for proper functioning
     Client *client = new Client(fd, "localhost"); 
     _clientManager.addClient(client);
 

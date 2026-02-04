@@ -13,6 +13,10 @@ SERVER
 should not freeze. When the client is active again, all stored commands should be processed normally; check
 for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
 
+    - [PRIVMSG] There is probably a problem with the "hostname" and the irssi client
+        maybe we need to initialize to some concrete value, check later
+
+
     - [DONE] File descriptors --> It seems like it has been corrected
     - I think there is something in the "QUIT" command, sometimes it gives error
     
