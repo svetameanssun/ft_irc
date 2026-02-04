@@ -107,6 +107,7 @@ void Channel::broadcast(const std::string &message) const
 {
     int excludeFd = -1;
     log_msg("[Channel] broadcasting to all users: ");
+    printChannelMembers();
     for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
     {
         int fd = it->first;
@@ -120,3 +121,14 @@ void Channel::broadcast(const std::string &message) const
 }
 
 bool Channel::isEmpty() { return _members.empty(); }
+
+void Channel::printChannelMembers() const
+{
+    log_debug("Channel Members of %s:", _name.c_str());
+    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
+    {
+        Client *c = it->second;
+        if (c)
+            log_debug(" - FD: %d - Nick: %s", it->first, c->getNick().c_str());
+    }
+}

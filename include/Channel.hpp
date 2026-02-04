@@ -74,5 +74,7 @@ class Channel
 
         //aux functions
         bool isEmpty();
+        void printChannelMembers() const;
+
 
 };
