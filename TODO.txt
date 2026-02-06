@@ -9,13 +9,19 @@ SERVER
 
 [EVALUATION]
 
+    - [MALFORMED PACKETS] There are some times that irssi does not display messages; it looks it is because
+        some of them are malformed and they need to be reformatted
+
     - Suspend a client (^-Z) connected to a channel. Then flood the channel with another client. This
 should not freeze. When the client is active again, all stored commands should be processed normally; check
 for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
 
     - [PRIVMSG] There is probably a problem with the "hostname" and the irssi client
         maybe we need to initialize to some concrete value, check later
-
+    - [PRIVMSG] There is another problem where the irssi client does not show the message sent 
+        by another user; maybe is because of the "hostname"?
+    - [QUIT] It gives a big error sometimes, I believe it is when the client 
+        is netcat and it has joined some channels
 
     - [DONE] File descriptors --> It seems like it has been corrected
     - I think there is something in the "QUIT" command, sometimes it gives error

@@ -224,12 +224,14 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     // ===== Broadcast MODE change =====
     if (!appliedModes.empty())
     {
-        std::string msg = ":" + client->getNick() + " MODE " +
+        //Changed get nick for get prefix 
+        std::string msg = client->getPrefix() + " MODE " +
                           channelName + " " +
                           (adding ? "+" : "-") + appliedModes;
 
         for (size_t i = 0; i < appliedParams.size(); i++)
             msg += " " + appliedParams[i];
+        msg += "\r\n";        
 
         chan->broadcast(msg);
     }
