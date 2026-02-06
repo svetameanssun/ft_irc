@@ -174,8 +174,10 @@ void CommandHandler::cmdJoin(Client *client, AParserResult *result)
                 oss << it->second->getNick() << " ";
         }
 
+
         MessageSender::sendNumeric(_server.getServerName(), client,
                                    RPL_NAMREPLY, oss.str());
+        
         MessageSender::sendNumeric(_server.getServerName(), client,
                                    RPL_ENDOFNAMES,
                                    chanName + " :End of /NAMES list");
