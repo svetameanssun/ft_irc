@@ -38,6 +38,7 @@ ParserResultUser::~ParserResultUser(){}
 /*----------------------------------------------------------*/
 void ParserResultUser::setParams(std::vector<std::string> userCommand){
 	this->_userParamsVec.clear(); //[SVETA] does it work?
+    this->_realname.clear();
     this->_username.clear();
   	if (!userCommand.empty() && userCommand.size() > 1) {
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
@@ -81,85 +82,16 @@ bool ParserResultUser::isAllowedChar(char c){
     return (false);
 }
 
-bool ParserResultUser::isAllowedNumber(std::string number){
-	size_t i = 0;
-	while(number[i] && number[i]== '+'){
-		i++;
-	}
-	if(!number[i]){
-		return (false);
-	}
-	if (number[i] == '-'){
-		return (false);
-	}
-	for(;i < number.length(); i++){
-		if(!std::isdigit(number[i])){
-			return (false);
-		}
-	}
-	return (true);
-}
-
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
-	
-	//check username
-	if (messageVec.size() <= 3){
-		return (ERR_NEEDMOREPARAMS);
-	}
 	for(size_t i = 0; i < messageVec[1].length(); i++){
 		if (!isAllowedChar(messageVec[1][i])){
 				return (ERR_WRONGINPUT);
 		}
 	}
-	this->_realname.clear();
-	// 
 	// USER guest   0       *     :Ronnie Reagan
 	// USER guest :Ronnie Reagan
 	//  0    1        2      3      4       5
-	std::string name;
-	size_t i = 2;
-
-	if (isAllowedNumber(messageVec.at(2))){
-		if (messageVec.at(3) != "*"){
-			return (ERR_WRONGINPUT);
-		}
-		if (messageVec.size() < 5){
-			return (ERR_NEEDMOREPARAMS);
-		}
-		i = 4;
-	}
-	if (messageVec[i][0]!= ':'){
-		name+=messageVec.at(i);
-	}
-	else{
-		for (; i < messageVec.size(); i++){
-			name += messageVec.at(i);
-			name += " ";
-		}
-	}
-	if(!name.empty() && name[0] == ':'){
-		name.erase(0, 1);
-	}
-	if(!name.empty() && name.at(name.length() - 1) == ' '){
-		name.erase(name.length() - 1, 1);
-	}
-	setRealname(name);
-	return (0);
-}
-
-
-/*int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
-	for(size_t i = 0; i < messageVec[1].length(); i++){
-		if (!isAllowedChar(messageVec[1][i])){
-				return (ERR_WRONGINPUT);
-		}
-	}
-	this->_realname.clear();
-	
-	// USER guest   0       *     :Ronnie Reagan
-	// USER guest :Ronnie Reagan
-	//  0    1        2      3      4       5
-	std::string name;
+	std::string name = "";
 	size_t i = 2;
 	if (messageVec.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
@@ -187,7 +119,7 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	}
 	setRealname(name);
 	return (0);
-}*/
+}
 
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */

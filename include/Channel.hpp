@@ -70,7 +70,8 @@ class Channel
         void removeFromInviteList(int fd);
 
         // broadcasting
-        void broadcast(const std::string &message) const; //Check params
+        void broadcast(const std::string &message) const;
+        void broadcast(const std::string &message, int userFd) const;
 
         //aux functions
         bool isEmpty();

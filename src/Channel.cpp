@@ -120,6 +120,24 @@ void Channel::broadcast(const std::string &message) const
     }
 }
 
+void Channel::broadcast(const std::string &message, int userFd) const
+{
+    int excludeFd = -1;
+    log_msg("[Channel] broadcasting to all users: ");
+    printChannelMembers();
+    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
+    {
+        int fd = it->first;
+        Client *c = it->second;
+        if (!c) continue;
+        if (fd == excludeFd || fd == userFd) continue; // skip excluded fd
+        // send raw message to each member
+        MessageSender::sendToClient(c, message);
+        log_msg("MessageSender: sending to client: %s", c->getNick().c_str());
+    }
+}
+
+
 bool Channel::isEmpty() { return _members.empty(); }
 
 void Channel::printChannelMembers() const

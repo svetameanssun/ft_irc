@@ -38,7 +38,7 @@ void CommandHandler::cmdPrivmsg(Client *client, AParserResult *result)
 
         std::string msg = ":" + client->getPrefix() + " PRIVMSG " + target +
                           " :" + message + "\r\n";
-        chan->broadcast(msg);
+        chan->broadcast(msg, client->getFd());
     }
     // User message
     else
