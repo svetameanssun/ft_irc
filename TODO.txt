@@ -1,11 +1,5 @@
 SERVER
 
-    - [DONE] [NEED CHECKING] Error replies -> 2 that are left, are done in the server logic
-            --> NOSUCHNICK and NOSUCHCHANNEL (why Sveta has it?)
-    - Error replies --> There are some that need access to the AParserResult, and sometimes they give a memory problem
-                        Dont know how to handle it 
-
-
 
 [EVALUATION]
 

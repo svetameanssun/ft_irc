@@ -118,7 +118,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
     else
 	{
 		ErrorReplies::chooseError(*this, client, ret);
-		//MessageSender::sendNumeric("irc_server", client, ret, "command not supported");
 	}
 }
 
