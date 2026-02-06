@@ -1,8 +1,6 @@
 SERVER
 
-
 [EVALUATION]
-
 
     - Suspend a client (^-Z) connected to a channel. Then flood the channel with another client. This
 should not freeze. When the client is active again, all stored commands should be processed normally; check
