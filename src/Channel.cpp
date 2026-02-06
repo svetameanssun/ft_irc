@@ -51,7 +51,7 @@ bool Channel::addMember(Client *client, bool isOp)
     client->joinChannel(this->getName());
     if (isOp)
     {
-        log_msg("[Channel]: the user is a operator, added to op list");
+        log_msg("[Channel]: the user is an operator, added to op list");
         _operators.insert(fd);
     }
     return true;
