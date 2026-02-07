@@ -87,8 +87,14 @@ void CommandHandler::cmdTopic(Client *client, AParserResult *result)
     chan->setTopic(result2->getTopicMessage());
     log_warning("Topic message: %s", chan->getTopic().c_str());
     std::string msg = ":" + client->getPrefix() +
-                      " TOPIC " + chanName +
-                      " :" + result2->getTopicMessage() + "\r\n";
+                      " TOPIC " + chanName; // +
+                      //" :" + result2->getTopicMessage() + "\r\n";
+
+    if (result2->getTopicMessage().at(0) != ':')
+        msg += " :";
+    else
+        msg += " ";
+    msg += result2->getTopicMessage() + "\r\n";
 
     chan->broadcast(msg);
 }

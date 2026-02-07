@@ -86,7 +86,18 @@ void Channel::promoteToOp(int fd)
     log_msg("[Channel]: The member has been added to operators");
 }
 
-void Channel::demoteFromOp(int fd) { _operators.erase(fd); }
+void Channel::demoteFromOp(int fd)
+{ 
+    if (isOperator(fd))
+    {   
+        if(_operators.size() == 1)
+            log_msg("[Channel] Cannot demote the only operator in the channel, returning...");
+        else 
+            _operators.erase(fd);
+    }
+    else 
+        log_msg("[Channel] The member was not an operator, cannot demote");
+}
 
 void Channel::invite(int fd) { _invited.insert(fd); }
 

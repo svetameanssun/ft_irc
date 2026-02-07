@@ -2,13 +2,14 @@ SERVER
 
 [EVALUATION]
 
-    - [TOPIC] When sending topic, if ':', we print twice, 
+    - [DONE] [TOPIC] When sending topic, if ':', we print twice, 
         if not, just once
+    - [DONE] When deassigning (-o), it should check if there is any op in the chan;
+    - [DONE] User cannot deassign from chanops if only 1 on the channel 
+
+
     - [MODE] When having '+o -o' (repeated), it prints the letter twice
-    - When deassigning (-o), it should check if there is any op in the chan;
-        
     - Chan cannot be named as '#'
-    - User cannot deassign from chanops if only 1 on the channel 
     - Invalid read after quit: 
         ==2168089== Invalid read of size 8
         ==2168089==    at 0x49C23B4: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::c_str() const (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
