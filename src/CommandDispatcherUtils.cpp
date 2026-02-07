@@ -80,7 +80,7 @@ int CommandDispatcher::dispatchPart(std::vector <std::string> &messageVec){
 
 
 int CommandDispatcher::dispatchMode(std::vector <std::string> &messageVec){
-    if (messageVec.size() < 3){
+    if (messageVec.size() < 2){
         //delete(_parserResult);
 
         return ERR_NEEDMOREPARAMS;

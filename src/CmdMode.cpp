@@ -59,14 +59,22 @@ void removeFlag(Client *client,char flag){
 void CommandHandler::cmdMode(Client *client, AParserResult *result)
 {
     if (!client || !result)
-        return;
-
+    return;
+    
     ParserResultMode *result2 = static_cast<ParserResultMode*>(result);
+    //getModeParams - gets the parameters without mode
+    //ex: MODE #chan
+    // getModeParams will return a vector with #chan
     const std::vector<std::string> &paramsVec = result2->getModeParams();
-
-    if (paramsVec.size() < 1)
+    
+    // checks if paramsVec is empty.
+    //I think that this one is better, than the one commented.
+    if (paramsVec.empty())
         return;
 
+    /*if (paramsVec.size() < 1)
+        return;
+    */
     const std::string &channelName = paramsVec[0];
 
     // ===== User MODEs (not implemented) =====
@@ -88,7 +96,10 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         return;
     }
 
+    // check this case ---->>> +oo
     // ===== MODE query =====
+    // paramsVec = #chan
+    
     if (paramsVec.size() == 1)
     {
         std::string modes = "+";
