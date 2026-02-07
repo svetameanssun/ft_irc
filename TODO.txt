@@ -2,11 +2,14 @@ SERVER
 
 [EVALUATION]
 
-    - Suspend a client (^-Z) connected to a channel. Then flood the channel with another client. This
-should not freeze. When the client is active again, all stored commands should be processed normally; check
-for memory leaks during this operation. <<<<--- THIS NEEDS A FULL REFACTOR
-
-
+    - Chan cannot be named as '#'
+    - User cannot deassign from chanops if only 1 on the channel 
+    - Invalid read after quit: 
+        ==2168089== Invalid read of size 8
+        ==2168089==    at 0x49C23B4: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::c_str() const (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+        ==2168089==    by 0x40E1DB: ChannelManager::removeChannel(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /home/regea-go/Documents/IRC/42IRC/ircserv)
+        ==2168089==    by 0x40E409: ChannelManager::removeClientFromChannels(Client*) (in /home/regea-go/Documents/IRC/42IRC/ircserv)
+        ==2168089==    by 0x405250: Server::disconnectClient(int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /home/regea-go/Documents/IRC/42IRC/ircserv)
 
 TEST CASES:
 1)    user sveta 9 *
