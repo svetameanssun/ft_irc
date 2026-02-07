@@ -102,6 +102,8 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     
     if (paramsVec.size() == 1)
     {
+        //[RUBEN] for this command :   MODE #chan
+        // client should be member of the channel?
         std::string modes = "+";
         if (chan->isInviteOnly()) modes += "i";
         if (chan->isTopicLocked()) modes += "t";
@@ -114,7 +116,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         return;
     }
 
-    // ===== Permission checks =====
+    // ===== Permission checks ===== 
     if (!chan->isMember(client->getFd()))
     {
         MessageSender::sendNumeric(_server.getServerName(), client,
@@ -122,7 +124,6 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                                    channelName + " :You're not on that channel");
         return;
     }
-
     if (!chan->isOperator(client->getFd()))
     {
         MessageSender::sendNumeric(_server.getServerName(), client,
@@ -133,6 +134,23 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
 
     // ===== Flatten mode strings =====
     std::string modeStr;
+    //supposedly! paramsVec.size() > 1 !!!!!!!!!!!!!!!
+    /*
+    -----------------------------------------------
+        MODE #chan +o-o+o sveta ruben
+    -----------------------------------------------
+
+        caso (1)
+            #chan  +o-o+o sveta ruben
+            0      1        2      3
+
+        caso (2)    
+            #chan  +o -o +o sveta ruben
+            0      1   2  3   4     5 
+
+
+    */
+    //we start with (i = 1), to exclude the chaName
     for (size_t i = 1; i < paramsVec.size(); i++)
     {
         if (!paramsVec[i].empty() &&
@@ -141,6 +159,12 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
             modeStr += paramsVec[i];
         }
     }
+    /* 
+        caso (1)
+            modeStr = +o-o+o
+        caso (2)
+            modeStr = +o-o+o
+    */
 
     bool adding = true;
     size_t argIndex = 1;
@@ -151,6 +175,13 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     {
         argIndex++;
     }
+        /* 
+        caso (1)
+            argIndex = 2
+        caso (2)
+            argIndex = 4
+    */
+
 
     std::string appliedModes;
     std::vector<std::string> appliedParams;
@@ -164,17 +195,31 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
         if (c == '-') { adding = false; continue; }
 
         std::string param;
-
+        //this method belongs to CommadHandler class,
+        //I can just call for it, because the class is public, right.
+        // [RUBEN] right????
         if (flagNeedsParam(c, adding))
         {
-            if (argIndex >= paramsVec.size())
+   
+            //this is a stupic condition, it is logically impossible for it top happen
+            //[SVETA] check
+            /*if (argIndex >= paramsVec.size())
             {
                 MessageSender::sendNumeric(_server.getServerName(), client,
                                            ERR_NEEDMOREPARAMS,
                                            "MODE :Not enough parameters");
                 break;
-            }
+            }*/
             param = paramsVec[argIndex++];
+            /* 
+            caso (1)
+                param  = sveta
+                argIndex = 3
+            caso (2)
+                param = sveta
+                argIndex = 5
+            */
+
         }
 
         switch (c)
