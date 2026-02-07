@@ -13,6 +13,8 @@
 //applyFlag(paramsVec[i][j], paramsVec[iFlagParams])
 
 //+kol
+ /*  else if(c == '\r')
+        return (false);*/
 /*int applyFlag(Client *client,char flag, std::string params){
     if (flag == 'k' ){
         // [CHECK] what message?
@@ -104,6 +106,7 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
     {
         //[RUBEN] for this command :   MODE #chan
         // client should be member of the channel?
+        // should we check it?
         std::string modes = "+";
         if (chan->isInviteOnly()) modes += "i";
         if (chan->isTopicLocked()) modes += "t";
@@ -210,7 +213,10 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                                            "MODE :Not enough parameters");
                 break;
             }*/
-            param = paramsVec[argIndex++];
+            if (argIndex < paramsVec.size()){
+                param = paramsVec[argIndex];
+                argIndex++;
+            }
             /* 
             caso (1)
                 param  = sveta
@@ -251,7 +257,16 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
             case 'o':
             {
                 Client *target = _server.getClientManager().findByNick(param);
-                if (!target || !chan->isMember(target->getFd()))
+                if (!target)
+                {
+                    MessageSender::sendNumeric(_server.getServerName(), client,
+                                               ERR_NEEDMOREPARAMS,
+                                               param + " " + channelName +
+                                               " :Not enough parameters");
+                    continue;
+                }
+
+                if (!chan->isMember(target->getFd()))
                 {
                     MessageSender::sendNumeric(_server.getServerName(), client,
                                                ERR_USERNOTINCHANNEL,
@@ -271,8 +286,10 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                                            " :is unknown mode char to me");
                 continue;
         }
-
-        appliedModes += c;
+        std::string auxStr;
+        auxStr +=c;
+        if(appliedModes.find(auxStr) == std::string::npos)
+            appliedModes += c;
         if (!param.empty())
             appliedParams.push_back(param);
     }
