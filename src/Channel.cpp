@@ -32,6 +32,7 @@ void Channel::setTMode(bool value) { _tMode = value ;}
 void Channel::setKey(const std::string &key) { _key = key; }
 void Channel::removeKey() { _key.clear(); }
 void Channel::setUserLimit(int limit) { _userLimit = limit; }
+void Channel::setLMode(bool value) { _lMode = value; }
 
 // Membership management
 bool Channel::addMember(Client *client, bool isOp)

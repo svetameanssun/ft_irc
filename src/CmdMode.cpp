@@ -244,8 +244,16 @@ void CommandHandler::cmdMode(Client *client, AParserResult *result)
                 break;
 
             case 'l':
-                if (adding) chan->setUserLimit(std::atoi(param.c_str()));
-                else chan->setUserLimit(0);
+                if (adding)
+                {
+                    chan->setUserLimit(std::atoi(param.c_str()));
+                    chan->setLMode(true);
+                }
+                else
+                {
+                    chan->setUserLimit(0);
+                    chan->setLMode(false);
+                }
                 break;
 
             case 'o':

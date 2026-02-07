@@ -2,6 +2,11 @@ SERVER
 
 [EVALUATION]
 
+    - [TOPIC] When sending topic, if ':', we print twice, 
+        if not, just once
+    - [MODE] When having '+o -o' (repeated), it prints the letter twice
+    - When deassigning (-o), it should check if there is any op in the chan;
+        
     - Chan cannot be named as '#'
     - User cannot deassign from chanops if only 1 on the channel 
     - Invalid read after quit: 
