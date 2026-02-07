@@ -38,7 +38,6 @@ ParserResultUser::~ParserResultUser(){}
 /*----------------------------------------------------------*/
 void ParserResultUser::setParams(std::vector<std::string> userCommand){
 	this->_userParamsVec.clear(); //[SVETA] does it work?
-    this->_realname.clear();
     this->_username.clear();
   	if (!userCommand.empty() && userCommand.size() > 1) {
     	userCommand.erase(userCommand.begin());  // drop the first element, which is the command
@@ -82,21 +81,47 @@ bool ParserResultUser::isAllowedChar(char c){
     return (false);
 }
 
+bool ParserResultUser::isAllowedNumber(std::string number){
+	size_t i = 0;
+	while(number[i] && number[i]== '+'){
+		i++;
+	}
+	if(!number[i]){
+		return (false);
+	}
+	if (number[i] == '-'){
+		return (false);
+	}
+	for(;i < number.length(); i++){
+		if(!std::isdigit(number[i])){
+			return (false);
+		}
+	}
+	return (true);
+}
+
 int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
+	
+	//check username
 	for(size_t i = 0; i < messageVec[1].length(); i++){
 		if (!isAllowedChar(messageVec[1][i])){
 				return (ERR_WRONGINPUT);
 		}
 	}
+	this->_realname.clear();
+	// 
 	// USER guest   0       *     :Ronnie Reagan
 	// USER guest :Ronnie Reagan
 	//  0    1        2      3      4       5
-	std::string name = "";
+	std::string name;
 	size_t i = 2;
 	if (messageVec.size() <= 2){
 		return (ERR_NEEDMOREPARAMS);
 	}
-	if (messageVec.at(2) == "0" && messageVec.at(3) == "*"){
+	if (isAllowedNumber(messageVec.at(2))){
+		if (messageVec.at(3) != "*"){
+			return (ERR_WRONGINPUT);
+		}
 		if (messageVec.size() < 5){
 			return (ERR_NEEDMOREPARAMS);
 		}
