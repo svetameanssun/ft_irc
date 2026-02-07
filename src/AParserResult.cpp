@@ -72,7 +72,10 @@ bool AParserResult::isValidChanName(std::string channelName) {
     }
     //[RUBEN]  
     //[SVETA]
-    if (channelName == "#"  || channelName == "&"){
+    if (channelName.at(0) == '#' && channelName.length() == 1){
+        return (false);
+    }
+    if (channelName.at(0) == '&' && channelName.length() == 1){
         return (false);
     }
     if((channelName.at(0) != '#') && (channelName.at(0) != '&')) {
