@@ -55,6 +55,7 @@ class Channel
         void setTMode(bool value);
         void removeKey();
         void setUserLimit(int limit);
+        void setLMode(bool value);
 
         // membership management
         bool addMember(Client *client, bool isOp);
