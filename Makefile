@@ -30,6 +30,7 @@ INC_FILES =		Server.hpp \
 				ParserResultQuit.hpp \
 				ParserResultPing.hpp \
 				Replies.hpp \
+				ErrorReplies.hpp \
 				utils.hpp \
 				signals.hpp
 
@@ -75,6 +76,7 @@ FILES    = 	main.cpp \
 			ParserResultPart.cpp \
 			ParserResultQuit.cpp \
 			ParserResultPing.cpp \
+			ErrorReplies.cpp \
 			utils.cpp \
 			signals.cpp
 
@@ -116,4 +118,13 @@ re: fclean all
 run: 
 	@./$(NAME) 6667 irc2026
 
-.PHONY: all clean fclean re run
+valgrind:
+	@valgrind --leak-check=full --track-fds=yes ./$(NAME) 6667 irc2026 > /tmp/irc_logs.txt 2>&1
+
+valgrind_logs:
+	@valgrind --leak-check=full --track-fds=yes ./$(NAME) 6667 irc2026 --show-logs=yes
+
+eval: 
+	./ft_irc_eval/eval_ft_irc.sh
+
+.PHONY: all clean fclean re run eval valgrind valgrind_logs

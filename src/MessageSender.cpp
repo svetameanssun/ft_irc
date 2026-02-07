@@ -7,7 +7,6 @@ void MessageSender::sendToClient(Client *client, const std::string &msg)
     if (!client)
         return;
 
-    log_msg("MessageSender: sending to client: %s", client->getNick().c_str());
     ::send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 
@@ -24,7 +23,6 @@ void MessageSender::sendNumeric(const std::string &serverName, Client *client,
     << std::setw(3) << std::setfill('0') << code
     << " " << client->getNick()
     << " " << msg << "\r\n";
-
 
     sendToClient(client, oss.str());
 }

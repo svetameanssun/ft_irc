@@ -2,7 +2,7 @@
 
 //Constructor 
 Channel::Channel(const std::string &name)
-: _name(name), _iMode(false), _userLimit(-1) {}
+: _name(name), _iMode(false),_tMode(true), _kMode(false), _lMode(false), _userLimit(-1) {}
 
 Channel::~Channel() {}
 
@@ -51,21 +51,28 @@ bool Channel::addMember(Client *client, bool isOp)
     client->joinChannel(this->getName());
     if (isOp)
     {
-        log_msg("[Channel]: the user is a operator, added to op list");
+        log_msg("[Channel]: the user is an operator, added to op list");
         _operators.insert(fd);
     }
     return true;
 }
 
-void Channel::removeMember(Client *client)
-{
-    int fd = client->getFd();
-    _members.erase(fd);
-    _operators.erase(fd);
-    _invited.erase(fd);
-    client->leaveChannel(this->getName());
-    log_msg("[Channel]: The member has been deleted from the channel");
-}
+    void Channel::removeMember(Client *client)
+    {
+        int fd = client->getFd();
+        _members.erase(fd);
+        _operators.erase(fd);
+        _invited.erase(fd);
+        client->leaveChannel(this->getName());
+        log_msg("[Channel]: The member has been deleted from the channel");
+        if (this->getUserCount() == 1)
+        {
+            log_msg("[Channel]: Only one member on the channel %s", this->getName().c_str());
+            std::map<int, Client *>::iterator it = _members.begin();
+            int fd = it->first;
+            promoteToOp(fd);
+        }
+    }
 
 bool Channel::isMember(int fd) const { return _members.find(fd) != _members.end(); }
 
@@ -100,6 +107,7 @@ void Channel::broadcast(const std::string &message) const
 {
     int excludeFd = -1;
     log_msg("[Channel] broadcasting to all users: ");
+    printChannelMembers();
     for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
     {
         int fd = it->first;
@@ -108,7 +116,37 @@ void Channel::broadcast(const std::string &message) const
         if (fd == excludeFd) continue; // skip excluded fd
         // send raw message to each member
         MessageSender::sendToClient(c, message);
+        log_msg("MessageSender: sending to client: %s", c->getNick().c_str());
     }
 }
 
+void Channel::broadcast(const std::string &message, int userFd) const
+{
+    int excludeFd = -1;
+    log_msg("[Channel] broadcasting to all users: ");
+    printChannelMembers();
+    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
+    {
+        int fd = it->first;
+        Client *c = it->second;
+        if (!c) continue;
+        if (fd == excludeFd || fd == userFd) continue; // skip excluded fd
+        // send raw message to each member
+        MessageSender::sendToClient(c, message);
+        log_msg("MessageSender: sending to client: %s", c->getNick().c_str());
+    }
+}
+
+
 bool Channel::isEmpty() { return _members.empty(); }
+
+void Channel::printChannelMembers() const
+{
+    log_debug("Channel Members of %s:", _name.c_str());
+    for (std::map<int, Client *>::const_iterator it = _members.begin(); it != _members.end(); it++)
+    {
+        Client *c = it->second;
+        if (c)
+            log_debug(" - FD: %d - Nick: %s", it->first, c->getNick().c_str());
+    }
+}

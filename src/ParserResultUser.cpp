@@ -146,48 +146,6 @@ int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
 	return (0);
 }
 
-
-/*int ParserResultUser::checkUserParams(std::vector<std::string> messageVec){
-	for(size_t i = 0; i < messageVec[1].length(); i++){
-		if (!isAllowedChar(messageVec[1][i])){
-				return (ERR_WRONGINPUT);
-		}
-	}
-	this->_realname.clear();
-	
-	// USER guest   0       *     :Ronnie Reagan
-	// USER guest :Ronnie Reagan
-	//  0    1        2      3      4       5
-	std::string name;
-	size_t i = 2;
-	if (messageVec.size() <= 2){
-		return (ERR_NEEDMOREPARAMS);
-	}
-	if (messageVec.at(2) == "0" && messageVec.at(3) == "*"){
-		if (messageVec.size() < 5){
-			return (ERR_NEEDMOREPARAMS);
-		}
-		i = 4;
-	}
-	if (messageVec[i][0]!= ':'){
-		name+=messageVec.at(i);
-	}
-	else{
-		for (; i < messageVec.size(); i++){
-			name += messageVec.at(i);
-			name += " ";
-		}
-	}
-	if(!name.empty() && name[0] == ':'){
-		name.erase(0, 1);
-	}
-	if(!name.empty() && name.at(name.length() - 1) == ' '){
-		name.erase(name.length() - 1, 1);
-	}
-	setRealname(name);
-	return (0);
-}*/
-
 /*----------------------------------------------------------*/
 /*                      PRINT_RESULT                        */
 /*----------------------------------------------------------*/

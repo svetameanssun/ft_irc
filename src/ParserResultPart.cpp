@@ -109,7 +109,7 @@ int ParserResultPart::fillPartParams(std::vector<std::string> messageVector){
 
 int ParserResultPart::checkPartParams(std::vector <std::string> messageVector){
 	//PART <channel> *( "," <channel> ) [<Part Message>]
-	if (messageVector.size() <= 2){
+	if (messageVector.size() < 2){
 		return (ERR_NEEDMOREPARAMS);
 	}
 	int res = checkPartMessage(messageVector);

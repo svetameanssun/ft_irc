@@ -29,11 +29,15 @@ ParserResultMode::~ParserResultMode(){}
 /*                    SETTERS / GETTERS                     */
 /*----------------------------------------------------------*/
 void ParserResultMode::setParams(std::vector<std::string> modeCommand){
-    if (!modeCommand.empty()) {
+    if (!modeCommand.empty() && modeCommand.size() > 1) {
         modeCommand.erase(modeCommand.begin());  // drop the first element, which is the command itself
     }
     this->_modeParamsVec = modeCommand;
     //I start with i = 1, becase I do not need channel name in my string;
+    if (this->_modeParamsVec.size() == 1){
+        this->_modeFlagsStr = "";
+        return ;
+    }
     for (size_t i = 1; i < modeCommand.size(); i++){
         this->_modeFlagsStr += modeCommand.at(i);
         this->_modeFlagsStr += " ";
