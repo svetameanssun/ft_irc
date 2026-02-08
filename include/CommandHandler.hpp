@@ -37,7 +37,7 @@ class CommandHandler
         bool flagNeedsParam(char c, bool adding);
 
 
-        // Disallow copying (orthodox canonical form, non-copyable)
+        // Disallow copying
         CommandHandler(const CommandHandler &);
         CommandHandler &operator=(const CommandHandler &);
 

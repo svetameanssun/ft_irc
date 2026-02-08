@@ -34,19 +34,6 @@ void Client::setRegistered(bool value) { _registered = value; }
 void Client::setOperator(bool value) { _isOperator = value; }
 void Client::setPassAccepted(bool value) { _passAccepted = value; }
 void Client::setLimitReached(bool value) { _nbrChannelJoined = value; }
-
-
-
-//[LANA EDIT]
-
-/*bool Client::isOnChannel(std::string channelName) const{
-    std::vector<std::string> channels = getChannels();
-    if (std::find(channels.begin(), channels.end(), channelName) == channels.end()){
-        return (false);
-    }
-    return (true);
-}*/
-//[---------]
             
 // Buffer handling
 void Client::appendToBuffer(const std::string &data) { _buffer += data; }
@@ -63,7 +50,7 @@ std::vector<std::string> Client::extractMessages()
         if (!msg.empty() && msg[msg.size() - 1] == '\r')
             msg.resize(msg.size() - 1);
         messages.push_back(msg);
-        _buffer.erase(0, pos + 1); // remove processed message (including '\n')
+        _buffer.erase(0, pos + 1);
     }
 
     return messages;

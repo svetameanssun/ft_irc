@@ -1,7 +1,6 @@
 #include "CommandHandler.hpp"
 #include "Server.hpp"
 
-//TODO: [END] [OPTIONAL] Refactor for code beauty :)
 void CommandHandler::cmdJoin(Client *client, AParserResult *result)
 {
     if (!client || !result)
@@ -43,8 +42,6 @@ void CommandHandler::cmdJoin(Client *client, AParserResult *result)
         const std::string &chanName = channels[i];
         const std::string key = (i < keys.size() ? keys[i] : "");
 
-        // Validate channel format; this should be done already in the parser...  but it is not xD
-        // We decided to just accept channels with '#', not '&'
         if (chanName.empty() || chanName[0] != '#')
         {
             MessageSender::sendNumeric(_server.getServerName(), client,

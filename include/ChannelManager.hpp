@@ -14,12 +14,13 @@ class Server;
 class ChannelManager
 {
 private:
-    std::map<std::string, Channel*> _channels; // name -> Channel*
-    //Server &_server;
+    std::map<std::string, Channel*> _channels;
+    // private; just for compliance
+    ChannelManager(const ChannelManager &other);
+    ChannelManager &operator=(const ChannelManager &other);
 
 public:
     ChannelManager();
-    //ChannelManager(Server &server);
     ~ChannelManager();
 
     Channel *addChannel(const std::string &name);

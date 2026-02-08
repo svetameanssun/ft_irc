@@ -2,7 +2,7 @@
 
 #include <string>
 #include <sstream>
-#include <unistd.h>   // for write()
+#include <unistd.h>
 #include <sys/socket.h>
 #include "Client.hpp"
 #include "utils.hpp"

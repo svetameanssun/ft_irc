@@ -2,6 +2,10 @@
 
 ChannelManager::ChannelManager() {}
 
+ChannelManager::ChannelManager(const ChannelManager &other) { (void) other; }
+ChannelManager &ChannelManager::operator=(const ChannelManager &other) { (void) other; return *this; }
+
+
 ChannelManager::~ChannelManager() { freeResources(); }
 
 Channel *ChannelManager::addChannel(const std::string &name)

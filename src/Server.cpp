@@ -36,7 +36,6 @@ void Server::init()
 	// signal handling
 	std::signal(SIGINT, signalHandler);
     //-----------------------------------
-	//TODO: [END] remove the debug messages
     log_debug("[Server] Password: %s", getPassword().c_str());
     log_debug("[Server] Server listening in port number: %d", getPort());
 	log_debug("[Server] Running routine: ");
@@ -106,7 +105,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 		log_warning("Parsing failed");
 		return;
 	}
-	//TODO: [LANA][QUIT command]: double check it
     log_debug("return value is: %d", ret);
 	//if (_parsingResult)
 	//std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << this->_parsingResult->getCommand() << std::endl;
@@ -124,8 +122,6 @@ void Server::executeRoutine(Client *client, std::string &rawCommand)
 // communication with network layer
 void Server::onClientConnected(int fd)
 {
-	// TODO: [END] hostname (necessary?)
-	// FIXME: Need to check if we need this for proper functioning
     Client *client = new Client(fd, "localhost"); 
     _clientManager.addClient(client);
 

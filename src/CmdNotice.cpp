@@ -6,8 +6,8 @@ void CommandHandler::cmdNotice(Client *client, AParserResult *result)
     if (!client || !result)
         return;
 
-    // RFC 1459: NOTICE should not generate errors, BUT:
-    // If not registered, silently ignore (NO ERR_NOTREGISTERED)
+    // NOTICE should not generate errors, so
+    // if not registered, silently ignore (NO ERR_NOTREGISTERED)
     if (!client->isRegistered())
         return;
 
@@ -20,9 +20,7 @@ void CommandHandler::cmdNotice(Client *client, AParserResult *result)
     {
         const std::string &target = targetsVec[i];
     
-        // ============================
         // Channel NOTICE
-        // ============================
         if (!target.empty() && target[0] == '#')
         {
             Channel *chan = _server.getChannelManager().findChannel(target);
@@ -37,9 +35,7 @@ void CommandHandler::cmdNotice(Client *client, AParserResult *result)
         
             chan->broadcast(msg);
         }
-        // ============================
         // User NOTICE
-        // ============================
         else
         {
             Client *receiver = _server.getClientManager().findByNick(target);

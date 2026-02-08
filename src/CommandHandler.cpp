@@ -4,14 +4,6 @@
 
 CommandHandler::CommandHandler(Server &server) : _server(server) {}
 
-//       MODE #channame -flag params 
-//        0       1       2    3
-//       itkol
-//          NO PARAMS:
-//            i t 
-//          WITH PARAMS:
-//            k o l
-
 bool CommandHandler::flagNeedsParam(char c, bool adding){
     if(!adding && c == 'o'){
         return (true);

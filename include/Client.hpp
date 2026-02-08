@@ -27,7 +27,7 @@ class Client
 
         public:
 
-        Client(); //IMPORTANT if we want to pass CpmmandParser * _cmdParser to anyther class
+        Client();
         Client(int fd);
         Client(int fd, const std::string &hostname);
         ~Client();
@@ -53,12 +53,6 @@ class Client
         void setOperator(bool value);
         void setPassAccepted(bool value);
         void setLimitReached(bool value);
-
-        //[LANA EDIT]
-        
-        //bool isOnChannel(std::string channelName) const;
-        //[---------]
-        
 
         //buffer handling, do it when we know how to handle data
         void appendToBuffer(const std::string &data);

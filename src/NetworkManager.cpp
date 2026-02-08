@@ -27,7 +27,6 @@ void NetworkManager::run(Server &server)
     {
         if (gSignalStatus == SIGINT){
 		    log_msg("SIGINT received, shutting down...");
-		    //server.stop();
             break;
 	    }
         log_debug("[Network manager] Inside the loop..");
@@ -42,7 +41,6 @@ void NetworkManager::run(Server &server)
             if (!(_pollFds[i].revents & POLLIN))
                 continue;
 
-            // Look at these functions
             if (_pollFds[i].fd == _listenFd)
                 server.onClientConnected(acceptClient());
             else

@@ -3,8 +3,8 @@
 
 ClientManager::ClientManager() {}
 
-//Not needed for the moment
-//ClientManager::ClientManager(Server &server) : _server(server) {}
+ClientManager::ClientManager(const ClientManager &other) { (void) other; }
+ClientManager &ClientManager::operator=(const ClientManager &other) { (void) other; return *this; }
 
 ClientManager::~ClientManager() { freeResources(); }
 

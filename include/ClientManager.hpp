@@ -14,22 +14,21 @@ class Server;
 class ClientManager
 {
 private:
-    std::map<int, Client*> _clients; // fd -> Client*       
-    //Server &_server; // Right now we do not need a reference to a client   
-    //ClientManager(Server &server);
+    std::map<int, Client*> _clients;     
+    ClientManager(const ClientManager &other);
+    ClientManager &operator=(const ClientManager &other);
 
 public:
     ClientManager();
     ~ClientManager();
 
     // Management
-    void addClient(Client *client);// Add the hostname if ever needed, const std::string &hostname);
+    void addClient(Client *client);
     void removeClient(int fd);
     bool clientExists(int fd);
     Client *findByFd(int fd);
     Client *findByNick(const std::string &nick);
 
-    void disconnectAll(void); //[LANA] maybe we need it
     // Utility
     void broadcast(const std::string &msg, int excludeFd = -1);
 

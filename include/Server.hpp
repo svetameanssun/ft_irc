@@ -62,7 +62,6 @@ class Server
         void    init();
         void    run();
 
-        // is this still needed?
         void    initSocket();
         void    stop();
 
