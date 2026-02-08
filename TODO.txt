@@ -2,8 +2,10 @@ SERVER
 
 [EVALUATION]
 
-    - [MODE] When having '+o -o' (repeated), it prints the letter twice
     - Chan cannot be named as '#'
+    - When MODE +o -o +o xegea11, it continues the iteration
+        although there are no more names; client manager recognizes
+        as users with empty nicknames
     - Need to clear comments from the code and remove utility files (TODO, .MD, etc)
 
 
