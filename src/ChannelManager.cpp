@@ -34,7 +34,7 @@ void ChannelManager::removeChannel(const std::string &name)
     {
         delete it->second;
         _channels.erase(it);
-        log_msg("[ChannelManager] removed channel %s", name.c_str());
+        log_msg("[ChannelManager] removed channel");
     }
 }
 
