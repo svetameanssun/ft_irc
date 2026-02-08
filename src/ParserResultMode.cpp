@@ -1,4 +1,5 @@
 #include "ParserResultMode.hpp"
+
 /*----------------------------------------------------------*/
 /*                      CANONICAL PART                      */
 /*----------------------------------------------------------*/
@@ -164,26 +165,6 @@ bool ParserResultMode::hasPlusMinus(std::string channelFlags){
 (Any order is allowed, as long as parameters follow the same order.)*/
 
 
-/*bool ParcerResultMode::isValidChanParams(std::vector<std::string> messageVec){
-     MODE #channame -flag params 
-        0       1       2    3
-        itkol
-        NO PARAMS:
-            i t 
-        WITH PARAMS:
-            k o l
-    
-    if (messageVec.at(2).length() > 3){
-        return (false);
-    }
-    std::string flags = messageVec.at(2);
-    for (int i = 0; i < flags.length(); ++i){
-       if (!checkFlagCombin(flags[i], messageVec))
-            return(false);
-    }
-    //TODO
-    return (true);
-}*/
 
 /* itkol
 ---------------------------------------------------------------------

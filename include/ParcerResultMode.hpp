@@ -1,19 +1,19 @@
-#ifndef PARCERRESULTMODE_HPP
-#define PARCERRESULTMODE_HPP
+#ifndef PARSERRESULTMODE_HPP
+#define PARSERRESULTMODE_HPP
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
-#include "AParcerResult.hpp"
+#include "AParserResult.hpp"
 
 
-class ParcerResultMode : public AParcerResult {
+class ParserResultMode : public AParserResult {
   public:
-    ParcerResultMode();
-    ParcerResultMode(const ParcerResultMode &other);
-    ParcerResultMode& operator=(const ParcerResultMode& other);
-    ~ParcerResultMode();
+    ParserResultMode();
+    ParserResultMode(const ParserResultMode &other);
+    ParserResultMode& operator=(const ParserResultMode& other);
+    ~ParserResultMode();
     
     void fillInModeMap();
     void setParams(std::vector<std::string> modeCommand);
